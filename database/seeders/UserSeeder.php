@@ -14,10 +14,10 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // $u = new \App\Models\User();
-        // $u->name = 'ADMIN';
-        // $u->username = 'admin';
-        // $u->password = Hash::make('admin');
-        // $u->save();
+        $u = new \App\Models\User();
+        $u->email = "lp2m@ianmadura.ac.id";
+        $u->username = "lp2m";
+        $u->password = Hash::make("lp2m");
+        $u->save();
     }
 }

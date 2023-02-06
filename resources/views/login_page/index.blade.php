@@ -33,7 +33,8 @@
                     <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="IMG">
                 </div>
 
-                <form class="login100-form validate-form" action="#">
+                <form class="login100-form validate-form" action="{{ route('login_auth') }}" method="post">
+                    @csrf
                     <span class="login100-form-title">
                         Login Aplikasi KPM
                     </span>

@@ -18,4 +18,9 @@ Route::get("/", function () {
     return view("welcome");
 });
 
-Route::get('/signin', [AuthenticationController::class, 'index'])->name('login_page');
+Route::get("/signin", [AuthenticationController::class, "index"])->name(
+    "login_page"
+);
+Route::post("/signin", [AuthenticationController::class, "login"])->name(
+    "login_auth"
+);
