@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-
+use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
+
+use App\Models\User;
 
 class AuthenticationController extends Controller
 {
@@ -40,7 +43,21 @@ class AuthenticationController extends Controller
                 "verify" => false,
             ]);
             $data = $response->getBody()->getContents();
-            $token = json_decode($data, true)->user;
+            $token = json_decode($data);
+            $user = User::where("email", $token->user->email)->first();
+            if ($user) {
+                Auth::login($user);
+                Session::put("token_api", $token->token);
+                Log::set("Melakukan login", "login");
+                return Redirect::to("mhs");
+            } else {
+                return Redirect::to("signin")
+                    ->withErrors(
+                        "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
+                        "login"
+                    )
+                    ->withInput();
+            }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
             $result = json_decode($response->getBody()->getContents(), true);
