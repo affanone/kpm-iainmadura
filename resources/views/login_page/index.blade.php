@@ -33,9 +33,9 @@
                     <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="IMG">
                 </div>
 
-                <form class="login100-form validate-form">
+                <form class="login100-form validate-form" action="#">
                     <span class="login100-form-title">
-                        Member Login
+                        Login Aplikasi KPM
                     </span>
 
                     <div class="wrap-input100 validate-input" data-validate="NIM/NIP harus diisi angka">
@@ -64,17 +64,17 @@
 
                     <div class="text-center p-t-12">
                         <span class="txt1">
-                            Forgot
+                            <sup>*)</sup> Gunakan data login SIMPADU untuk masuk ke dalam aplikasi
                         </span>
-                        <a class="txt2" href="#">
+                        {{-- <a class="txt2" href="#">
                             Username / Password?
-                        </a>
+                        </a> --}}
                     </div>
 
                     <div class="text-center p-t-136">
                         <a class="txt2" href="#">
-                            Create your Account
-                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                            {{-- Create your Account
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i> --}}
                         </a>
                     </div>
                 </form>
