@@ -39,11 +39,13 @@
             ) {
                 return false;
             }
-        } else if ($(input).attr("name") == "id_login") {
-            if ($(input).val().trim().match(/^\d+$/) == null) {
-                return false;
-            }
-        } else {
+        }
+        // else if ($(input).attr("name") == "id_login") {
+        //     if ($(input).val().trim().match(/^\d+$/) == null) {
+        //         return false;
+        //     }
+        // }
+        else {
             if ($(input).val().trim() == "") {
                 return false;
             }

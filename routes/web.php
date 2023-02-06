@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,7 @@ Route::get("/", function () {
 });
 
 Route::get('/signin', [AuthenticationController::class, 'index'])->name('login_page');
+
+Route::group(["prefix" => "dashboard"], function () {
+    Route::get("/", [DashboardController::class, 'index']);
+});
