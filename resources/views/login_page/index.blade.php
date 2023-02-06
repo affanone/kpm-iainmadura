@@ -39,7 +39,7 @@
                         Login Aplikasi KPM
                     </span>
 
-                    <div class="wrap-input100 validate-input" data-validate="NIM/NIP harus diisi angka">
+                    <div class="wrap-input100 validate-input" data-validate="NIM/NIP harus diisi">
                         <input class="input100" type="text" name="id_login" placeholder="NIM/NIP" autocomplete="off">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
