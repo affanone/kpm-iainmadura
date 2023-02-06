@@ -17,11 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ["name", "email", "password"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,11 +25,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
-        'updated_at',
-        'email_verified_at',
-        'created_at',
+        "password",
+        "remember_token",
+        "updated_at",
+        "email_verified_at",
+        "created_at",
+        "acceess",
     ];
 
     /**
@@ -42,11 +39,16 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        "email_verified_at" => "datetime",
     ];
 
     public function user_group()
     {
-        return $this->hasOne('App\Models\UserGroup');
+        return $this->hasOne("App\Models\UserGroup");
+    }
+
+    public function getAccessAttribute($value)
+    {
+        return $value ? json_decode($value) : [];
     }
 }
