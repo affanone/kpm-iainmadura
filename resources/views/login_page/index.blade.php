@@ -22,6 +22,17 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('login/css/util.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('login/css/main.css') }}">
     <!--===============================================================================================-->
+    <style>
+        .error-login {
+            background: #99333c;
+            color: white;
+            text-align: center;
+            margin-bottom: 21px;
+            padding: 5px 0px;
+            border-radius: 6px;
+            box-shadow: 0 0 3px #99333c;
+        }
+    </style>
 </head>
 
 <body>
@@ -39,8 +50,13 @@
                         Login Aplikasi KPM
                     </span>
 
+                    @if ($errors->login->first())
+                        <p class="error-login">{{ $errors->login->first() }}</p>
+                    @endif
+
                     <div class="wrap-input100 validate-input" data-validate="NIM/NIP harus diisi">
-                        <input class="input100" type="text" name="id_login" placeholder="NIM/NIP" autocomplete="off">
+                        <input class="input100" type="text" value="{{ old('id_login') }}" name="id_login"
+                            placeholder="NIM/NIP" autocomplete="off">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-user" aria-hidden="true"></i>
@@ -48,7 +64,8 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password harus diisi">
-                        <input class="input100" type="password" name="password" placeholder="Password">
+                        <input class="input100" type="password" value="{{ old('password') }}" name="password"
+                            placeholder="Password">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
