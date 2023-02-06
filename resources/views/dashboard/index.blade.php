@@ -1,5 +1,7 @@
 @extends('master_template')
 
+@section('title', 'Dashboard')
+
 @section('content')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

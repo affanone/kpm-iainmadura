@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserCategoryController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,9 @@ Route::get("/", function () {
 });
 
 Route::group(["prefix" => "dashboard"], function () {
-    Route::get("/", [DashboardController::class, "index"]);
+    Route::get("/", [DashboardController::class, "index"])->name("dashboard");
+    Route::get("/user_category", [UserCategoryController::class, "index"])->name("user.category");
+    Route::get("/user", [UserController::class, "index"])->name("user");
 });
 
 Route::get("/signin", [AuthenticationController::class, "index"])->name(
