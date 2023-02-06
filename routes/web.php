@@ -1,5 +1,7 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get("/", function () {
     return view("welcome");
 });
+
+Route::get('/signin', [AuthenticationController::class, 'index'])->name('login_page');
