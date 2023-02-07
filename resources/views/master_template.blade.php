@@ -117,22 +117,14 @@
     </script>
 
     <script>
-        function setActive() {
-            aObj = document.getElementById('sideMenu').getElementsByTagName('a');
-            for (i = 0; i < aObj.length; i++) {
-                if (document.location.href.indexOf(aObj[i].href) >= 0) {
-                    const activeurl = window.location;
-                    $('a[href="' + activeurl.origin + activeurl.pathname + '"]').addClass('active');
-                    $('a[href="' + activeurl.origin + activeurl.pathname + '"]').parents('ul').parents('li:first').children(
-                        'a:first').addClass(
-                        'active');
-                    $('a[href="' + activeurl.origin + activeurl.pathname + '"]').parents('ul').parents('li:first')
-                        .addClass(
-                            'menu-open');
-                }
-            }
-        }
-        window.onload = setActive();
+        const activeurl = window.location;
+        $('li', '#sideMenu')
+            .filter(function() {
+                return !!$(this).find('a[href="' + activeurl.origin + activeurl.pathname.replace(/\/$/,
+                    "") + '"]').length;
+            })
+            .addClass('menu-open')
+            .find('a:first').addClass('active');
     </script>
 </body>
 

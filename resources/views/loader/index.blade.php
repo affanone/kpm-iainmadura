@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="shortcut icon" href="http://iainmadura.ac.id/media/iainmadura.png" type="image/x-icon">
+    <title>Aplikasi KPM {{ date('Y') }}</title>
     <style>
         body {
             height: 100vh;
@@ -15,7 +16,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #1a1a1a;
+            /* background: #1a1a1a; */
+            background: #343a40;
         }
 
         .loading {
@@ -27,6 +29,45 @@
             position: relative;
             margin: 0px;
             padding: 0px;
+        }
+
+        img {
+            width: 50%;
+            position: absolute;
+            top: -205px;
+            background: #eee;
+            padding: 5px;
+            border-radius: 50%;
+            border: 2px solid gold;
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h4 {
+            position: absolute;
+            top: -145px;
+            font-size: 2.5em;
+            letter-spacing: 0.15em;
+            font-weight: 100;
+            width: max-content;
+            color: #eee;
+            filter: drop-shadow(2px 2px 15px #ffffff70);
+            font-family: roboto, sans-serif;
+        }
+
+        p {
+            font-family: roboto, sans-serif;
+            /* color: #eee; */
+            color: transparent;
+            position: relative;
+            overflow: hidden;
+            /* position: absolute; */
+            top: 175px;
+            font-size: 1.5em;
+            letter-spacing: 0.15em;
+            font-weight: 100;
+            filter: drop-shadow(2px 2px 15px #ffffff70);
         }
 
         .circle {
@@ -159,20 +200,6 @@
             }
         }
 
-        p {
-            font-family: roboto, sans-serif;
-            /* color: #eee; */
-            color: transparent;
-            position: relative;
-            overflow: hidden;
-            /* position: absolute; */
-            top: 175px;
-            font-size: 1.5em;
-            letter-spacing: 0.15em;
-            font-weight: 100;
-            filter: drop-shadow(2px 2px 15px #ffffff70);
-        }
-
         p::before {
             content: "Loading...";
             position: absolute;
@@ -224,11 +251,27 @@
                 width: 100%;
             }
         }
+
+        @media (max-height: 992px) and (max-width: 768px) {
+            img {
+                width: 30%;
+                top: -165px;
+            }
+
+            h4 {
+                font-size: 20px;
+                top: -110px;
+                width: fit-content;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="loading">
+        <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="Logo">
+        <h4>Aplikasi KPM IAIN Madura</h4>
         <div class="circle cyan"></div>
         <div class="circle magenta"></div>
         <div class="circle yellow"></div>
