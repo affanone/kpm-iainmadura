@@ -235,5 +235,8 @@
         <p>Loading...</p>
     </div>
 </body>
+<script>
+    console.log(@json(session('token_api')))
+</script>
 
 </html>

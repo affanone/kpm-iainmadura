@@ -24,7 +24,10 @@ Route::get("/", function () {
 
 Route::group(["prefix" => "dashboard"], function () {
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
-    Route::get("/user_category", [UserCategoryController::class, "index"])->name("user.category");
+    Route::get("/user_category", [
+        UserCategoryController::class,
+        "index",
+    ])->name("user.category");
     Route::get("/user", [UserController::class, "index"])->name("user");
     Route::get("/master", [MasterController::class, "index"]);
     Route::get("/loader", [DashboardController::class, "create"]);
@@ -35,6 +38,16 @@ Route::group(
     function () {
         Route::get("/", [
             \App\Http\Controllers\Mhs\DashboardController::class,
+            "index",
+        ]);
+    }
+);
+
+Route::group(
+    ["prefix" => "reg", "middleware" => ["mhs_unregister"]],
+    function () {
+        Route::get("/", [
+            \App\Http\Controllers\Reg\CheckController::class,
             "index",
         ]);
     }
