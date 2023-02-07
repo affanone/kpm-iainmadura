@@ -27,6 +27,7 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/user_category", [UserCategoryController::class, "index"])->name("user.category");
     Route::get("/user", [UserController::class, "index"])->name("user");
     Route::get("/master", [MasterController::class, "index"]);
+    Route::get("/loader", [DashboardController::class, "create"]);
 });
 
 Route::group(
