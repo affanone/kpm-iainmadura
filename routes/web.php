@@ -51,9 +51,14 @@ Route::group(
             "index",
         ]);
 
-        Route::get("/sks", [
+        Route::post("/sks", [
             \App\Http\Controllers\Reg\CheckController::class,
             "check_sks",
+        ]);
+
+        Route::post("/mk", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "check_mk",
         ]);
     }
 );

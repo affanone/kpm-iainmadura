@@ -293,9 +293,35 @@
         function cekSKS() {
             $('#text-checking').text('Cek minimal SKS yang ditempuh..!');
             $.ajax({
+                type: 'post',
                 url: 'reg/sks',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
                 success: res => {
-                    console.log(res)
+                    if (res.next) {
+                        cekNilai();
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            })
+        }
+
+        function cekNilai() {
+            $('#text-checking').text('Cek Matakuliah KPM..!');
+            $.ajax({
+                type: 'post',
+                url: 'reg/mk',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: res => {
+                    if (res.next) {
+                        // cekNilai();
+                    } else {
+                        alert(res.message);
+                    }
                 }
             })
         }

@@ -20,7 +20,6 @@ class CheckController extends Controller
      */
     public function index()
     {
-        return self::check_sks();
         return view("loader.index");
     }
 
@@ -34,6 +33,20 @@ class CheckController extends Controller
         try {
             $sks = IainApi::get("mhs/sks");
             if ($sks->data->capaian) {
+                $total_sks = $sks->data->capaian->sks;
+                if ($total_sks < $this->min_sks) {
+                    // batas sks yang ditetapkan tidak memenuhi syarat
+                    return response()->json([
+                        "next" => false,
+                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah tempuh adalah $total_sks SKS !!",
+                    ]);
+                } else {
+                    return response()->json([
+                        "next" => true,
+                        "message" =>
+                            "Jumlah SKS yang anda tempuh telah memenuhi syarat !!",
+                    ]);
+                }
             } else {
                 // data traskip sementara tidak ditemukan
                 return response()->json([
@@ -53,7 +66,7 @@ class CheckController extends Controller
         }
     }
 
-    public function check_nilai()
+    public function check_mk()
     {
         // matakuliah?tahun=2017&q=kpm&prod=0201
 
@@ -112,61 +125,5 @@ class CheckController extends Controller
                 "message" => "Data mahasiswa tidak ditemukan !!",
             ]);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
