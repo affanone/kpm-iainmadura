@@ -13,11 +13,12 @@
             width: 100vw;
             margin: 0px;
             padding: 0px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* display: flex; */
+            /* align-items: center;
+            justify-content: center; */
             /* background: #1a1a1a; */
             background: #343a40;
+            font-family: roboto, sans-serif;
         }
 
         .loading {
@@ -27,8 +28,11 @@
             height: 160px;
             width: 170px;
             position: relative;
-            margin: 0px;
             padding: 0px;
+            position: absolute;
+            top: 52%;
+            left: 47%;
+            margin: -50px 0 0 -50px;
         }
 
         img {
@@ -53,21 +57,24 @@
             width: max-content;
             color: #eee;
             filter: drop-shadow(2px 2px 15px #ffffff70);
-            font-family: roboto, sans-serif;
         }
 
         p {
-            font-family: roboto, sans-serif;
-            /* color: #eee; */
-            color: transparent;
+            color: #eee;
+            /* color: transparent; */
             position: relative;
             overflow: hidden;
             /* position: absolute; */
             top: 175px;
             font-size: 1.5em;
             letter-spacing: 0.15em;
-            font-weight: 100;
-            filter: drop-shadow(2px 2px 15px #ffffff70);
+            font-weight: 300;
+            filter: drop-shadow(2px 2px 15px #51CBEE);
+            border-right: .15em solid #51CBEE;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3s steps(40, end),
+                blink-caret .75s step-end infinite;
         }
 
         .circle {
@@ -200,7 +207,7 @@
             }
         }
 
-        p::before {
+        /* p::before {
             content: "Loading...";
             position: absolute;
             top: 0;
@@ -210,11 +217,20 @@
             border-right: 4px solid #eee;
             overflow: hidden;
             color: #eee;
-            animation: load91371 3s linear infinite;
+            animation: loading 3s linear infinite;
+        } */
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 85%
+            }
         }
 
-        @keyframes load91371 {
-
+        /* @keyframes loading {
             0%,
             10%,
             100% {
@@ -249,6 +265,17 @@
             60%,
             80% {
                 width: 100%;
+        } */
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: #51CBEE;
             }
         }
 
@@ -266,6 +293,18 @@
             }
         }
     </style>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Selesai!',
+                text: 'Data Berhasil Terverifikasi'
+            });
+        });
+    </script>
 </head>
 
 <body>
