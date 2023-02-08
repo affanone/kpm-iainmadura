@@ -304,12 +304,6 @@
     </style>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-        });
-    </script>
 </head>
 
 <body>
@@ -320,7 +314,7 @@
         <div class="circle magenta"></div>
         <div class="circle yellow"></div>
         {{-- <p id="is-loading">Loading...</p> --}}
-        <div id="text-checking">LOADING...</div>
+        <div id="text-checking">Loading...</div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
@@ -350,7 +344,7 @@
                             icon: 'error',
                             title: 'Kesalahan!',
                             text: res.message
-                        });
+                        }).then(() => window.location.href = 'signin');
                         // alert(res.message);
                     }
                 }
@@ -374,7 +368,7 @@
                             icon: 'error',
                             title: 'Kesalahan!',
                             text: res.message
-                        });
+                        }).then(() => window.location.href = 'signin');
                         // alert(res.message);
                     }
                 }
