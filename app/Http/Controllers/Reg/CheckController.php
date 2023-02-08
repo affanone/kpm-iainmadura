@@ -23,6 +23,11 @@ class CheckController extends Controller
         return view("loader.index");
     }
 
+    public function validate()
+    {
+        return view("loader.index");
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -31,7 +36,7 @@ class CheckController extends Controller
     public function check_sks()
     {
         try {
-            $sks = IainApi::get("mhs/sks");
+            $sks = IainApi::get("api/mhs/sks");
             if ($sks->data->capaian) {
                 $total_sks = $sks->data->capaian->sks;
                 if ($total_sks < $this->min_sks) {
@@ -71,17 +76,17 @@ class CheckController extends Controller
         // matakuliah?tahun=2017&q=kpm&prod=0201
 
         $res = IainApi::get(
-            "mahasiswa?nim=" . session("token_api")->user->username
+            "api/mahasiswa?nim=" . session("token_api")->user->username
         );
         if ($res->status) {
             if (count($res->data->data)) {
                 $mhs = $res->data->data[0];
                 $kur = $mhs->kurikulum->tahun;
                 $prod = $mhs->prodi->id;
-                $res = IainApi::get("matakuliah?kur=$kur&q=kpm&prod=$prod");
+                $res = IainApi::get("api/matakuliah?kur=$kur&q=kpm&prod=$prod");
                 if (count($res->data->data)) {
                     $mk = $res->data->data[0]->id;
-                    $res = IainApi::get("mhs/nilai/?mk=$mk");
+                    $res = IainApi::get("api/mhs/nilai/?mk=$mk");
                     if ($res->data->nilai) {
                         $nilai = $res->data->nilai;
                         if (

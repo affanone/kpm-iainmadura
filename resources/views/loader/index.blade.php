@@ -325,6 +325,15 @@
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script>
+        function logout() {
+            $.ajax({
+                url: 'logout?json=1',
+                success: res => {
+                    window.location = "{{ url('signin') }}"
+                }
+            })
+        }
+
         function cekSKS() {
             $('#text-checking').text('Cek minimal SKS yang ditempuh..!');
             $.ajax({
@@ -359,6 +368,7 @@
                 success: res => {
                     if (res.next) {
                         // cekNilai();
+                        window.location = "{{ url('/reg/validate') }}"
                     } else {
                         Swal.fire({
                             icon: 'error',

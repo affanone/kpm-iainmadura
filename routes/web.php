@@ -32,7 +32,9 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/user", [UserController::class, "index"])->name("user");
     Route::get("/master", [MasterController::class, "index"]);
     Route::get("/loader", [DashboardController::class, "create"]);
-    Route::get("/syarat", [PersyaratanController::class, "index"])->name("persyaratan");
+    Route::get("/syarat", [PersyaratanController::class, "index"])->name(
+        "persyaratan"
+    );
 });
 
 Route::group(
@@ -62,9 +64,14 @@ Route::group(
             \App\Http\Controllers\Reg\CheckController::class,
             "check_mk",
         ]);
+
+        Route::post("/validate", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "validate",
+        ]);
     }
 );
-
+Route::get("/logout", [AuthenticationController::class, "logout"]);
 Route::get("/signin", [AuthenticationController::class, "index"])->name(
     "login_page"
 );

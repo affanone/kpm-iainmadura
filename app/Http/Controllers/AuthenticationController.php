@@ -77,4 +77,14 @@ class AuthenticationController extends Controller
                 ->withInput();
         }
     }
+
+    public function logout(Request $request)
+    {
+        IainApi::get("auth/logout");
+        if ($request->json == 1) {
+            return response()->json(true);
+        } else {
+            return Redirect::to("signin");
+        }
+    }
 }
