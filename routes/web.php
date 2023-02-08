@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\PersyaratanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,6 +32,7 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/user", [UserController::class, "index"])->name("user");
     Route::get("/master", [MasterController::class, "index"]);
     Route::get("/loader", [DashboardController::class, "create"]);
+    Route::get("/syarat", [PersyaratanController::class, "index"])->name("persyaratan");
 });
 
 Route::group(

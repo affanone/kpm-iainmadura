@@ -20,6 +20,8 @@
         href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}" />
     <!-- iCheck -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}" />
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" />
     <!-- JQVMap -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/jqvmap/jqvmap.min.css') }}" />
     <!-- Theme style -->
@@ -68,6 +70,8 @@
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- ChartJS -->
     <script src="{{ asset('assets/plugins/chart.js/Chart.min.js') }}"></script>
     <!-- Sparkline -->
@@ -110,7 +114,12 @@
         $(function() {
             $("#example1").DataTable({
                 "responsive": true,
-                "autoWidth": false,
+                "autoWidth": true,
+                "fixedColumns": true,
+                "columnDefs": [{
+                    "targets": "_all",
+                    "className": "dt-center cell-border"
+                }],
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
@@ -125,6 +134,13 @@
             })
             .addClass('menu-open')
             .find('a:first').addClass('active');
+    </script>
+
+    <script>
+        $(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+        })
     </script>
 </body>
 
