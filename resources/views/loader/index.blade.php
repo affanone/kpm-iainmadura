@@ -307,11 +307,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Selesai!',
-                text: 'Data Berhasil Terverifikasi'
-            });
+
         });
     </script>
 </head>
@@ -341,7 +337,12 @@
                     if (res.next) {
                         cekNilai();
                     } else {
-                        alert(res.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: res.message
+                        });
+                        // alert(res.message);
                     }
                 }
             })
@@ -359,7 +360,12 @@
                     if (res.next) {
                         // cekNilai();
                     } else {
-                        alert(res.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: res.message
+                        });
+                        // alert(res.message);
                     }
                 }
             })
