@@ -265,6 +265,15 @@
                 text-align: center;
             }
         }
+
+        #text-checking {
+            font-family: roboto, sans-serif;
+            color: white;
+            position: absolute;
+            top: 240px;
+            width: 400px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -275,11 +284,23 @@
         <div class="circle cyan"></div>
         <div class="circle magenta"></div>
         <div class="circle yellow"></div>
-        <p>Loading...</p>
+        {{-- <p id="is-loading">Loading...</p> --}}
+        <div id="text-checking">LOADING...</div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script>
+        function cekSKS() {
+            $('#text-checking').text('Cek minimal SKS yang ditempuh..!');
+            $.ajax({
+                url: 'reg/sks',
+                success: res => {
+                    console.log(res)
+                }
+            })
+        }
+        cekSKS();
+    </script>
 </body>
-<script>
-    console.log(@json(session('token_api')))
-</script>
 
 </html>

@@ -31,7 +31,7 @@ class AuthenticationController extends Controller
         }
         try {
             $client = new Client();
-            $response = $client->post(env("API_LOGIN"), [
+            $response = $client->post(env("API_SERVER") . "/auth", [
                 "form_params" => [
                     "username" => $request->id_login,
                     "password" => $request->password,

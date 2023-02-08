@@ -50,6 +50,11 @@ Route::group(
             \App\Http\Controllers\Reg\CheckController::class,
             "index",
         ]);
+
+        Route::get("/sks", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "check_sks",
+        ]);
     }
 );
 
