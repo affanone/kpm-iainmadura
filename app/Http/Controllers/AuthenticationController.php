@@ -31,7 +31,7 @@ class AuthenticationController extends Controller
         }
         try {
             $client = new Client();
-            $response = $client->post(env("API_LOGIN"), [
+            $response = $client->post(env("API_SERVER") . "/auth", [
                 "form_params" => [
                     "username" => $request->id_login,
                     "password" => $request->password,
@@ -44,20 +44,31 @@ class AuthenticationController extends Controller
             ]);
             $data = $response->getBody()->getContents();
             $token = json_decode($data);
-            $user = User::where("email", $token->user->email)->first();
+            $user = User::where("username", $token->user->username)->first();
             if ($user) {
-                Auth::login($user);
-                Session::put("token_api", $token->token);
-                Log::set("Melakukan login", "login");
-                return Redirect::to("mhs");
+                // data ada di database kpm
             } else {
-                return Redirect::to("signin")
-                    ->withErrors(
-                        "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
-                        "login"
-                    )
-                    ->withInput();
+                // data tidak ada
+                session([
+                    "token_api" => $token, // token hasil login api
+                    "register" => false, // false artinya tidak ada di database
+                ]);
+                return Redirect::to("reg");
             }
+
+            // if ($user) {
+            //     Auth::login($user);
+            //     Session::put("token_api", $token->token);
+            //     Log::set("Melakukan login", "login");
+            //     return Redirect::to("mhs");
+            // } else {
+            //     return Redirect::to("signin")
+            //         ->withErrors(
+            //             "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
+            //             "login"
+            //         )
+            //         ->withInput();
+            // }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
             $result = json_decode($response->getBody()->getContents(), true);
