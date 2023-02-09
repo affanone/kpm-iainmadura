@@ -80,7 +80,7 @@ class CheckController extends Controller
                     // batas sks yang ditetapkan tidak memenuhi syarat
                     return response()->json([
                         "next" => false,
-                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS !!",
+                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS!!",
                     ]);
                 } else {
                     session()->flash(
@@ -90,7 +90,7 @@ class CheckController extends Controller
                     return response()->json([
                         "next" => true,
                         "message" =>
-                            "Jumlah SKS yang anda tempuh telah memenuhi syarat !!",
+                        "Jumlah SKS yang anda tempuh telah memenuhi syarat!!",
                     ]);
                 }
             } else {
@@ -98,7 +98,7 @@ class CheckController extends Controller
                 return response()->json([
                     "next" => false,
                     "message" =>
-                        "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini !!",
+                    "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini!!",
                 ]);
             }
             return response()->json($sks);
@@ -107,7 +107,7 @@ class CheckController extends Controller
             return response()->json([
                 "next" => false,
                 "message" =>
-                    "Terdapat kesalahan pada saat pengecekan jumlah SKS !!",
+                "Terdapat kesalahan pada saat pengecekan jumlah SKS!!",
             ]);
         }
     }
@@ -143,13 +143,13 @@ class CheckController extends Controller
                             );
                             return response()->json([
                                 "next" => true,
-                                "message" => "Anda mengulang matakuliah KPM !!",
+                                "message" => "Anda mengulang matakuliah KPM!!!",
                             ]);
                         } else {
                             // MK SUDAH LULUS
                             return response()->json([
                                 "next" => false,
-                                "message" => "Anda sudah dinyatakan lulus !!",
+                                "message" => "Anda sudah dinyatakan lulus!!!",
                             ]);
                         }
                     } else {
@@ -160,14 +160,14 @@ class CheckController extends Controller
                         );
                         return response()->json([
                             "next" => true,
-                            "message" => "Anda belum mengambil KPM !!",
+                            "message" => "Anda belum mengambil KPM!!!",
                         ]);
                     }
                 } else {
                     // mk tidak ditemukan
                     return response()->json([
                         "next" => false,
-                        "message" => "Matakuliah KPM tidak ditemukan !!",
+                        "message" => "Matakuliah KPM tidak ditemukan!!!",
                     ]);
                 }
                 return $res->data;
@@ -176,7 +176,7 @@ class CheckController extends Controller
             // mahasiswa tidak ditemukan
             return response()->json([
                 "next" => false,
-                "message" => "Data mahasiswa tidak ditemukan !!",
+                "message" => "Data mahasiswa tidak ditemukan!!!",
             ]);
         }
     }
