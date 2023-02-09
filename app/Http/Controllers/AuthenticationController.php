@@ -35,7 +35,7 @@ class AuthenticationController extends Controller
                 "form_params" => [
                     "username" => $request->id_login,
                     "password" => $request->password,
-                    "logout" => 1,
+                    "logout" => 0,
                 ],
                 "headers" => [
                     "Auth-api-key" => env("API_KEY"),
@@ -75,6 +75,16 @@ class AuthenticationController extends Controller
             return Redirect::to("signin")
                 ->withErrors($result, "login")
                 ->withInput();
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        IainApi::get("auth/logout");
+        if ($request->json == 1) {
+            return response()->json(true);
+        } else {
+            return Redirect::to("signin");
         }
     }
 }

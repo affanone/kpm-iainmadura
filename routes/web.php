@@ -61,9 +61,14 @@ Route::group(
             \App\Http\Controllers\Reg\CheckController::class,
             "check_mk",
         ]);
+
+        Route::post("/validate", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "validate",
+        ]);
     }
 );
-
+Route::get("/logout", [AuthenticationController::class, "logout"]);
 Route::get("/signin", [AuthenticationController::class, "index"])->name(
     "login_page"
 );
