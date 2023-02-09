@@ -64,8 +64,8 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password harus diisi">
-                        <input class="input100" type="password" value="{{ old('password', '8240628') }}" name="password"
-                            placeholder="Password">
+                        <input class="input100" type="password" value="{{ old('password', '8240628') }}"
+                            name="password" placeholder="Password">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -99,9 +99,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <!--===============================================================================================-->
     <script src="{{ asset('login/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
