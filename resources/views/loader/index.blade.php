@@ -7,16 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="http://iainmadura.ac.id/media/iainmadura.png" type="image/x-icon">
     <title>Aplikasi KPM {{ date('Y') }}</title>
+
     <style>
         body {
-            height: 100vh;
-            width: 100vw;
-            margin: 0px;
-            padding: 0px;
-            /* display: flex; */
-            /* align-items: center;
-            justify-content: center; */
-            /* background: #1a1a1a; */
             background: #343a40;
             font-family: roboto, sans-serif;
         }
@@ -30,7 +23,7 @@
             position: relative;
             padding: 0px;
             position: absolute;
-            top: 52%;
+            top: 50%;
             left: 47%;
             margin: -50px 0 0 -50px;
         }
@@ -38,7 +31,7 @@
         img {
             width: 50%;
             position: absolute;
-            top: -205px;
+            top: -275px;
             background: #eee;
             padding: 5px;
             border-radius: 50%;
@@ -50,7 +43,7 @@
 
         h4 {
             position: absolute;
-            top: -145px;
+            top: -195px;
             font-size: 2.5em;
             letter-spacing: 0.15em;
             font-weight: 100;
@@ -280,6 +273,10 @@
         }
 
         @media (max-height: 992px) and (max-width: 768px) {
+            .loading {
+                left: 40%;
+            }
+
             img {
                 width: 30%;
                 top: -165px;
@@ -291,15 +288,39 @@
                 width: fit-content;
                 text-align: center;
             }
+
+            #is-loading {
+                font-size: 100%;
+            }
         }
 
         #is-loading {
-            font-family: roboto, sans-serif;
-            color: white;
             position: absolute;
             top: 240px;
-            width: 400px;
-            text-align: center;
+        }
+
+        .button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            position: relative;
+            top: 150%;
+        }
+
+        .btn-shadow {
+            border-radius: 10px;
+            border: 2px solid #000;
+            box-shadow: 5px 5px;
+            background-color: #fec89a;
+            transition: box-shadow 300ms ease, transform 500ms ease;
+        }
+
+        .btn-shadow:hover {
+            box-shadow: none;
+        }
+
+        .btn-shadow:active {
+            transform: scale(0.9);
         }
     </style>
 
@@ -313,8 +334,8 @@
         <div class="circle cyan"></div>
         <div class="circle magenta"></div>
         <div class="circle yellow"></div>
-        <p id="is-loading">fdf...</p>
-        {{-- <div id="is-loading">Sedang mengecek...</div> --}}
+        <p>Loading...</p>
+        <button onclick="logout()" class="button btn-shadow" style="display: none;"><span>Logout</span></button>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
@@ -344,6 +365,7 @@
                             title: 'Kesalahan!',
                             text: res.message
                         }).then(() => {
+                            $('.btn-shadow').css('display', 'inline-block');
                             // window.location.href = 'logout'
                         });
                     }
@@ -352,6 +374,7 @@
         }
 
         function cekNilai() {
+            $('p').attr('id', 'is-loading');
             $('#is-loading').text('Cek Matakuliah KPM..!');
             $.ajax({
                 type: 'post',
@@ -368,16 +391,20 @@
                             title: 'Kesalahan!',
                             text: res.message
                         }).then(() => {
+                            $('.btn-shadow').css('display', 'inline-block');
                             //window.location.href = 'logout'
                         });
+
                     }
                 }
             })
         }
-        $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
+
         setTimeout(() => {
+            $('p').attr('id', 'is-loading');
+            $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
             cekSKS();
-        }, 1000);
+        }, 2000);
     </script>
 </body>
 
