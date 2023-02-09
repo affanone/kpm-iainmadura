@@ -22,17 +22,40 @@ class CheckController extends Controller
     {
         return view("loader.index");
     }
-
-    public function validater()
-    {
-        return view("loader.index");
+    public function valid(){
+        return 'active';
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+    public function check_aktif(){
+        $nim = session('token_api')->user->username
+        $res = IainApi::get("api/mahahsiswa?nim=$nim");
+        if(count($res->data)){
+            $ket = $res->data[0]->status->keterangan;
+            if($res->data[0]->status->keterangan == 'AKTIF'){
+                return response()->json([
+                    "next" => true,
+                    "message" =>
+                        "Status anda \"$ket\", sehingga dapat melanjutkan",
+                ]);
+            }else{
+                return response()->json([
+                    "next" => false,
+                    "message" =>
+                        "Status anda sedang \"$ket\"",
+                ]);
+            }
+        }else{
+            return response()->json([
+                "next" => false,
+                "message" =>
+                    "Data mahasiswa tidak ditemukan !!",
+            ]);
+        }
+    }
+
+
     public function check_sks()
     {
         try {

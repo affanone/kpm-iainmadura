@@ -55,6 +55,11 @@ Route::group(
             "index",
         ]);
 
+        Route::post("/aktif", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "check_aktif",
+        ]);
+
         Route::post("/sks", [
             \App\Http\Controllers\Reg\CheckController::class,
             "check_sks",
@@ -65,9 +70,9 @@ Route::group(
             "check_mk",
         ]);
 
-        Route::post("/validate", [
+        Route::post("/valid", [
             \App\Http\Controllers\Reg\CheckController::class,
-            "validater",
+            "valid",
         ]);
     }
 );
