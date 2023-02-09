@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Reg;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 
 class CheckController extends Controller
@@ -20,41 +22,53 @@ class CheckController extends Controller
      */
     public function index()
     {
-        return view("loader.index");
+        $nim = session("token_api")->user->username;
+        $res = IainApi::get("api/mahasiswa?nim=$nim");
+        return view("loader.index", [
+            "nama" => ucwords(strtolower($res->data->data[0]->nama)),
+        ]);
     }
-    public function valid(){
-        return 'active';
-    }
-
-
-
-    public function check_aktif(){
-        $nim = session('token_api')->user->username
-        $res = IainApi::get("api/mahahsiswa?nim=$nim");
-        if(count($res->data)){
-            $ket = $res->data[0]->status->keterangan;
-            if($res->data[0]->status->keterangan == 'AKTIF'){
-                return response()->json([
-                    "next" => true,
-                    "message" =>
-                        "Status anda \"$ket\", sehingga dapat melanjutkan",
-                ]);
-            }else{
-                return response()->json([
-                    "next" => false,
-                    "message" =>
-                        "Status anda sedang \"$ket\"",
-                ]);
-            }
-        }else{
-            return response()->json([
-                "next" => false,
-                "message" =>
-                    "Data mahasiswa tidak ditemukan !!",
-            ]);
+    public function valid()
+    {
+        if (session("valid_status") == 3) {
+        } else {
+            IainApi::get("api/auth/logout");
+            Auth::logout();
+            session()->flush();
+            return Redirect::to("signin")
+                ->withErrors(
+                    "Tidak dapat melakukan pendaftaran karena dianggap ILEGAL",
+                    "login"
+                )
+                ->withInput();
         }
     }
 
+    public function check_aktif()
+    {
+        $nim = session("token_api")->user->username;
+        $res = IainApi::get("api/mahasiswa?nim=$nim");
+        if (count($res->data->data)) {
+            $ket = $res->data->data[0]->status->keterangan;
+            if ($ket == "AKTIF") {
+                session()->flash("valid_status", 1);
+                return response()->json([
+                    "next" => true,
+                    "message" => "Status anda \"$ket\", sehingga dapat melanjutkan",
+                ]);
+            } else {
+                return response()->json([
+                    "next" => false,
+                    "message" => "Status anda sedang \"$ket\"",
+                ]);
+            }
+        } else {
+            return response()->json([
+                "next" => false,
+                "message" => "Data mahasiswa tidak ditemukan !!",
+            ]);
+        }
+    }
 
     public function check_sks()
     {
@@ -69,6 +83,10 @@ class CheckController extends Controller
                         "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS !!",
                     ]);
                 } else {
+                    session()->flash(
+                        "valid_status",
+                        session("valid_status") + 1
+                    );
                     return response()->json([
                         "next" => true,
                         "message" =>
@@ -119,6 +137,10 @@ class CheckController extends Controller
                             )
                         ) {
                             // MK TIDAK LULUS
+                            session()->flash(
+                                "valid_status",
+                                session("valid_status") + 1
+                            );
                             return response()->json([
                                 "next" => true,
                                 "message" => "Anda mengulang matakuliah KPM !!",
@@ -132,6 +154,10 @@ class CheckController extends Controller
                         }
                     } else {
                         // nilai tidak ditemukan
+                        session()->flash(
+                            "valid_status",
+                            session("valid_status") + 1
+                        );
                         return response()->json([
                             "next" => true,
                             "message" => "Anda belum mengambil KPM !!",

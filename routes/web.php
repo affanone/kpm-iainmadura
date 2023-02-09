@@ -31,7 +31,9 @@ Route::group(["prefix" => "dashboard"], function () {
     ])->name("user.category");
     Route::get("/user", [UserController::class, "index"])->name("user");
     Route::get("/master", [MasterController::class, "index"]);
-    Route::get("/syarat", [PersyaratanController::class, "index"])->name("persyaratan");
+    Route::get("/syarat", [PersyaratanController::class, "index"])->name(
+        "persyaratan"
+    );
 });
 
 Route::group(
@@ -67,7 +69,7 @@ Route::group(
             "check_mk",
         ]);
 
-        Route::post("/valid", [
+        Route::get("/valid", [
             \App\Http\Controllers\Reg\CheckController::class,
             "valid",
         ]);

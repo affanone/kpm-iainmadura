@@ -341,15 +341,39 @@
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script>
         function logout() {
+            window.location = "{{ url('logout') }}";
+        }
+
+        function cekAktif() {
+            $('p').attr('id', 'is-loading');
+            $('#is-loading').text('Cek Status anda..!');
             $.ajax({
-                url: 'logout?json=1',
+                type: 'post',
+                url: 'reg/aktif',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
                 success: res => {
-                    window.location = "{{ url('signin') }}"
+                    if (res.next) {
+                        cekSKS();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Hai, {{ $nama }}...",
+                            confirmButtonText: 'Logout',
+                            text: res.message
+                        }).then(() => {
+                            // $('.btn-shadow').css('display', 'inline-block');
+                            window.location.href = 'logout'
+                        });
+                    }
                 }
             })
         }
 
         function cekSKS() {
+            $('p').attr('id', 'is-loading');
+            $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
             $.ajax({
                 type: 'post',
                 url: 'reg/sks',
@@ -362,11 +386,12 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Kesalahan!',
+                            title: "Hai, {{ $nama }}...",
+                            confirmButtonText: 'Logout',
                             text: res.message
                         }).then(() => {
-                            $('.btn-shadow').css('display', 'inline-block');
-                            // window.location.href = 'logout'
+                            // $('.btn-shadow').css('display', 'inline-block');
+                            window.location.href = 'logout'
                         });
                     }
                 }
@@ -384,15 +409,16 @@
                 },
                 success: res => {
                     if (res.next) {
-                        window.location = "{{ url('/reg/validate') }}"
+                        window.location = "{{ url('/reg/valid') }}"
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Kesalahan!',
+                            title: "Hai, {{ $nama }}...",
+                            confirmButtonText: 'Logout',
                             text: res.message
                         }).then(() => {
-                            $('.btn-shadow').css('display', 'inline-block');
-                            //window.location.href = 'logout'
+                            // $('.btn-shadow').css('display', 'inline-block');
+                            window.location.href = 'logout'
                         });
 
                     }
@@ -402,8 +428,7 @@
 
         setTimeout(() => {
             $('p').attr('id', 'is-loading');
-            $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
-            cekSKS();
+            cekAktif();
         }, 2000);
     </script>
 </body>
