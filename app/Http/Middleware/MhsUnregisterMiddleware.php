@@ -20,7 +20,7 @@ class MhsUnregisterMiddleware
             !$request->session()->exists("token_api") ||
             !$request->session()->exists("register")
         ) {
-            return rebort(404, "Access denied to open page !!");
+            return abort(404, "Access denied to open page !!");
         }
         return $next($request);
     }

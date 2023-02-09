@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reg;
+namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 
 class IainApi

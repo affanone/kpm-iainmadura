@@ -23,7 +23,7 @@ class CheckController extends Controller
         return view("loader.index");
     }
 
-    public function validate()
+    public function validater()
     {
         return view("loader.index");
     }
@@ -43,7 +43,7 @@ class CheckController extends Controller
                     // batas sks yang ditetapkan tidak memenuhi syarat
                     return response()->json([
                         "next" => false,
-                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah tempuh adalah $total_sks SKS !!",
+                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS !!",
                     ]);
                 } else {
                     return response()->json([

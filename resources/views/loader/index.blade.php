@@ -73,7 +73,7 @@
             border-right: .15em solid #51CBEE;
             white-space: nowrap;
             margin: 0 auto;
-            animation: typing 3s steps(40, end),
+            animation: typing 1000ms steps(20, end),
                 blink-caret .75s step-end infinite;
         }
 
@@ -226,7 +226,7 @@
             }
 
             to {
-                width: 85%
+                width: 100%
             }
         }
 
@@ -293,7 +293,7 @@
             }
         }
 
-        #text-checking {
+        #is-loading {
             font-family: roboto, sans-serif;
             color: white;
             position: absolute;
@@ -313,8 +313,8 @@
         <div class="circle cyan"></div>
         <div class="circle magenta"></div>
         <div class="circle yellow"></div>
-        {{-- <p id="is-loading">Loading...</p> --}}
-        <div id="text-checking">Loading...</div>
+        <p id="is-loading">fdf...</p>
+        {{-- <div id="is-loading">Sedang mengecek...</div> --}}
     </div>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
@@ -329,7 +329,6 @@
         }
 
         function cekSKS() {
-            $('#text-checking').text('Cek minimal SKS yang ditempuh..!');
             $.ajax({
                 type: 'post',
                 url: 'reg/sks',
@@ -344,15 +343,16 @@
                             icon: 'error',
                             title: 'Kesalahan!',
                             text: res.message
-                        }).then(() => window.location.href = 'signin');
-                        // alert(res.message);
+                        }).then(() => {
+                            // window.location.href = 'logout'
+                        });
                     }
                 }
             })
         }
 
         function cekNilai() {
-            $('#text-checking').text('Cek Matakuliah KPM..!');
+            $('#is-loading').text('Cek Matakuliah KPM..!');
             $.ajax({
                 type: 'post',
                 url: 'reg/mk',
@@ -361,20 +361,23 @@
                 },
                 success: res => {
                     if (res.next) {
-                        // cekNilai();
                         window.location = "{{ url('/reg/validate') }}"
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Kesalahan!',
                             text: res.message
-                        }).then(() => window.location.href = 'signin');
-                        // alert(res.message);
+                        }).then(() => {
+                            //window.location.href = 'logout'
+                        });
                     }
                 }
             })
         }
-        cekSKS();
+        $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
+        setTimeout(() => {
+            cekSKS();
+        }, 1000);
     </script>
 </body>
 
