@@ -67,7 +67,7 @@ Route::group(
 
         Route::post("/validate", [
             \App\Http\Controllers\Reg\CheckController::class,
-            "validate",
+            "validater",
         ]);
     }
 );

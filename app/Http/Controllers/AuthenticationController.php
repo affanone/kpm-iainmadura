@@ -31,11 +31,11 @@ class AuthenticationController extends Controller
         }
         try {
             $client = new Client();
-            $response = $client->post(env("API_SERVER") . "/auth", [
+            $response = $client->post(env("API_SERVER") . "/api/auth", [
                 "form_params" => [
                     "username" => $request->id_login,
                     "password" => $request->password,
-                    "logout" => 1,
+                    "logout" => 0,
                 ],
                 "headers" => [
                     "Auth-api-key" => env("API_KEY"),
@@ -80,7 +80,10 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request)
     {
-        IainApi::get("auth/logout");
+        IainApi::get("api/auth/logout");
+        Auth::logout();
+        session()->flush();
+
         if ($request->json == 1) {
             return response()->json(true);
         } else {
