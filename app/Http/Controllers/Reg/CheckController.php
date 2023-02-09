@@ -98,27 +98,27 @@ class CheckController extends Controller
                             // MK TIDAK LULUS
                             return response()->json([
                                 "next" => true,
-                                "message" => "Anda mengulang matakuliah KPM !!",
+                                "message" => "Anda mengulang matakuliah KPM!!!",
                             ]);
                         } else {
                             // MK SUDAH LULUS
                             return response()->json([
                                 "next" => false,
-                                "message" => "Anda sudah dinyatakan lulus !!",
+                                "message" => "Anda sudah dinyatakan lulus!!!",
                             ]);
                         }
                     } else {
                         // nilai tidak ditemukan
                         return response()->json([
                             "next" => true,
-                            "message" => "Anda belum mengambil KPM !!",
+                            "message" => "Anda belum mengambil KPM!!!",
                         ]);
                     }
                 } else {
                     // mk tidak ditemukan
                     return response()->json([
                         "next" => false,
-                        "message" => "Matakuliah KPM tidak ditemukan !!",
+                        "message" => "Matakuliah KPM tidak ditemukan!!!",
                     ]);
                 }
                 return $res->data;
@@ -127,7 +127,7 @@ class CheckController extends Controller
             // mahasiswa tidak ditemukan
             return response()->json([
                 "next" => false,
-                "message" => "Data mahasiswa tidak ditemukan !!",
+                "message" => "Data mahasiswa tidak ditemukan!!!",
             ]);
         }
     }
