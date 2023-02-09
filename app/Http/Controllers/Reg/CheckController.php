@@ -43,13 +43,13 @@ class CheckController extends Controller
                     // batas sks yang ditetapkan tidak memenuhi syarat
                     return response()->json([
                         "next" => false,
-                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS !!",
+                        "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS!!",
                     ]);
                 } else {
                     return response()->json([
                         "next" => true,
                         "message" =>
-                            "Jumlah SKS yang anda tempuh telah memenuhi syarat !!",
+                        "Jumlah SKS yang anda tempuh telah memenuhi syarat!!",
                     ]);
                 }
             } else {
@@ -57,7 +57,7 @@ class CheckController extends Controller
                 return response()->json([
                     "next" => false,
                     "message" =>
-                        "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini !!",
+                    "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini!!",
                 ]);
             }
             return response()->json($sks);
@@ -66,7 +66,7 @@ class CheckController extends Controller
             return response()->json([
                 "next" => false,
                 "message" =>
-                    "Terdapat kesalahan pada saat pengecekan jumlah SKS !!",
+                "Terdapat kesalahan pada saat pengecekan jumlah SKS!!",
             ]);
         }
     }
