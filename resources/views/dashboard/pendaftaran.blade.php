@@ -127,15 +127,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="form-group">
                                             <label for="nim">NIM</label>
                                             <input type="text" class="form-control" id="nim" name="nim"
-                                                readonly>
+                                                value="{{ $data->nim }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label for="nama">Nama Mahasiswa</label>
                                             <input type="text" class="form-control" id="nama" name="nama"
-                                                readonly>
+                                                value="{{ $data->nama }}" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputFile">File input</label>
+                                            <label for="exampleInputFile">Jenis Kelamin</label>
                                             <input type="text" class="form-control" id="nim" name="nim"
                                                 readonly>
                                         </div>
