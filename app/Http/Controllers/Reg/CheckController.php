@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class CheckController extends Controller
 {
+    protected $min_sks;
+    protected $tidak_lulus;
+
     public function __construct()
     {
         $this->min_sks = 100;
@@ -31,6 +34,7 @@ class CheckController extends Controller
     public function valid()
     {
         if (session("valid_status") == 3) {
+            return redirect()->route("pendaftaran.kpm");
         } else {
             IainApi::get("api/auth/logout");
             Auth::logout();

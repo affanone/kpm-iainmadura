@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PersyaratanController;
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/syarat", [PersyaratanController::class, "index"])->name(
         "persyaratan"
     );
+    Route::get("pendaftaran", [PendaftaranController::class, "index"])->name("pendaftaran.kpm");
 });
 
 Route::group(
