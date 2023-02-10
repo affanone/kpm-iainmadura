@@ -47,6 +47,16 @@ Route::group(
 );
 
 Route::group(
+    ["prefix" => "reg", "middleware" => ["mhs_register"]],
+    function () {
+        Route::get("/", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "index",
+        ]);
+    }
+);
+
+Route::group(
     ["prefix" => "unreg", "middleware" => ["mhs_unregister"]],
     function () {
         Route::get("/", [
@@ -81,9 +91,9 @@ Route::group(
     }
 );
 Route::get("/logout", [AuthenticationController::class, "logout"]);
-Route::get("/signin", [AuthenticationController::class, "index"])->name(
-    "login_page"
-);
+Route::get("/signin", [AuthenticationController::class, "index"])
+    ->name("login_page")
+    ->middleware("is_login");
 Route::post("/signin", [AuthenticationController::class, "login"])->name(
     "login_auth"
 );

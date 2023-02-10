@@ -104,7 +104,7 @@ class CheckController extends Controller
         if (count($res->data->data)) {
             $ket = $res->data->data[0]->status->keterangan;
             if ($ket == "AKTIF") {
-                session()->flash("valid_status", 1);
+                session()->put("valid_status", 1);
                 return response()->json([
                     "next" => true,
                     "message" => "Status anda \"$ket\", sehingga dapat melanjutkan",
@@ -136,10 +136,7 @@ class CheckController extends Controller
                         "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS!!",
                     ]);
                 } else {
-                    session()->flash(
-                        "valid_status",
-                        session("valid_status") + 1
-                    );
+                    session()->put("valid_status", session("valid_status") + 1);
                     return response()->json([
                         "next" => true,
                         "message" =>
@@ -192,7 +189,7 @@ class CheckController extends Controller
                             )
                         ) {
                             // MK TIDAK LULUS
-                            session()->flash(
+                            session()->put(
                                 "valid_status",
                                 session("valid_status") + 1
                             );
@@ -209,7 +206,7 @@ class CheckController extends Controller
                         }
                     } else {
                         // nilai tidak ditemukan
-                        session()->flash(
+                        session()->put(
                             "valid_status",
                             session("valid_status") + 1
                         );
