@@ -80,7 +80,7 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request)
     {
-        IainApi::get("api/auth/logout");
+        \IainApi::get("api/auth/logout");
         Auth::logout();
         session()->flush();
 

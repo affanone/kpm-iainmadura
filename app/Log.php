@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reg;
+namespace App;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
