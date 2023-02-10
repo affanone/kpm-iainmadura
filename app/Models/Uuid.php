@@ -32,7 +32,7 @@ class Uuid extends Model
      */
     public function getKeyName()
     {
-        return 'id';
+        return "id";
     }
 
     /**
@@ -42,6 +42,6 @@ class Uuid extends Model
      */
     public function getKeyType()
     {
-        return 'string';
+        return "string";
     }
 }
