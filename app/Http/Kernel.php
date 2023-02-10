@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         "akses_user" => \App\Http\Middleware\AccessUserMiddleware::class,
         "akses_mahasiswa" => \App\Http\Middleware\MahasiswaMiddleware::class,
         "mhs_unregister" => \App\Http\Middleware\MhsUnregisterMiddleware::class,
+        "is_login" => \App\Http\Middleware\IsLoginMiddleware::class,
     ];
 }

@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Form Pendaftaran KPM IAIN Madura <small>Tahun {{ date('Y') }}</small>
+                            <h1 class="m-0">Form Pendaftaran <small>{{ $nama_kpm }}</small>
                             </h1>
                         </div>
                     </div>
@@ -127,17 +127,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="form-group">
                                             <label for="nim">NIM</label>
                                             <input type="text" class="form-control" id="nim" name="nim"
-                                                value="{{ $data->nim }}" readonly>
+                                                value="{{ $data->nim }}" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="nama">Nama Mahasiswa</label>
                                             <input type="text" class="form-control" id="nama" name="nama"
-                                                value="{{ $data->nama }}" readonly>
+                                                value="{{ $data->nama }}" disabled>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputFile">Jenis Kelamin</label>
-                                            <input type="text" class="form-control" id="nim" name="nim"
-                                                readonly>
+                                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                                            <input type="text" class="form-control" id="jenis_kelamin"
+                                                name="jenis_kelamin"
+                                                value="{{ $data->kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}"
+                                                disabled>
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="exampleCheck1">

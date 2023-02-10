@@ -72,17 +72,22 @@ class CheckController extends Controller
         $m->alamat = $request->alamat;
         $m->save();
 
+        Auth::login($user);
+        session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
+
+        return Redirect::to("reg");
     }
 
     public function valid()
     {
         if (session("valid_status") == 3) {
+
             $nim = session("token_api")->user->username;
             $res = \IainApi::get("api/mahasiswa?nim=$nim");
             $mhs = $res->data->data[0];
-            return $mhs;
-            // return view('dashboard.pendaftaran', ['data' => $mhs]);
+            // return $mhs;
+            return view('dashboard.pendaftaran', ['data' => $mhs,  'nama_kpm' => 'KPM IAIN Madura Tahun 2023']);
         } else {
             \IainApi::get("api/auth/logout");
             Auth::logout();
