@@ -75,6 +75,11 @@ Route::group(
             \App\Http\Controllers\Reg\CheckController::class,
             "valid",
         ]);
+
+        Route::post("/register", [
+            \App\Http\Controllers\Reg\CheckController::class,
+            "registrasi",
+        ]);
     }
 );
 Route::get("/logout", [AuthenticationController::class, "logout"]);

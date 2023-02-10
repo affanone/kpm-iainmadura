@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Reg;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Models\Mahsiswa;
 
 class CheckController extends Controller
 {
@@ -26,17 +28,64 @@ class CheckController extends Controller
     public function index()
     {
         $nim = session("token_api")->user->username;
-        $res = IainApi::get("api/mahasiswa?nim=$nim");
+        $res = \IainApi::get("api/mahasiswa?nim=$nim");
         return view("loader.index", [
             "nama" => ucwords(strtolower($res->data->data[0]->nama)),
         ]);
     }
+
+    public function registrasi()
+    {
+        // Validate form data
+        $validator = Validator::make($request->all(), [
+            "alamat" => "required",
+            "hp" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $nim = session("token_api")->user->username;
+        $res = \IainApi::get("api/mahasiswa?nim=$nim");
+        $mhs = $res->data->data[0];
+
+        $n = new User();
+        $n->username = session("token_api")->user->username;
+        $n->email = session("token_api")->user->email;
+        $n->email_verified_at = now();
+        $n->access = "[2]";
+        $n->save();
+
+        $m = new Mahasiswa();
+        $m->nim = $mhs->nim;
+        $m->nama = $mhs->nama;
+        $m->kelamin = $mhs->kelamin;
+        $m->prodi =
+            $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
+        $m->fakultas =
+            $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
+        $m->hp = $request->hp;
+        $m->alamat = $request->alamat;
+        $m->save();
+
+        \Log::set("Melakukan pendaftaran", "register");
+    }
+
     public function valid()
     {
         if (session("valid_status") == 3) {
+            $nim = session("token_api")->user->username;
+            $res = \IainApi::get("api/mahasiswa?nim=$nim");
+            $mhs = $res->data->data[0];
             return redirect()->route("pendaftaran.kpm");
+            // return $mhs;
+            // return view('')
         } else {
-            IainApi::get("api/auth/logout");
+            \IainApi::get("api/auth/logout");
             Auth::logout();
             session()->flush();
             return Redirect::to("signin")
@@ -51,7 +100,7 @@ class CheckController extends Controller
     public function check_aktif()
     {
         $nim = session("token_api")->user->username;
-        $res = IainApi::get("api/mahasiswa?nim=$nim");
+        $res = \IainApi::get("api/mahasiswa?nim=$nim");
         if (count($res->data->data)) {
             $ket = $res->data->data[0]->status->keterangan;
             if ($ket == "AKTIF") {
@@ -77,7 +126,7 @@ class CheckController extends Controller
     public function check_sks()
     {
         try {
-            $sks = IainApi::get("api/mhs/sks");
+            $sks = \IainApi::get("api/mhs/sks");
             if ($sks->data->capaian) {
                 $total_sks = $sks->data->capaian->sks;
                 if ($total_sks < $this->min_sks) {
@@ -120,7 +169,7 @@ class CheckController extends Controller
     {
         // matakuliah?tahun=2017&q=kpm&prod=0201
 
-        $res = IainApi::get(
+        $res = \IainApi::get(
             "api/mahasiswa?nim=" . session("token_api")->user->username
         );
         if ($res->status) {
@@ -128,10 +177,12 @@ class CheckController extends Controller
                 $mhs = $res->data->data[0];
                 $kur = $mhs->kurikulum->tahun;
                 $prod = $mhs->prodi->id;
-                $res = IainApi::get("api/matakuliah?kur=$kur&q=kpm&prod=$prod");
+                $res = \IainApi::get(
+                    "api/matakuliah?kur=$kur&q=kpm&prod=$prod"
+                );
                 if (count($res->data->data)) {
                     $mk = $res->data->data[0]->id;
-                    $res = IainApi::get("api/mhs/nilai/?mk=$mk");
+                    $res = \IainApi::get("api/mhs/nilai/?mk=$mk");
                     if ($res->data->nilai) {
                         $nilai = $res->data->nilai;
                         if (

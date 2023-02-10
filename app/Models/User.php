@@ -42,13 +42,14 @@ class User extends Authenticatable
         "email_verified_at" => "datetime",
     ];
 
-    public function user_group()
-    {
-        return $this->hasOne("App\Models\UserGroup");
-    }
-
     public function getAccessAttribute($value)
     {
+        /*
+            0 => lp2m,
+            1 => dpl,
+            2 => mhs
+            */
+
         return $value ? json_decode($value) : [];
     }
 }
