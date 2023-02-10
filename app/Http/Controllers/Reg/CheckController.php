@@ -69,7 +69,11 @@ class CheckController extends Controller
         $m->alamat = $request->alamat;
         $m->save();
 
+        Auth::login($user);
+        session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
+
+        return Redirect::to("reg");
     }
 
     public function valid()

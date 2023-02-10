@@ -47,7 +47,7 @@ Route::group(
 );
 
 Route::group(
-    ["prefix" => "reg", "middleware" => ["mhs_unregister"]],
+    ["prefix" => "unreg", "middleware" => ["mhs_unregister"]],
     function () {
         Route::get("/", [
             \App\Http\Controllers\Reg\CheckController::class,

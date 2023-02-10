@@ -53,7 +53,7 @@ class AuthenticationController extends Controller
                     "token_api" => $token, // token hasil login api
                     "register" => false, // false artinya tidak ada di database
                 ]);
-                return Redirect::to("reg");
+                return Redirect::to("unreg");
             }
 
             // if ($user) {
