@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reg;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class CheckController extends Controller
@@ -28,10 +29,30 @@ class CheckController extends Controller
             "nama" => ucwords(strtolower($res->data->data[0]->nama)),
         ]);
     }
+
+    public function registrasi()
+    {
+        // Validate form data
+        $validator = Validator::make($request->all(), [
+            "name" => "required|min:3",
+            "email" => "required|email",
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+    }
+
     public function valid()
     {
         if (session("valid_status") == 3) {
-            return "s";
+            $nim = session("token_api")->user->username;
+            $res = \IainApi::get("api/mahasiswa?nim=$nim");
+            $mhs = $res->data->data[0];
+            return $mhs;
             // return view('')
         } else {
             \IainApi::get("api/auth/logout");

@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->string("nim", 18)->unique();
             $table->string("nama", 50);
             $table->enum("kelamin", ["L", "P"]);
-            $table->string("prodi", 50);
-            $table->string("fakultas", 32);
+            $table->string("prodi", 100);
+            $table->string("fakultas", 100);
             $table->string("hp", 16);
             $table->string("alamat");
             $table->timestamps();
