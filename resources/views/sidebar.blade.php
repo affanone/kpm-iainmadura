@@ -57,6 +57,12 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('tahun.akademik') }}" class="nav-link">
+                                <i class="fas fa-calendar-check nav-icon"></i>
+                                <p>Tahun Akademik</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('user.category') }}" class="nav-link">
                                 <i class="fas fa-user-cog nav-icon"></i>
                                 <p>Kategori Pengguna</p>

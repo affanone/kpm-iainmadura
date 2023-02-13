@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PersyaratanController;
+use App\Http\Controllers\Superadmin\TahunAkademikController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,7 +37,7 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/syarat", [PersyaratanController::class, "index"])->name(
         "persyaratan"
     );
-    Route::get("pendaftaran", [PendaftaranController::class, "index"])->name("pendaftaran.kpm");
+    Route::get("tahun_akademik", [TahunAkademikController::class, "index"])->name("tahun.akademik");
 });
 
 Route::group(

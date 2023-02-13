@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Superadmin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PendaftaranController extends Controller
+class TahunAkademikController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class PendaftaranController extends Controller
      */
     public function index()
     {
-        return view('dashboard.pendaftaran');
+        return view('dashboard.tahun_akademik');
     }
 
     /**
