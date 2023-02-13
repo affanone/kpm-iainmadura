@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
 
 use App\Models\User;
+use App\Models\TahunAkademik;
 
 class AuthenticationController extends Controller
 {
@@ -49,6 +50,7 @@ class AuthenticationController extends Controller
                 // data ada di database kpm
             } else {
                 // data tidak ada
+
                 session([
                     "token_api" => $token, // token hasil login api
                     "register" => false, // false artinya tidak ada di database
