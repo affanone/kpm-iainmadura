@@ -107,9 +107,53 @@ Route::get("/password", function () {
 });
 
 Route::get("/dummi/ta", function () {
-    // $i = new \App\Models\TahunAkademik();
-    // $i->tahun = 2022;
-    // $i->semester = "GENAP";
-    // $i->status = 1;
-    // $i->save();
+    return "a";
+    $kpm = [];
+    array_push($kpm, [
+        "id" => "krs",
+        "name" => "krs",
+        "deskripsi" => "Harap Upload KRS terbaru anda",
+        "validator" => "required",
+        "format" => [
+            "pdf" => [
+                "max" => 5000000, // byte
+                "min" => 0, // infinity
+            ],
+            "jpg" => [
+                "max" => 1000000, // byte
+                "min" => 0, // infinity
+            ],
+        ],
+    ]);
+    array_push($kpm, [
+        "id" => "rekom",
+        "name" => "rekom",
+        "deskripsi" => "Harap uload rekomendasi dari dekan",
+        "validator" => "required",
+        "format" => [
+            "pdf" => [
+                "max" => 5000000, // byte
+                "min" => 0, // infinity
+            ],
+            "jpg" => [
+                "max" => 1000000, // byte
+                "min" => 0, // infinity
+            ],
+        ],
+    ]);
+    $i = new \App\Models\Kpm();
+    $i->nama = "KPM Fakultas";
+    $i->config_upload = json_encode($kpm);
+    $i->deskripsi =
+        "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Fakultas";
+    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->save();
+
+    $i = new \App\Models\Kpm();
+    $i->nama = "KPM Institur";
+    $i->config_upload = json_encode($kpm);
+    $i->deskripsi =
+        "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Institur";
+    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->save();
 });
