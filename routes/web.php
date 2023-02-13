@@ -35,7 +35,9 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/syarat", [PersyaratanController::class, "index"])->name(
         "persyaratan"
     );
-    Route::get("pendaftaran", [PendaftaranController::class, "index"])->name("pendaftaran.kpm");
+    Route::get("pendaftaran", [PendaftaranController::class, "index"])->name(
+        "pendaftaran.kpm"
+    );
 });
 
 Route::group(
@@ -102,4 +104,12 @@ Route::post("/signin", [AuthenticationController::class, "login"])->name(
 
 Route::get("/password", function () {
     return Hash::make("19380011030");
+});
+
+Route::get("/dummi/ta", function () {
+    // $i = new \App\Models\TahunAkademik();
+    // $i->tahun = 2022;
+    // $i->semester = "GENAP";
+    // $i->status = 1;
+    // $i->save();
 });
