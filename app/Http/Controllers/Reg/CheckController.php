@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Mahsiswa;
 use App\Models\TahunAkademik;
 
 class CheckController extends Controller
@@ -35,51 +34,6 @@ class CheckController extends Controller
         ]);
     }
 
-    public function registrasi()
-    {
-        // Validate form data
-        $validator = Validator::make($request->all(), [
-            "alamat" => "required",
-            "hp" => "required",
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $nim = session("token_api")->user->username;
-        $res = \IainApi::get("api/mahasiswa?nim=$nim");
-        $mhs = $res->data->data[0];
-
-        $n = new User();
-        $n->username = session("token_api")->user->username;
-        $n->email = session("token_api")->user->email;
-        $n->email_verified_at = now();
-        $n->access = "[2]";
-        $n->save();
-
-        $m = new Mahasiswa();
-        $m->nim = $mhs->nim;
-        $m->nama = $mhs->nama;
-        $m->kelamin = $mhs->kelamin;
-        $m->prodi =
-            $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
-        $m->fakultas =
-            $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
-        $m->hp = $request->hp;
-        $m->alamat = $request->alamat;
-        $m->save();
-
-        Auth::login($user);
-        session()->push("register", true);
-        \Log::set("Melakukan pendaftaran", "register");
-
-        return Redirect::to("reg");
-    }
-
     public function valid()
     {
         if (session("valid_status") == 3) {
@@ -89,6 +43,7 @@ class CheckController extends Controller
             $ta = TahunAkademik::where("status", 1)->first();
             if ($ta && count($ta->kpm)) {
                 return view("register.data-diri", [
+                    "step" => 0,
                     "data" => $mhs,
                     "kpm" => $ta->kpm,
                     "nama_kpm" =>

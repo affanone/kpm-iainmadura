@@ -17,8 +17,10 @@ class MhsUnregisterMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (
-            !$request->session()->exists("token_api") ||
-            !$request->session()->exists("register")
+            !(
+                $request->session()->exists("token_api") &&
+                !$request->session()->get("register")
+            )
         ) {
             return abort(404, "Access denied to open page !!");
         }

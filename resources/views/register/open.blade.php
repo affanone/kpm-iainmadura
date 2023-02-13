@@ -18,6 +18,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}" />
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}" />
+    <style>
+        .error {
+            background-color: #ffe9eb !important;
+            color: black !important;
+        }
+
+        .error .font-italic {
+            color: #952828 !important;
+        }
+
+        .menu-utama a.active {
+            color: var(--light) !important;
+            background: var(--primary) !important;
+            border-radius: 20px !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition layout-top-nav">
@@ -36,24 +52,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-                    <!-- Left navbar links -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Data Diri</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Jenis KPM</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Persyaratan KPM</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Finalisasi</a>
-                        </li>
-                    </ul>
-                </div>
+                @if ($step > 0)
+                    <div class="collapse navbar-collapse order-3 menu-utama" id="navbarCollapse">
+                        <!-- Left navbar links -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="{{ route('reg_profil') }}"
+                                    class="nav-link @if ($step == 1) active @endif">Data Diri</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reg_kpm') }}"
+                                    class="nav-link @if ($step == 2) active @endif">Jenis KPM</a>
+                                {{-- </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reg_syarat') }}" class="nav-link">Persyaratan KPM</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reg_final') }}" class="nav-link">Finalisasi</a>
+                            </li> --}}
+                        </ul>
+                    </div>
+                @endif
 
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">

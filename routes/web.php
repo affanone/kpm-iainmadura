@@ -53,10 +53,25 @@ Route::group(
 Route::group(
     ["prefix" => "reg", "middleware" => ["mhs_register"]],
     function () {
-        Route::get("/", [
+        Route::get("/profil", [
             \App\Http\Controllers\Reg\RegisterController::class,
-            "index",
-        ]);
+            "profil",
+        ])->name("reg_profil");
+
+        Route::get("/kpm", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "kpm",
+        ])->name("reg_kpm");
+
+        // Route::get("/kpm", [
+        //     \App\Http\Controllers\Reg\RegisterController::class,
+        //     "kpm",
+        // ])->name("reg_syarat");
+
+        // Route::get("/kpm", [
+        //     \App\Http\Controllers\Reg\RegisterController::class,
+        //     "kpm",
+        // ])->name("reg_final");
     }
 );
 
@@ -89,9 +104,9 @@ Route::group(
         ]);
 
         Route::post("/register", [
-            \App\Http\Controllers\Reg\CheckController::class,
+            \App\Http\Controllers\Reg\RegisterController::class,
             "registrasi",
-        ]);
+        ])->name("register");
     }
 );
 Route::get("/logout", [AuthenticationController::class, "logout"]);
