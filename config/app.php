@@ -192,6 +192,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*
@@ -210,6 +212,7 @@ return [
             // 'ExampleClass' => App\Example\ExampleClass::class,
             "Log" => App\Log::class,
             "IainApi" => App\IainApi::class,
+            "DataTables" => Yajra\DataTables\Facades\DataTables::class,
         ])
         ->toArray(),
 ];

@@ -26,9 +26,8 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tmb-thn-akademik"><i
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tmbTahunAkademik"><i
                             class="fas fa-plus-circle"></i> Tambah Data</button>
-                    <button type="button" class="btn btn-info"><i class="fas fa-file-import"></i> Import Data</button>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -39,7 +38,7 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped table-hover">
+                                    <table id="tblThnAkademik" class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th width="5%">No</th>
@@ -80,12 +79,14 @@
         </section>
         <!-- /.content -->
 
-        <div class="modal fade" id="tmb-thn-akademik" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        <!-- /modal Tambah -->
+        <div class="modal fade" id="tmbTahunAkademik" data-backdrop="static" data-keyboard="false"
             aria-labelledby="tmbTahunAkademik" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" id="frmTmbThnAkademik">
+                        @csrf
                         <div class="modal-header bg-secondary">
                             <h5 class="modal-title">Tambah Tahun Akademik</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -94,33 +95,101 @@
                         </div>
                         <div class="modal-body">
                             <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
-                                    <div class="col-sm-2 mr-3">
-                                        <input type="text" class="form-control" id="tahun" name="tahun"
-                                            autocomplete="off">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="tahun">Tahun</label>
+                                            <input type="text" class="form-control" id="tahun" name="tahun"
+                                                value="{{ old('tahun', date('Y')) }}" autocomplete="off">
+                                        </div>
+                                        <!-- /.form-group -->
                                     </div>
-                                    <label for="semester" class="col-sm-2 col-form-label">Semester</label>
-                                    <div class="col-sm-2">
-                                        <select class="form-control select2">
-                                            <option selected="selected">-- Pilih salah satu --</option>
-                                            <option>Ganjil</option>
-                                            <option>Genap</option>
-                                        </select>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="semester">Semester</label>
+                                            <select class="form-control" id="semester" name="semester">
+                                                <option value="" selected="selected">-- Pilih Semester --</option>
+                                                <option value="gasal">Gasal</option>
+                                                <option value="genap">Genap</option>
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="status" class="col-sm-2 col-form-label">Status</label>
-                                    <div class="col-2">
-                                        <input type="checkbox" name="status" id="status" data-on-text="Aktif"
-                                            data-off-text="Tidak" checked data-off-color="danger" data-on-color="success">
+
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="status">Status</label>
+                                            <input class="form-control" type="checkbox" name="status" id="status"
+                                                data-on-text="Aktif" data-off-text="Tidak" checked data-off-color="danger"
+                                                data-on-color="success">
+                                        </div>
+                                        <!-- /.form-group -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="save-thn-akademik">Simpan</button>
+                            <button type="submit" class="btn btn-primary" id="btnSmpThnAkademik">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- /modal Tambah -->
+        <div class="modal fade" id="modalEditThnAkademik" data-backdrop="static" data-keyboard="false"
+            aria-labelledby="modalEditThnAkademik" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- form start -->
+                    <form class="form-horizontal" id="frmEditThnAkademik">
+                        @method('PUT')
+                        @csrf
+                        <div class="modal-header bg-secondary">
+                            <h5 class="modal-title">Edit Tahun Akademik</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="tahun_edit">Tahun</label>
+                                            <input type="text" class="form-control" id="tahun_edit" name="tahun_edit"
+                                                autocomplete="off">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="semester_edit">Semester</label>
+                                            <select class="form-control" id="semester_edit" name="semester_edit">
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="status">Status</label>
+                                            <input class="form-control" type="checkbox" name="status" id="status"
+                                                data-on-text="Aktif" data-off-text="Tidak" checked
+                                                data-off-color="danger" data-on-color="success">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="btnSmpThnAkademik">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -135,8 +204,148 @@
 
 @section('script')
     <script>
-        $('#status').bootstrapSwitch({
+        $('#status').bootstrapSwitch();
 
+        $("#frmTmbThnAkademik").validate({
+            errorClass: 'error is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                tahun: {
+                    required: true,
+                    digits: true,
+                    range: [new Date().getFullYear() - 5, new Date().getFullYear()]
+                },
+                semester: {
+                    required: true
+                }
+            },
+            messages: {
+                tahun: {
+                    required: 'Harus diisi',
+                    digits: 'Hanya angka',
+                    range: 'Isi diantara rentang tahun {0} dan {1}'
+                },
+                semester: {
+                    required: 'Harus dipilih'
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid').removeClass('is-valid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid').addClass('is-valid');
+            },
+            submitHandler: function(form, e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('tahun_akademik.post') }}",
+                    data: $('#frmTmbThnAkademik').serialize(),
+                    dataType: 'JSON',
+                    success: function(data) {
+                        document.getElementById('frmTmbThnAkademik').reset();
+                        $('#tmbTahunAkademik').modal('toggle');
+                        $('#tblThnAkademik').DataTable().ajax.reload(null,
+                            false);
+                        const msg = JSON.parse(JSON.stringify(data));
+                        console.log(msg);
+                        Swal.fire({
+                            icon: msg.icon,
+                            title: "Berhasil",
+                            text: msg.message
+                        });
+                    },
+                    error: function(data) {
+                        const msg = JSON.parse(JSON.stringify(data));
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Gagal",
+                            text: msg.responseJSON.message
+                        });
+                    }
+                });
+                return false;
+            }
         });
+    </script>
+
+    <script>
+        let tblThnAkademik = $("#tblThnAkademik").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('tahun_akademik.data') }}",
+                type: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}"
+                }
+            },
+            columns: [{
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+                },
+                {
+                    data: 'tahun'
+                },
+                {
+                    data: 'semester'
+                },
+                {
+                    data: 'status'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            "order": [
+                [1, 'asc']
+            ],
+            "columnDefs": [{
+                "width": "30%",
+                "targets": 2
+            }, {
+                "targets": "_all",
+                "className": "text-center",
+                "visible": true
+            }],
+            "responsive": true
+        });
+    </script>
+
+    <script>
+        function editThnAkademik(id) {
+            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+            url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                dataType: "JSON"
+            }).done((response) => {
+                const smt = {
+                    "gasal": "Gasal",
+                    "genap": "Genap"
+                };
+
+                $('#id_edit').val(response.id);
+                $('#tahun_edit').val(response.tahun);
+
+                $('#semester_edit').append(`<option value="">-- Pilih Semester --</option>`);
+                for (const key in smt) {
+                    const selected = response.semester.toLowerCase() == key ? 'selected' : '';
+                    $('#semester_edit').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
+                }
+
+                $('#status_edit').val(response.status);
+                $('#modalEditThnAkademik').modal('show');
+            });
+        }
     </script>
 @endsection
