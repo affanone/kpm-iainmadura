@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
 
 use App\Models\User;
+use App\Models\TahunAkademik;
 
 class AuthenticationController extends Controller
 {
@@ -49,11 +50,21 @@ class AuthenticationController extends Controller
                 // data ada di database kpm
             } else {
                 // data tidak ada
-                session([
-                    "token_api" => $token, // token hasil login api
-                    "register" => false, // false artinya tidak ada di database
-                ]);
-                return Redirect::to("unreg");
+                $ta = TahunAkademik::where("status", 1)->first();
+                if ($ta) {
+                    session([
+                        "token_api" => $token, // token hasil login api
+                        "register" => false, // false artinya tidak ada di database
+                    ]);
+                    return Redirect::to("unreg");
+                } else {
+                    return Redirect::to("signin")
+                        ->withErrors(
+                            "Mohon maaf, saat ini belum ada pendaftaran KPM yang tersedia",
+                            "login"
+                        )
+                        ->withInput();
+                }
             }
 
             // if ($user) {
@@ -62,12 +73,12 @@ class AuthenticationController extends Controller
             //     Log::set("Melakukan login", "login");
             //     return Redirect::to("mhs");
             // } else {
-            //     return Redirect::to("signin")
-            //         ->withErrors(
-            //             "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
-            //             "login"
-            //         )
-            //         ->withInput();
+            // return Redirect::to("signin")
+            //     ->withErrors(
+            //         "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
+            //         "login"
+            //     )
+            //     ->withInput();
             // }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
