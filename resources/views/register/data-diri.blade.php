@@ -1,18 +1,4 @@
 @include('register.open')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container">
-        <div class="row mb-2">
-            <div class="col-12">
-                <h1 class="m-0">Form Pendaftaran <small>{{ $nama_kpm }}</small>
-                </h1>
-            </div>
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
 
 <!-- Main content -->
 <div class="content">
@@ -26,30 +12,38 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="{{ route('register') }}">
+                    <form method="post" action="{{ $step > 0 ? route('reg_update_profil') : route('register') }}">
                         @csrf
                         <div class="card-body">
+                            @if ($errors->daftar->first())
+                                <div class="alert alert-danger">{{ $errors->daftar->first() }}</div>
+                            @endif
                             <div class="form-group">
                                 <label for="nim">NIM</label>
-                                <input type="text" class="form-control" id="nim" value="{{ $data->nim }}"
+                                <input type="text" class="form-control" id="nim" value="{{ $mhs->nim }}"
                                     disabled>
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama Mahasiswa</label>
-                                <input type="text" class="form-control" id="nama" value="{{ $data->nama }}"
+                                <input type="text" class="form-control" id="nama" value="{{ $mhs->nama }}"
                                     disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="nama">Fakultas / Prodi</label>
+                                <input type="text" class="form-control" id="nama"
+                                    value="{{ $mhs->prodi->fakultas->nama . ' / ' . $mhs->prodi->long }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="jenis_kelamin">Jenis Kelamin</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" value="L" id="jeniskelaminl"
-                                        {{ $data->kelamin == 'L' ? 'checked' : '' }} disabled>
+                                        {{ $mhs->kelamin == 'L' ? 'checked' : '' }} disabled>
                                     <label class="form-check-label" for="jeniskelaminl">Laki-laki</label>
                                 </div>
 
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input"
-                                        {{ $data->kelamin == 'P' ? 'checked' : '' }} value="P" id="jeniskelaminp"
+                                        {{ $mhs->kelamin == 'P' ? 'checked' : '' }} value="P" id="jeniskelaminp"
                                         disabled>
                                     <label class="form-check-label" for="jeniskelaminp">Perempuan</label>
                                 </div>
@@ -60,7 +54,7 @@
                                 @endif
                                 <label for="hp">Nomor HP / WhatsApp<strong class="text-danger">*</strong></label>
                                 <input type="number" class="form-control" id="hp" name="hp"
-                                    value="{{ old('hp') }}">
+                                    value="{{ old('hp', $hp) }}">
                             </div>
                             <div class="form-group @if ($errors->has('alamat')) alert alert-danger  error @endif">
                                 @if ($errors->has('alamat'))
@@ -68,13 +62,13 @@
                                 @endif
                                 <label for="alamat">Alamat Tinggal Saat Ini<strong
                                         class="text-danger">*</strong></label>
-                                <textarea type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat') }}"></textarea>
+                                <textarea type="text" class="form-control" id="alamat" name="alamat">{{ old('alamat', $alamat) }}</textarea>
                             </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Simpan & Lanjut</button>
                         </div>
                     </form>
                 </div>

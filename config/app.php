@@ -210,6 +210,7 @@ return [
             // 'ExampleClass' => App\Example\ExampleClass::class,
             "Log" => App\Log::class,
             "IainApi" => App\IainApi::class,
+            "Helper" => App\Helper::class,
         ])
         ->toArray(),
 ];

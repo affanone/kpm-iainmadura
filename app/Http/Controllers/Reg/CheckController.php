@@ -44,8 +44,9 @@ class CheckController extends Controller
             if ($ta && count($ta->kpm)) {
                 return view("register.data-diri", [
                     "step" => 0,
-                    "data" => $mhs,
-                    "kpm" => $ta->kpm,
+                    "mhs" => $mhs,
+                    "hp" => "",
+                    "alamat" => "",
                     "nama_kpm" =>
                         "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
                         ($ta->tahun + 1),

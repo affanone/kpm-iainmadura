@@ -53,6 +53,11 @@ Route::group(
 Route::group(
     ["prefix" => "reg", "middleware" => ["mhs_register"]],
     function () {
+        Route::post("/register", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "update_profil",
+        ])->name("reg_update_profil");
+
         Route::get("/profil", [
             \App\Http\Controllers\Reg\RegisterController::class,
             "profil",
@@ -63,10 +68,20 @@ Route::group(
             "kpm",
         ])->name("reg_kpm");
 
-        // Route::get("/kpm", [
-        //     \App\Http\Controllers\Reg\RegisterController::class,
-        //     "kpm",
-        // ])->name("reg_syarat");
+        Route::post("/kpm", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "update_kpm",
+        ])->name("reg_update_kpm");
+
+        Route::get("/syarat", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "syarat",
+        ])->name("reg_syarat");
+
+        Route::post("/syarat", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "upload_syarat",
+        ])->name("reg_upload_syarat");
 
         // Route::get("/kpm", [
         //     \App\Http\Controllers\Reg\RegisterController::class,

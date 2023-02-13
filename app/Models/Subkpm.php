@@ -8,4 +8,9 @@ class Subkpm extends Uuid
     {
         return json_decode($value);
     }
+
+    public function kpm()
+    {
+        return $this->belongsTo(Kpm::class);
+    }
 }

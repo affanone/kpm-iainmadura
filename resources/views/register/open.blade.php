@@ -63,11 +63,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <li class="nav-item">
                                 <a href="{{ route('reg_kpm') }}"
                                     class="nav-link @if ($step == 2) active @endif">Jenis KPM</a>
-                                {{-- </li>
-                            <li class="nav-item">
-                                <a href="{{ route('reg_syarat') }}" class="nav-link">Persyaratan KPM</a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('reg_syarat') }}"
+                                    class="nav-link @if ($step == 3) active @endif">Persyaratan KPM</a>
+                            </li>
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('reg_final') }}" class="nav-link">Finalisasi</a>
                             </li> --}}
                         </ul>
@@ -114,3 +115,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <h1 class="m-0">Form Pendaftaran <small>{{ $nama_kpm }}</small>
+                            </h1>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
