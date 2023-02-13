@@ -56,10 +56,40 @@ Route::group(
 Route::group(
     ["prefix" => "reg", "middleware" => ["mhs_register"]],
     function () {
-        Route::get("/", [
+        Route::post("/register", [
             \App\Http\Controllers\Reg\RegisterController::class,
-            "index",
-        ]);
+            "update_profil",
+        ])->name("reg_update_profil");
+
+        Route::get("/profil", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "profil",
+        ])->name("reg_profil");
+
+        Route::get("/kpm", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "kpm",
+        ])->name("reg_kpm");
+
+        Route::post("/kpm", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "update_kpm",
+        ])->name("reg_update_kpm");
+
+        Route::get("/syarat", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "syarat",
+        ])->name("reg_syarat");
+
+        Route::post("/syarat", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "upload_syarat",
+        ])->name("reg_upload_syarat");
+
+        // Route::get("/kpm", [
+        //     \App\Http\Controllers\Reg\RegisterController::class,
+        //     "kpm",
+        // ])->name("reg_final");
     }
 );
 
@@ -92,9 +122,9 @@ Route::group(
         ]);
 
         Route::post("/register", [
-            \App\Http\Controllers\Reg\CheckController::class,
+            \App\Http\Controllers\Reg\RegisterController::class,
             "registrasi",
-        ]);
+        ])->name("register");
     }
 );
 Route::get("/logout", [AuthenticationController::class, "logout"]);
@@ -144,19 +174,19 @@ Route::get("/dummi/ta", function () {
             ],
         ],
     ]);
-    $i = new \App\Models\Kpm();
+    $i = new \App\Models\Subkpm();
     $i->nama = "KPM Fakultas";
     $i->config_upload = json_encode($kpm);
     $i->deskripsi =
         "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Fakultas";
-    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->kpm_id = "057513a7-d145-4a94-a009-8b492dcca624";
     $i->save();
 
-    $i = new \App\Models\Kpm();
+    $i = new \App\Models\Subkpm();
     $i->nama = "KPM Institur";
     $i->config_upload = json_encode($kpm);
     $i->deskripsi =
         "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Institur";
-    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->kpm_id = "057513a7-d145-4a94-a009-8b492dcca624";
     $i->save();
 });

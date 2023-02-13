@@ -213,6 +213,7 @@ return [
             "Log" => App\Log::class,
             "IainApi" => App\IainApi::class,
             "DataTables" => Yajra\DataTables\Facades\DataTables::class,
+            "Helper" => App\Helper::class,
         ])
         ->toArray(),
 ];

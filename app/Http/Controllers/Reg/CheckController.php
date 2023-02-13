@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Mahsiswa;
+use App\Models\TahunAkademik;
 
 class CheckController extends Controller
 {
@@ -34,60 +34,34 @@ class CheckController extends Controller
         ]);
     }
 
-    public function registrasi()
-    {
-        // Validate form data
-        $validator = Validator::make($request->all(), [
-            "alamat" => "required",
-            "hp" => "required",
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $nim = session("token_api")->user->username;
-        $res = \IainApi::get("api/mahasiswa?nim=$nim");
-        $mhs = $res->data->data[0];
-
-        $n = new User();
-        $n->username = session("token_api")->user->username;
-        $n->email = session("token_api")->user->email;
-        $n->email_verified_at = now();
-        $n->access = "[2]";
-        $n->save();
-
-        $m = new Mahasiswa();
-        $m->nim = $mhs->nim;
-        $m->nama = $mhs->nama;
-        $m->kelamin = $mhs->kelamin;
-        $m->prodi =
-            $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
-        $m->fakultas =
-            $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
-        $m->hp = $request->hp;
-        $m->alamat = $request->alamat;
-        $m->save();
-
-        Auth::login($user);
-        session()->push("register", true);
-        \Log::set("Melakukan pendaftaran", "register");
-
-        return Redirect::to("reg");
-    }
-
     public function valid()
     {
         if (session("valid_status") == 3) {
-
             $nim = session("token_api")->user->username;
             $res = \IainApi::get("api/mahasiswa?nim=$nim");
             $mhs = $res->data->data[0];
-            // return $mhs;
-            return view('dashboard.pendaftaran', ['data' => $mhs,  'nama_kpm' => 'KPM IAIN Madura Tahun 2023']);
+            $ta = TahunAkademik::where("status", 1)->first();
+            if ($ta && count($ta->kpm)) {
+                return view("register.data-diri", [
+                    "step" => 0,
+                    "mhs" => $mhs,
+                    "hp" => "",
+                    "alamat" => "",
+                    "nama_kpm" =>
+                        "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
+                        ($ta->tahun + 1),
+                ]);
+            } else {
+                \IainApi::get("api/auth/logout");
+                Auth::logout();
+                session()->flush();
+                return Redirect::to("signin")
+                    ->withErrors(
+                        "Mohon maaf, saat ini belum ada pendaftaran KPM yang tersedia",
+                        "login"
+                    )
+                    ->withInput();
+            }
         } else {
             \IainApi::get("api/auth/logout");
             Auth::logout();
@@ -140,14 +114,11 @@ class CheckController extends Controller
                         "message" => "Jumlah SKS tidak memenuhi syarat yang telah ditetapkan, batas minimal SKS adalah $this->min_sks SKS, sementara total SKS anda yang telah ditempuh adalah $total_sks SKS!!",
                     ]);
                 } else {
-                    session()->put(
-                        "valid_status",
-                        session("valid_status") + 1
-                    );
+                    session()->put("valid_status", session("valid_status") + 1);
                     return response()->json([
                         "next" => true,
                         "message" =>
-                        "Jumlah SKS yang anda tempuh telah memenuhi syarat!!",
+                            "Jumlah SKS yang anda tempuh telah memenuhi syarat!!",
                     ]);
                 }
             } else {
@@ -155,7 +126,7 @@ class CheckController extends Controller
                 return response()->json([
                     "next" => false,
                     "message" =>
-                    "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini!!",
+                        "SKS anda tidak ditemukan, silahkan laporkan kepada fakultas terkait masalah ini!!",
                 ]);
             }
             return response()->json($sks);
@@ -164,7 +135,7 @@ class CheckController extends Controller
             return response()->json([
                 "next" => false,
                 "message" =>
-                "Terdapat kesalahan pada saat pengecekan jumlah SKS!!",
+                    "Terdapat kesalahan pada saat pengecekan jumlah SKS!!",
             ]);
         }
     }

@@ -12,15 +12,26 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create("tahun_akademiks", function ($table) {
+        Schema::create("pendaftarans", function ($table) {
             $table->engine = "InnoDB";
             $table->charset = "utf8";
             $table->collation = "utf8_unicode_ci";
             $table->uuid("id")->unique();
-            $table->year("tahun");
-            $table->enum("semester", ["GASAL", "GENAP"]);
-            $table->boolean("status")->default(false);
+            $table->uuid("mahasiswa_id");
+            $table->uuid("subkpm_id");
             $table->timestamps();
+            $table
+                ->foreign("mahasiswa_id")
+                ->references("id")
+                ->on("mahasiswas")
+                ->onUpdate("cascade")
+                ->onDelete("cascade");
+            $table
+                ->foreign("subkpm_id")
+                ->references("id")
+                ->on("subkpms")
+                ->onUpdate("cascade")
+                ->onDelete("cascade");
         });
     }
 

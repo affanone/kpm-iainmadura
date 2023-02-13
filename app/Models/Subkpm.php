@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-class Kpm extends Uuid
+class Subkpm extends Uuid
 {
     function getConfigUploadAttribute($value)
     {
         return json_decode($value);
     }
 
-    public function subkpm()
+    public function kpm()
     {
-        return $this->hasMany(Subkpm::class);
+        return $this->belongsTo(Kpm::class);
     }
 }
