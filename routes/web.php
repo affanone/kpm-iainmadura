@@ -141,19 +141,19 @@ Route::get("/dummi/ta", function () {
             ],
         ],
     ]);
-    $i = new \App\Models\Kpm();
+    $i = new \App\Models\Subkpm();
     $i->nama = "KPM Fakultas";
     $i->config_upload = json_encode($kpm);
     $i->deskripsi =
         "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Fakultas";
-    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->kpm_id = "057513a7-d145-4a94-a009-8b492dcca624";
     $i->save();
 
-    $i = new \App\Models\Kpm();
+    $i = new \App\Models\Subkpm();
     $i->nama = "KPM Institur";
     $i->config_upload = json_encode($kpm);
     $i->deskripsi =
         "Beberapa persyaratan yang harus anda upload untuk mendaftar KPM Institur";
-    $i->tahun_akademik_id = "ce573e3e-6cb4-4760-a566-31c1e8704d8c";
+    $i->kpm_id = "057513a7-d145-4a94-a009-8b492dcca624";
     $i->save();
 });

@@ -51,7 +51,6 @@ class AuthenticationController extends Controller
             } else {
                 // data tidak ada
                 $ta = TahunAkademik::where("status", 1)->first();
-                return $ta->kpm;
                 if ($ta && count($ta->kpm)) {
                     session([
                         "token_api" => $token, // token hasil login api
