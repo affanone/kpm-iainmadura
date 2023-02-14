@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserCategoryController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
-use App\Http\Controllers\PersyaratanController;
+use App\Http\Controllers\Superadmin\DashboardController;
+use App\Http\Controllers\Superadmin\UserCategoryController;
+use App\Http\Controllers\Superadmin\UserController;
+use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
 use Illuminate\Support\Facades\Redirect;
 

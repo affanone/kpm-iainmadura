@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Superadmin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PersyaratanController extends Controller
+class UserCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class PersyaratanController extends Controller
      */
     public function index()
     {
-        return view('register.persyaratan');
+        return view('superadmin.user_category');
     }
 
     /**
