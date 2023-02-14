@@ -87,7 +87,7 @@ Route::group(
         ])->name("reg_upload_syarat");
 
         Route::get("/", fucntion(){
-            Route::to('reg/register');
+            Route::to('reg/profil');
         });
     }
 );
