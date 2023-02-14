@@ -84,4 +84,18 @@ class Helper
             return null;
         }
     }
+
+    public static function url2path($url)
+    {
+        $path = str_replace(
+            "/",
+            ".",
+            str_replace(url("attachment") . "/", "", $url)
+        );
+        $paths = explode(".", $path);
+        return $paths[0] .
+            "/" .
+            $paths[1] .
+            (isset($paths[2]) ? "." . $paths[2] : "");
+    }
 }

@@ -33,13 +33,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
             background: var(--primary) !important;
             border-radius: 20px !important;
         }
+
+        .file-exists {
+            background: #defbf2;
+            padding: 5px;
+            border-radius: 4px;
+            border: solid 1px #00bc8c;
+            margin-bottom: 4px;
+        }
+
+        .checked-valid {
+            left: 10px;
+            top: 2px;
+            position: relative;
+        }
     </style>
 </head>
 
 <body class="hold-transition layout-top-nav">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+        <nav class="main-header navbar fixed-top navbar-expand-md navbar-light navbar-white">
             <div class="container">
                 <a href="#" class="navbar-brand">
                     <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="AdminLTE Logo"
@@ -68,9 +82,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <a href="{{ route('reg_syarat') }}"
                                     class="nav-link @if ($step == 3) active @endif">Persyaratan KPM</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a href="{{ route('reg_final') }}" class="nav-link">Finalisasi</a>
-                            </li> --}}
+                            <li class="nav-item">
+                                <a href="{{ route('reg_final') }}"
+                                    class="nav-link @if ($step == 4) active @endif">Finalisasi</a>
+                            </li>
                         </ul>
                     </div>
                 @endif
@@ -90,13 +105,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         class="img-size-50 mr-3 img-circle" />
                                     <div class="media-body">
                                         <h3 class="dropdown-item-title">
-                                            Helap
+                                            {{ $mhs->nama }}
                                         </h3>
                                         <p class="text-sm text-muted">
-                                            <i class="fas fa-id-badge mr-1"></i> 123456789
+                                            <i class="fas fa-id-badge mr-1"></i> {{ $mhs->nim }}
                                         </p>
                                         <p class="text-sm text-muted">
-                                            <i class="fas fa-graduation-cap"></i> Pendidikan Agama Islam
+                                            <i class="fas fa-graduation-cap"></i> {{ $mhs->prodi->fakultas->nama }} /
+                                            {{ $mhs->prodi->sort }}
                                         </p>
                                     </div>
                                 </div>
@@ -117,8 +133,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="content-wrapper">
 
             <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container">
+            <div class="content-header  mt-5">
+                <div class="container mt-3">
                     <div class="row mb-2">
                         <div class="col-12">
                             <h1 class="m-0">Form Pendaftaran <small>{{ $nama_kpm }}</small>

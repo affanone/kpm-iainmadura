@@ -101,6 +101,16 @@ Route::group(
             "upload_syarat",
         ])->name("reg_upload_syarat");
 
+        Route::get("/final", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "finalisasi",
+        ])->name("reg_final");
+
+        Route::post("/final", [
+            \App\Http\Controllers\Reg\RegisterController::class,
+            "verifikasi_dan_finalisasi",
+        ])->name("reg_verifikasi_finalisasi");
+
         Route::get("/", function () {
             return Redirect::to("reg/profil");
         });
@@ -148,6 +158,40 @@ Route::get("/signin", [AuthenticationController::class, "index"])
 Route::post("/signin", [AuthenticationController::class, "login"])->name(
     "login_auth"
 );
+Route::get("attachment/{folder}/{file}/{extension}", function (
+    $folder,
+    $file,
+    $extension
+) {
+    $filename = $_GET["filename"] ?? $file;
+    $ext = $extension ? "." . $extension : "";
+    $file = $file . $ext;
+    $path = storage_path("app/" . $folder . "/" . $file);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    if ($filename) {
+        $response->header(
+            "Content-disposition",
+            'attachment; filename="' . $filename . $ext . '"'
+        );
+    }
+
+    $arr_ext = ["pdf", "png", "gif", "jpeg", "jpg"];
+
+    if (in_array($_GET["type"] ?? "", $arr_ext)) {
+        return response()->file($path);
+    }
+
+    return $response;
+});
+
+// TESTING
 
 Route::get("/password", function () {
     return Hash::make("19380011030");

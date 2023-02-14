@@ -27,7 +27,8 @@
                                             <div class="font-style text-muted small">{{ $sub->deskripsi }}</div>
                                             <input type="radio" class="form-check-input" value="{{ $sub->id }}"
                                                 id="kpm_{{ $key . $key1 }}" name="jeniskpm"
-                                                @if ($jeniskpm == $sub->id) checked @endif>
+                                                @if ($jeniskpm == $sub->id) checked @endif
+                                                @if (!in_array(session('status') ?? 0, [0, 2])) disabled @endif>
                                             <label class="form-check-label"
                                                 for="kpm_{{ $key . $key1 }}">{{ $sub->nama }}</label>
                                         </div>

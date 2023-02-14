@@ -54,15 +54,16 @@
                                 @endif
                                 <label for="hp">Nomor HP / WhatsApp<strong class="text-danger">*</strong></label>
                                 <input type="number" class="form-control" id="hp" name="hp"
-                                    value="{{ old('hp', $hp) }}">
+                                    value="{{ old('hp', $hp) }}" @if (!in_array(session('status') ?? 0, [0, 2])) disabled @endif>
                             </div>
                             <div class="form-group @if ($errors->has('alamat')) alert alert-danger  error @endif">
                                 @if ($errors->has('alamat'))
                                     <div class="font-italic">{{ $errors->first('alamat') }}</div>
                                 @endif
-                                <label for="alamat">Alamat Tinggal Saat Ini<strong
+                                <label for="alamat">Alamat Tempat Tinggal Saat Ini<strong
                                         class="text-danger">*</strong></label>
-                                <textarea type="text" class="form-control" id="alamat" name="alamat">{{ old('alamat', $alamat) }}</textarea>
+                                <textarea type="text" class="form-control" id="alamat" name="alamat"
+                                    @if (!in_array(session('status') ?? 0, [0, 2])) disabled @endif>{{ old('alamat', $alamat) }}</textarea>
                             </div>
                         </div>
                         <!-- /.card-body -->
