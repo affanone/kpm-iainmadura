@@ -12,6 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
+
                     <form method="post" action="{{ route('reg_upload_syarat') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body">
@@ -21,7 +22,7 @@
                             <div class="form-group">
                                 <label for="kpm">KPM Yang Dipilih</label>
                                 <input type="text" class="form-control" id="kpm"
-                                    value="{{ $pendaftaran->subkpm->kpm->nama }} | {{ $pendaftaran->subkpm->nama }}"
+                                    value="{{ $pendaftaran->subkpm->kpm->nama }} > {{ $pendaftaran->subkpm->nama }}"
                                     disabled>
                             </div>
 
@@ -35,17 +36,27 @@
                                                 <div class="alert alert-danger">{{ $errors->first($config->name) }}
                                                 </div>
                                             @endif
+                                            @php
+                                                $a = collect($document)->first(function ($i) use ($config) {
+                                                    return $i ? $i->desc->name == $config->name : false;
+                                                });
+                                            @endphp
+                                            @if ($a)
+                                                <div class="file-exists">
+                                                    Berkas yang diupload <a
+                                                        href="{{ $a->url }}?filename={{ $a->name }}"
+                                                        target="_blank"
+                                                        class="btn-link font-weight-bold">{{ $a->name }}</a>, form
+                                                    diisi hanya untuk
+                                                    mengganti berkas yang baru
+                                                </div>
+                                            @endif
                                             <label for="file_kpm_{{ $key }}">{{ $config->label }}
-                                                @php
-                                                    $formats = [];
-                                                    foreach ($config->format as $fk => $fv) {
-                                                        array_push($formats, $fk);
-                                                    }
-                                                    echo '(' . join(' / ', $formats) . ')';
-                                                @endphp</label>
+                                                {{ count($config->format ?? []) ? '(' . join(' / ', $config->format) . ')' : '' }}</label>
                                             <input type="file" name="{{ $config->name }}" class="form-control-file"
                                                 id="file_kpm_{{ $key }}"
-                                                aria-describedby="file_kpm_helper_{{ $key }}">
+                                                aria-describedby="file_kpm_helper_{{ $key }}"
+                                                @if (!in_array(session('status') ?? 0, [0, 2])) disabled @endif>
                                             <small id="file_kpm_helper_{{ $key }}"
                                                 class="form-text text-muted">{{ $config->deskripsi }}
                                             </small>
@@ -63,17 +74,27 @@
                                                 <div class="alert alert-danger">{{ $errors->first($config->name) }}
                                                 </div>
                                             @endif
+                                            @php
+                                                $a = collect($document)->first(function ($i) use ($config) {
+                                                    return $i ? $i->desc->name == $config->name : false;
+                                                });
+                                            @endphp
+                                            @if ($a)
+                                                <div class="file-exists">
+                                                    Berkas yang diupload <a
+                                                        href="{{ $a->url }}?filename={{ $a->name }}"
+                                                        target="_blank"
+                                                        class="btn-link font-weight-bold">{{ $a->name }}</a>, form
+                                                    diisi hanya untuk
+                                                    mengganti berkas yang baru
+                                                </div>
+                                            @endif
                                             <label for="file_kpm_in_{{ $key }}">{{ $config->label }}
-                                                @php
-                                                    $formats = [];
-                                                    foreach ($config->format as $fk => $fv) {
-                                                        array_push($formats, $fk);
-                                                    }
-                                                    echo '(' . join(' / ', $formats) . ')';
-                                                @endphp</label>
+                                                {{ count($config->format ?? []) ? '(' . join(' / ', $config->format) . ')' : '' }}</label>
                                             <input type="file" name="{{ $config->name }}" class="form-control-file"
                                                 id="file_kpm_in_{{ $key }}"
-                                                aria-describedby="file_kpm_helper_in_{{ $key }}">
+                                                aria-describedby="file_kpm_helper_in_{{ $key }}"
+                                                @if (!in_array(session('status') ?? 0, [0, 2])) disabled @endif>
                                             <small id="file_kpm_helper_in_{{ $key }}"
                                                 class="form-text text-muted">{{ $config->deskripsi }}</small>
                                         </div>

@@ -11,10 +11,10 @@
 <!-- Main Footer -->
 <footer class="main-footer">
     <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">Anything you want</div>
+    <div class="float-right d-none d-sm-inline">Jago Rebahan</div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2021
-        <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    <strong>Copyright &copy; {{ date('Y') }}
+        <a href="https://tipd.iainmadura.ac.id">TIPD IAIN Madura</a>.</strong>
     All rights reserved.
 </footer>
 </div>
