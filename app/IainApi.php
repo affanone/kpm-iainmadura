@@ -14,7 +14,7 @@ class IainApi
                 "form_params" => $data,
                 "headers" => [
                     "Auth-api-key" => env("API_KEY"),
-                    "Auth-token" => session("token_api")->token,
+                    "Auth-token" => session("token_api")->token ?? "",
                 ],
                 "verify" => false,
             ]);
@@ -41,7 +41,7 @@ class IainApi
                 "form_params" => $data,
                 "headers" => [
                     "Auth-api-key" => env("API_KEY"),
-                    "Auth-token" => session("token_api")->token,
+                    "Auth-token" => session("token_api")->token ?? "",
                 ],
                 "verify" => false,
             ]);

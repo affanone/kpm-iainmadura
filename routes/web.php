@@ -27,7 +27,7 @@ Route::get("/", function () {
     return view("welcome");
 });
 
-Route::group(["prefix" => "dashboard"], function () {
+Route::group(["prefix" => "super"], function () {
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
     Route::get("/user_category", [
         UserCategoryController::class,
@@ -54,8 +54,14 @@ Route::group(["prefix" => "dashboard"], function () {
         TahunAkademikController::class,
         "edit",
     ])->name("tahun_akademik.edit");
-    Route::put("/tahun_akademik", [TahunAkademikController::class, "update"])->name("tahun_akademik.update");
-    Route::delete("/tahun_akademik", [TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
+    Route::put("/tahun_akademik", [
+        TahunAkademikController::class,
+        "update",
+    ])->name("tahun_akademik.update");
+    Route::delete("/tahun_akademik", [
+        TahunAkademikController::class,
+        "destroy",
+    ])->name("tahun_akademik.delete");
 });
 
 Route::group(
@@ -193,8 +199,8 @@ Route::get("attachment/{folder}/{file}/{extension}", function (
 
 // TESTING
 
-Route::get("/password", function () {
-    return Hash::make("19380011030");
+Route::get("/password/{pass}", function ($pass) {
+    return Hash::make($pass);
 });
 
 Route::get("/dummi/ta", function () {

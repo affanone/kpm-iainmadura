@@ -32,82 +32,109 @@ class AuthenticationController extends Controller
                 ->withInput();
         }
         try {
-            $client = new Client();
-            $response = $client->post(env("API_SERVER") . "/api/auth", [
-                "form_params" => [
+            if (
+                Auth::attempt([
+                    "email" => $request->id_login,
+                    "password" => $request->password,
+                ]) ||
+                Auth::attempt([
                     "username" => $request->id_login,
                     "password" => $request->password,
-                    "logout" => 0,
-                ],
-                "headers" => [
-                    "Auth-api-key" => env("API_KEY"),
-                ],
-                "verify" => false,
-            ]);
-            $data = $response->getBody()->getContents();
-            $token = json_decode($data);
-
-            // setting untuk mahasiswa
-            $user = User::where("username", $token->user->username)->first();
-            if ($user) {
-                // data ada di database kpm
-                Auth::login($user);
-                $pend = Pendaftaran::whereExists(function ($db) {
-                    $db->select("*")
-                        ->from("mahasiswas")
-                        ->whereRaw("mahasiswas.id = pendaftarans.mahasiswa_id")
-                        ->where("mahasiswas.user_id", Auth::id());
-                })
-                    ->whereExists(function ($db) {
-                        $db->select("*")
-                            ->from("subkpms")
-                            ->whereRaw("subkpms.id = pendaftarans.subkpm_id")
-                            ->whereExists(function ($db) {
-                                $db->select("*")
-                                    ->from("kpms")
-                                    ->whereRaw("kpms.id = subkpms.kpm_id")
-                                    ->whereExists(function ($db) {
-                                        $db->select("*")
-                                            ->from("tahun_akademiks")
-                                            ->whereRaw(
-                                                "tahun_akademiks.id = kpms.tahun_akademik_id"
-                                            )
-                                            ->where(
-                                                "tahun_akademiks.status",
-                                                1
-                                            );
-                                    });
-                            });
-                    })
-                    ->first();
-
+                ])
+            ) {
+                // superadmin
                 session([
-                    "token_api" => $token, // token hasil login api
-                    "register" => true, // false artinya tidak ada di database
-                    "status" => $pend ? $pend->status : 0,
+                    "user" => Auth::user(), // uthor
+                    "level" => 0, // level user
                 ]);
-                if ($pend && $pend->status == 1) {
-                    return Redirect::to("reg/final");
-                } else {
-                    return Redirect::to("reg");
-                }
+                return Redirect::to("super");
             } else {
-                // data tidak ada
-                $ta = TahunAkademik::where("status", 1)->first();
-                if ($ta && count($ta->kpm)) {
+                $client = new Client();
+                $response = $client->post(env("API_SERVER") . "/api/auth", [
+                    "form_params" => [
+                        "username" => $request->id_login,
+                        "password" => $request->password,
+                        "logout" => 0,
+                    ],
+                    "headers" => [
+                        "Auth-api-key" => env("API_KEY"),
+                    ],
+                    "verify" => false,
+                ]);
+                $data = $response->getBody()->getContents();
+                $token = json_decode($data);
+
+                // setting untuk mahasiswa
+                $user = User::where(
+                    "username",
+                    $token->user->username
+                )->first();
+                if ($user) {
+                    // data ada di database kpm
+                    Auth::login($user);
+                    $pend = Pendaftaran::whereExists(function ($db) {
+                        $db->select("*")
+                            ->from("mahasiswas")
+                            ->whereRaw(
+                                "mahasiswas.id = pendaftarans.mahasiswa_id"
+                            )
+                            ->where("mahasiswas.user_id", Auth::id());
+                    })
+                        ->whereExists(function ($db) {
+                            $db->select("*")
+                                ->from("subkpms")
+                                ->whereRaw(
+                                    "subkpms.id = pendaftarans.subkpm_id"
+                                )
+                                ->whereExists(function ($db) {
+                                    $db->select("*")
+                                        ->from("kpms")
+                                        ->whereRaw("kpms.id = subkpms.kpm_id")
+                                        ->whereExists(function ($db) {
+                                            $db->select("*")
+                                                ->from("tahun_akademiks")
+                                                ->whereRaw(
+                                                    "tahun_akademiks.id = kpms.tahun_akademik_id"
+                                                )
+                                                ->where(
+                                                    "tahun_akademiks.status",
+                                                    1
+                                                );
+                                        });
+                                });
+                        })
+                        ->first();
+
                     session([
                         "token_api" => $token, // token hasil login api
-                        "register" => false, // false artinya tidak ada di database
-                        "status" => 0,
+                        "register" => true, // false artinya tidak ada di database
+                        "status" => $pend ? $pend->status : 0, // status pendaftaran
+                        "level" => 2, // level user
                     ]);
-                    return Redirect::to("unreg");
+                    if ($pend && $pend->status == 1) {
+                        return Redirect::to("reg/final");
+                    } else {
+                        return Redirect::to("reg");
+                    }
                 } else {
-                    return Redirect::to("signin")
-                        ->withErrors(
-                            "Mohon maaf, saat ini belum ada pendaftaran KPM yang tersedia",
-                            "login"
-                        )
-                        ->withInput();
+                    // data tidak ada
+                    $ta = TahunAkademik::where("status", 1)->first();
+                    if ($ta && count($ta->kpm)) {
+                        session([
+                            "token_api" => $token, // token hasil login api
+                            "register" => false, // false artinya tidak ada di database
+                            "status" => 0, // status pendaftaran
+                            "level" => 2, // level user
+                        ]);
+                        return Redirect::to("unreg");
+                    } else {
+                        return Redirect::to("signin")
+                            ->withErrors(
+                                "Mohon maaf, saat ini belum ada pendaftaran KPM yang tersedia",
+                                "login"
+                            )
+                            ->withInput();
+                    }
                 }
             }
 

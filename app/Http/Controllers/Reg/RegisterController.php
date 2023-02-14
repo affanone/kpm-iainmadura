@@ -473,7 +473,7 @@ class RegisterController extends Controller
 
             $pendaftaran->status = 1;
             $pendaftaran->save();
-            session()->push("status", 1);
+            session()->put("status", 1);
             return Redirect::to("reg/final");
         }
     }
