@@ -86,10 +86,9 @@ Route::group(
             "upload_syarat",
         ])->name("reg_upload_syarat");
 
-        // Route::get("/kpm", [
-        //     \App\Http\Controllers\Reg\RegisterController::class,
-        //     "kpm",
-        // ])->name("reg_final");
+        Route::get("/", fucntion(){
+            Route::to('reg/register');
+        });
     }
 );
 
