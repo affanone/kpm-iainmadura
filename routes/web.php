@@ -54,6 +54,8 @@ Route::group(["prefix" => "dashboard"], function () {
         TahunAkademikController::class,
         "edit",
     ])->name("tahun_akademik.edit");
+    Route::put("/tahun_akademik", [TahunAkademikController::class, "update"])->name("tahun_akademik.update");
+    Route::delete("/tahun_akademik", [TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
 });
 
 Route::group(

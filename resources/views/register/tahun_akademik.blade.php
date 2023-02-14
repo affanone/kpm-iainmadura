@@ -26,8 +26,8 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tmbTahunAkademik"><i
-                            class="fas fa-plus-circle"></i> Tambah Data</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modalTmbTahunAkademik"><i class="fas fa-plus-circle"></i> Tambah Data</button>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -37,35 +37,19 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="tblThnAkademik" class="table table-bordered table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">No</th>
-                                                <th>Tahun Akademik</th>
-                                                <th>Semester</th>
-                                                <th>Status</th>
-                                                <th width="7%">Opsi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Superadmin</td>
-                                                <td>Superadmin</td>
-                                                <td>_All</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-warning btn-sm"><i
-                                                                class="fas fa-edit"></i></button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i
-                                                                class="fas fa-eraser"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table id="tblThnAkademik" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%">No</th>
+                                            <th>Tahun Akademik</th>
+                                            <th>Semester</th>
+                                            <th>Status</th>
+                                            <th width="7%">Opsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -80,13 +64,14 @@
         <!-- /.content -->
 
         <!-- /modal Tambah -->
-        <div class="modal fade" id="tmbTahunAkademik" data-backdrop="static" data-keyboard="false"
+        <div class="modal fade" id="modalTmbTahunAkademik" data-backdrop="static" data-keyboard="false"
             aria-labelledby="tmbTahunAkademik" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <!-- form start -->
                     <form class="form-horizontal" id="frmTmbThnAkademik">
                         @csrf
+                        <input class="d-none" type="text" name="id_ta" id="id_ta">
                         <div class="modal-header bg-secondary">
                             <h5 class="modal-title">Tambah Tahun Akademik</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -108,7 +93,7 @@
                                         <div class="form-group">
                                             <label for="semester">Semester</label>
                                             <select class="form-control" id="semester" name="semester">
-                                                <option value="" selected="selected">-- Pilih Semester --</option>
+                                                <option value="">-- Pilih Semester --</option>
                                                 <option value="gasal">Gasal</option>
                                                 <option value="genap">Genap</option>
                                             </select>
@@ -129,66 +114,7 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="btnSmpThnAkademik">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
-        <!-- /modal Tambah -->
-        <div class="modal fade" id="modalEditThnAkademik" data-backdrop="static" data-keyboard="false"
-            aria-labelledby="modalEditThnAkademik" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <!-- form start -->
-                    <form class="form-horizontal" id="frmEditThnAkademik">
-                        @method('PUT')
-                        @csrf
-                        <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Edit Tahun Akademik</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="tahun_edit">Tahun</label>
-                                            <input type="text" class="form-control" id="tahun_edit" name="tahun_edit"
-                                                autocomplete="off">
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="semester_edit">Semester</label>
-                                            <select class="form-control" id="semester_edit" name="semester_edit">
-                                            </select>
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label for="status_edit">Status</label>
-                                            <input class="form-control" type="checkbox" name="status_edit"
-                                                id="status_edit" data-on-text="Aktif" data-off-text="Tidak"
-                                                data-off-color="danger" data-on-color="success">
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary" id="btnSmpThnAkademik">Simpan</button>
                         </div>
                     </form>
@@ -206,9 +132,7 @@
     <script>
         $('#status').bootstrapSwitch();
 
-        $("#frmTmbThnAkademik").validate({
-            errorClass: 'error is-invalid',
-            validClass: 'is-valid',
+        const validFormThnAkademik = $("#frmTmbThnAkademik").validate({
             rules: {
                 tahun: {
                     required: true,
@@ -241,18 +165,27 @@
             },
             submitHandler: function(form, e) {
                 e.preventDefault();
+                const id = $('#id_ta').val();
+                let method, url;
+                if (id) {
+                    method = "PUT";
+                    url = "{{ route('tahun_akademik.update') }}";
+                } else {
+                    method = "POST";
+                    url = "{{ route('tahun_akademik.post') }}";
+                }
+
                 $.ajax({
-                    type: "POST",
-                    url: "{{ route('tahun_akademik.post') }}",
+                    type: method,
+                    url: url,
                     data: $('#frmTmbThnAkademik').serialize(),
                     dataType: 'JSON',
                     success: function(data) {
                         document.getElementById('frmTmbThnAkademik').reset();
-                        $('#tmbTahunAkademik').modal('toggle');
+                        $('#modalTmbTahunAkademik').modal('toggle');
                         $('#tblThnAkademik').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));
-                        console.log(msg);
                         Swal.fire({
                             icon: msg.icon,
                             title: "Berhasil",
@@ -310,14 +243,13 @@
                 [1, 'asc']
             ],
             "columnDefs": [{
-                "width": "30%",
-                "targets": 2
-            }, {
                 "targets": "_all",
-                "className": "text-center",
+                "className": "dt-center cell-border",
                 "visible": true
             }],
-            "responsive": true
+            "responsive": true,
+            "autoWidth": true,
+            "fixedColumns": true
         });
     </script>
 
@@ -334,18 +266,89 @@
                     "genap": "Genap"
                 };
 
-                $('#id_edit').val(response.id);
-                $('#tahun_edit').val(response.tahun);
+                $('#id_ta').val(response.id);
+                $('#tahun').val(response.tahun);
 
-                $('#semester_edit').append(`<option value="">-- Pilih Semester --</option>`);
-                for (const key in smt) {
-                    const selected = response.semester.toLowerCase() == key ? 'selected' : '';
-                    $('#semester_edit').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
-                }
+                // $('#semester')
+                //     .find('option')
+                //     .remove()
+                //     .end()
+                //     .append(
+                //         `<option value="">-- Pilih Semester --</option>`
+                //     );
+                // for (const key in smt) {
+                //     const selected = response.semester.toLowerCase() == key ? 'selected' : '';
+                //     $('#semester').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
+                // }
+                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
 
-                $('#status_edit').prop();
-                $('#modalEditThnAkademik').modal('show');
+                response.status == 1 ? $('#status').bootstrapSwitch('state', true) : $('#status')
+                    .bootstrapSwitch(
+                        'state',
+                        false);
+                $('#modalTmbTahunAkademik').modal('show');
             });
         }
+    </script>
+
+    <script>
+        function hapusThnAkademik(id) {
+            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+            url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                dataType: "JSON"
+            }).done((response) => {
+                Swal.fire({
+                    title: 'Apa Anda Yakin?',
+                    html: `Anda akan menghapus data <span class="font-weight-bold font-italic">Tahun Akademik ${response.tahun}</span>`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('tahun_akademik.delete') }}",
+                            type: "DELETE",
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                "id": response.id
+                            },
+                            success: function(res) {
+                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                    false);
+                                Swal.fire(
+                                    res.title,
+                                    res.message,
+                                    res.icon
+                                );
+                            },
+                            error: function(res) {
+                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                    false);
+                                Swal.fire(
+                                    'Gagal',
+                                    'Ada Kesalahan',
+                                    'error'
+                                );
+                            }
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        Swal.fire(
+                            'Batal',
+                            `Tahun Akademik ${response.tahun} tidak jadi dihapus`,
+                            'info'
+                        )
+                    }
+                });
+            });
+        };
     </script>
 @endsection
