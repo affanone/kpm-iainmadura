@@ -48,6 +48,11 @@ class AuthenticationController extends Controller
             $user = User::where("username", $token->user->username)->first();
             if ($user) {
                 // data ada di database kpm
+                session([
+                    "token_api" => $token, // token hasil login api
+                    "register" => true, // false artinya tidak ada di database
+                ]);
+                return Redirect::to("reg");
             } else {
                 // data tidak ada
                 $ta = TahunAkademik::where("status", 1)->first();
