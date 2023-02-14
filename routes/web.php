@@ -38,10 +38,22 @@ Route::group(["prefix" => "dashboard"], function () {
     Route::get("/syarat", [PersyaratanController::class, "index"])->name(
         "persyaratan"
     );
-    Route::get("/tahun_akademik", [TahunAkademikController::class, "index"])->name("tahun.akademik");
-    Route::post("/tahun_akademik", [TahunAkademikController::class, "store"])->name("tahun_akademik.post");
-    Route::post("/tahun_akademik/data", [TahunAkademikController::class, "show"])->name("tahun_akademik.data");
-    Route::get("/tahun_akademik/{id}", [TahunAkademikController::class, "edit"])->name("tahun_akademik.edit");
+    Route::get("/tahun_akademik", [
+        TahunAkademikController::class,
+        "index",
+    ])->name("tahun.akademik");
+    Route::post("/tahun_akademik", [
+        TahunAkademikController::class,
+        "store",
+    ])->name("tahun_akademik.post");
+    Route::post("/tahun_akademik/data", [
+        TahunAkademikController::class,
+        "show",
+    ])->name("tahun_akademik.data");
+    Route::get("/tahun_akademik/{id}", [
+        TahunAkademikController::class,
+        "edit",
+    ])->name("tahun_akademik.edit");
 });
 
 Route::group(
@@ -88,7 +100,7 @@ Route::group(
         ])->name("reg_upload_syarat");
 
         Route::get("/", function () {
-            Redirect::to('reg/profil');
+            return Redirect::to("reg/profil");
         });
     }
 );
