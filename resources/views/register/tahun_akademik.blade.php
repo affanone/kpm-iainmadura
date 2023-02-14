@@ -177,9 +177,9 @@
 
                                     <div class="col-lg-2">
                                         <div class="form-group">
-                                            <label for="status">Status</label>
-                                            <input class="form-control" type="checkbox" name="status" id="status"
-                                                data-on-text="Aktif" data-off-text="Tidak" checked
+                                            <label for="status_edit">Status</label>
+                                            <input class="form-control" type="checkbox" name="status_edit"
+                                                id="status_edit" data-on-text="Aktif" data-off-text="Tidak"
                                                 data-off-color="danger" data-on-color="success">
                                         </div>
                                         <!-- /.form-group -->
@@ -343,7 +343,7 @@
                     $('#semester_edit').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
                 }
 
-                $('#status_edit').val(response.status);
+                $('#status_edit').prop();
                 $('#modalEditThnAkademik').modal('show');
             });
         }

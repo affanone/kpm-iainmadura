@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,8 +87,8 @@ Route::group(
             "upload_syarat",
         ])->name("reg_upload_syarat");
 
-        Route::get("/", fucntion(){
-            Route::to('reg/profil');
+        Route::get("/", function () {
+            Redirect::to('reg/profil');
         });
     }
 );

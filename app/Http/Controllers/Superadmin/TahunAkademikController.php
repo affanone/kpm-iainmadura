@@ -16,7 +16,7 @@ class TahunAkademikController extends Controller
      */
     public function index()
     {
-        return view('dashboard.tahun_akademik');
+        return view('register.tahun_akademik');
     }
 
     /**
