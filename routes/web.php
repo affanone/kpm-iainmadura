@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,8 @@ Route::group(["prefix" => "dashboard"], function () {
         TahunAkademikController::class,
         "edit",
     ])->name("tahun_akademik.edit");
+    Route::put("/tahun_akademik", [TahunAkademikController::class, "update"])->name("tahun_akademik.update");
+    Route::delete("/tahun_akademik", [TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
 });
 
 Route::group(

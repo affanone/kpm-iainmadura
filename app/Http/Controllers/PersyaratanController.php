@@ -13,7 +13,7 @@ class PersyaratanController extends Controller
      */
     public function index()
     {
-        return view('dashboard.persyaratan');
+        return view('register.persyaratan');
     }
 
     /**

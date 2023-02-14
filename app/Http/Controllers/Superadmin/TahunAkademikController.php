@@ -16,7 +16,7 @@ class TahunAkademikController extends Controller
      */
     public function index()
     {
-        return view('dashboard.tahun_akademik');
+        return view('register.tahun_akademik');
     }
 
     /**
@@ -40,7 +40,7 @@ class TahunAkademikController extends Controller
         $this->validate(
             $request,
             [
-                'tahun' => 'required|numeric|unique:tahun_akademiks',
+                'tahun' => 'required|numeric',
                 'semester' => 'required'
             ],
             [
@@ -68,7 +68,7 @@ class TahunAkademikController extends Controller
             'icon' => 'success',
             'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Disimpan'
         );
-        echo json_encode($data);
+        return response()->json($data);
     }
 
     /**
@@ -125,9 +125,41 @@ class TahunAkademikController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'tahun' => 'required|numeric',
+                'semester' => 'required'
+            ],
+            [
+                'tahun.required' => 'Tahun harus diisi',
+                'tahun.numeric' => 'Tahun harus diisi angka',
+                'semester.required' => 'Semester harus dipilih'
+            ]
+        );
+
+        $id = $request->id_ta;
+        $tahun = strip_tags($request->tahun);
+        $semester = strtoupper(strip_tags($request->semester));
+        $status = strip_tags($request->status) == 'on' ? 1 : 0;
+
+        if ($status == 1) {
+            TahunAkademik::query()->update(['status' => 0]);
+        }
+
+        $ta = TahunAkademik::find($id);
+        $ta->tahun = $tahun;
+        $ta->semester = $semester;
+        $ta->status = $status;
+        $ta->update();
+
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Diupdate'
+        );
+        return response()->json($data);
     }
 
     /**
@@ -136,8 +168,25 @@ class TahunAkademikController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $ta = TahunAkademik::find($id);
+
+        $data = array();
+        try {
+            $proc = $ta->delete();
+            if ($proc) {
+                $data['icon'] = 'success';
+                $data['title'] = 'Berhasil';
+                $data['message'] = 'Tahun Akademik ' . $ta->tahun . ' Berhasil Dihapus';
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            $error = $e->errorInfo;
+            $data['icon'] = 'error';
+            $data['title'] = 'Gagal';
+            $data['message'] = str_contains($error[2], 'constraint') ? 'Tahun Akademik ' . $ta->tahun . ' sedang Aktif' : 'Ada Kesalahan';
+        }
+        return response()->json($data);
     }
 }
