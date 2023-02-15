@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Subkpm extends Uuid
 {
-    function getConfigUploadAttribute($value)
+    function getConfigAttribute($value)
     {
         return json_decode($value);
     }

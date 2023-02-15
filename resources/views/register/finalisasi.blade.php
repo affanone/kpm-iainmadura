@@ -30,6 +30,11 @@
                                         Proses Pendaftaran anda berhasil dikirim dan sedang menunggu untuk
                                         <strong>divalidasi</strong>
                                     </div>
+                                @elseif(session('status') == 3)
+                                    <div class="alert alert-success">
+                                        Proses Pendaftaran telah divalidasi, silahkan menunggu informasi untuk proses
+                                        selanjutnya
+                                    </div>
                                 @endif
                             @endif
                             <ul class="list-group mb-4">
@@ -88,7 +93,7 @@
                                         {{ $pendaftaran->subkpm->kpm->nama }} > {{ $pendaftaran->subkpm->nama }}
                                     </div>
                                 </li>
-                                @foreach ($pendaftaran->subkpm->kpm->config_upload as $key => $config)
+                                @foreach ($pendaftaran->subkpm->kpm->config->upload as $key => $config)
                                     <li class="list-group-item">
                                         <small class="text-muted">{{ $config->label }}</small>
                                         @php
@@ -112,7 +117,7 @@
                                         </div>
                                     </li>
                                 @endforeach
-                                @foreach ($pendaftaran->subkpm->config_upload as $key => $config)
+                                @foreach ($pendaftaran->subkpm->config->upload as $key => $config)
                                     <li class="list-group-item">
                                         <small class="text-muted">{{ $config->label }}</small>
                                         @php

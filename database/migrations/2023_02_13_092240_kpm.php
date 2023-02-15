@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->uuid("id")->unique();
             $table->uuid("tahun_akademik_id");
             $table->string("deskripsi")->unique();
-            $table->text("config_upload");
+            $table->text("config");
             $table->timestamps();
             $table
                 ->foreign("tahun_akademik_id")
