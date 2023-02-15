@@ -48,12 +48,12 @@ class RegisterController extends Controller
             )
             ->first();
         if (!in_array(session("status"), [0, 2])) {
-            return Redirect::to("reg/profil");
+            return Redirect::to("mhs/reg/profil");
         }
         $m->hp = $request->hp;
         $m->alamat = $request->alamat;
         $m->save();
-        return Redirect::to("reg/kpm");
+        return Redirect::to("mhs/reg/kpm");
     }
 
     function registrasi(Request $request)
@@ -78,12 +78,12 @@ class RegisterController extends Controller
                 ->withInput();
         }
 
-        $nim = session("token_api")->user->username;
-        $res = \IainApi::get("api/mahasiswa?nim=$nim");
+        $nim = session("token_api")->user->kode;
+        $res = \IainApi::get("api/mahasiswa?kode=$nim");
         $mhs = $res->data->data[0];
 
         $n = new User();
-        $n->username = session("token_api")->user->username;
+        $n->username = session("token_api")->user->kode;
         $n->email = session("token_api")->user->email;
         $n->email_verified_at = now();
         $n->access = "[2]";
@@ -106,7 +106,7 @@ class RegisterController extends Controller
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
-        return Redirect::to("reg/kpm");
+        return Redirect::to("mhs/reg/kpm");
     }
 
     public function profil()
@@ -139,7 +139,7 @@ class RegisterController extends Controller
         $ta = TahunAkademik::where("status", 1)->first();
 
         if (!$mhs) {
-            return Redirect::to("reg/profil")
+            return Redirect::to("mhs/reg/profil")
                 ->withErrors("Silahkan isikan data diri anda", "daftar")
                 ->withInput();
         }
@@ -191,7 +191,7 @@ class RegisterController extends Controller
             )
             ->first();
         if (!in_array(session("status"), [0, 2])) {
-            return Redirect::to("reg/kpm");
+            return Redirect::to("mhs/reg/kpm");
         }
         if ($pend) {
             if ($pend->subkpm_id != $request->jeniskpm) {
@@ -216,7 +216,7 @@ class RegisterController extends Controller
             $pend->subkpm_id = $request->jeniskpm;
             $pend->save();
         }
-        return Redirect::to("reg/syarat");
+        return Redirect::to("mhs/reg/syarat");
     }
 
     public function syarat(Request $request)
@@ -237,7 +237,7 @@ class RegisterController extends Controller
         if (!$pend) {
             $validator = Validator::make([], []);
             $validator->errors()->add("jeniskpm", "Jenis KPM harus dipilih");
-            return Redirect::to("reg/kpm")
+            return Redirect::to("mhs/reg/kpm")
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -266,15 +266,18 @@ class RegisterController extends Controller
             )
             ->first();
         if (!in_array(session("status"), [0, 2])) {
-            return Redirect::to("reg/syarat");
+            return Redirect::to("mhs/reg/syarat");
         }
 
-        $doc = DokumenPendaftaran::where("pendaftaran_id", $pend->id)->get();
+        $documents = DokumenPendaftaran::where(
+            "pendaftaran_id",
+            $pend->id
+        )->get();
 
         $rules = [];
         $message_error = [];
         foreach ($pend->subkpm->config->upload as $key => $conf) {
-            $f = collect($doc)->first(function ($d) use ($conf) {
+            $f = collect($documents)->first(function ($d) use ($conf) {
                 return $d ? $d->desc->name == $conf->name : false;
             });
             if (!$f) {
@@ -288,7 +291,7 @@ class RegisterController extends Controller
             }
         }
         foreach ($pend->subkpm->kpm->config->upload as $key => $conf) {
-            $f = collect($doc)->first(function ($d) use ($conf) {
+            $f = collect($documents)->first(function ($d) use ($conf) {
                 return $d ? $d->desc->name == $conf->name : false;
             });
             if (!$f) {
@@ -316,7 +319,7 @@ class RegisterController extends Controller
                     "doc_pendaftaran",
                     true
                 );
-                $f = collect($doc)->first(function ($d) use ($conf) {
+                $f = collect($documents)->first(function ($d) use ($conf) {
                     return $d ? $d->desc->name == $conf->name : false;
                 });
                 if ($f) {
@@ -344,7 +347,7 @@ class RegisterController extends Controller
                     "doc_pendaftaran",
                     true
                 );
-                $f = collect($doc)->first(function ($d) use ($conf) {
+                $f = collect($documents)->first(function ($d) use ($conf) {
                     return $d ? $d->desc->name == $conf->name : false;
                 });
                 if ($f) {
@@ -365,7 +368,7 @@ class RegisterController extends Controller
                 $doc->save();
             }
         }
-        return Redirect::to("reg/final");
+        return Redirect::to("mhs/reg/final");
     }
 
     public function finalisasi()
@@ -392,7 +395,7 @@ class RegisterController extends Controller
             )->get();
             if (!count($doc)) {
                 return redirect()
-                    ->to("reg/syarat")
+                    ->to("mhs/reg/syarat")
                     ->withErrors(
                         "Silahkan upload berkas yang diminta !!",
                         "daftar"
@@ -468,13 +471,13 @@ class RegisterController extends Controller
                 ->withInput();
         } else {
             if (!in_array(session("status"), [0, 2])) {
-                return Redirect::to("reg/final");
+                return Redirect::to("mhs/reg/final");
             }
             $status = $pendaftaran->subkpm->config->validate ? 1 : 3;
             $pendaftaran->status = $status;
             $pendaftaran->save();
             session()->put("status", $status);
-            return Redirect::to("reg/final");
+            return Redirect::to("mhs/reg/final");
         }
     }
 }

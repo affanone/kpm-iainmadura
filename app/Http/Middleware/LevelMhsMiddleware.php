@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsLoginMiddleware
+class LevelMhsMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,20 +16,8 @@ class IsLoginMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->exists("token_api")) {
-            switch (session("level")) {
-                /*
-                0 => lp2m,
-                1 => dpl,
-                2 => mhs
-                */
-                case 0:
-                    return redirect()->to("super");
-                case 1:
-                    return redirect()->to("dpl");
-                case 2:
-                    return redirect()->to("mhs");
-            }
+        if (session("level") != 2) {
+            return redirect()->to(route("login_page"));
         }
         return $next($request);
     }

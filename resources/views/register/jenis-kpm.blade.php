@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="{{ route('reg_update_kpm') }}">
+                    <form method="post" action="{{ route('mhs.reg.kpm') }}">
                         @csrf
                         <div class="card-body">
                             @if ($errors->has('jeniskpm'))

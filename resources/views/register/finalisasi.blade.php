@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="{{ route('reg_verifikasi_finalisasi') }}">
+                    <form method="post" action="{{ route('mhs.reg.final') }}">
                         @csrf
                         <div class="card-body">
                             @if ($errors->final->first())

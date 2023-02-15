@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->collation = "utf8_unicode_ci";
             $table->uuid("id")->unique();
             $table->uuid("tahun_akademik_id");
-            $table->string("deskripsi")->unique();
+            $table->string("deskripsi")->nullable();
             $table->text("config");
             $table->timestamps();
             $table

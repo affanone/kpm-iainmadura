@@ -27,8 +27,8 @@ class CheckController extends Controller
      */
     public function index()
     {
-        $nim = session("token_api")->user->username;
-        $res = \IainApi::get("api/mahasiswa?nim=$nim");
+        $nim = session("token_api")->user->kode;
+        $res = \IainApi::get("api/mahasiswa?kode=$nim");
         return view("loader.index", [
             "nama" => ucwords(strtolower($res->data->data[0]->nama)),
         ]);
@@ -37,8 +37,8 @@ class CheckController extends Controller
     public function valid()
     {
         if (session("valid_status") == 3) {
-            $nim = session("token_api")->user->username;
-            $res = \IainApi::get("api/mahasiswa?nim=$nim");
+            $nim = session("token_api")->user->kode;
+            $res = \IainApi::get("api/mahasiswa?kode=$nim");
             $mhs = $res->data->data[0];
             $ta = TahunAkademik::where("status", 1)->first();
             if ($ta && count($ta->kpm)) {
@@ -77,8 +77,8 @@ class CheckController extends Controller
 
     public function check_aktif()
     {
-        $nim = session("token_api")->user->username;
-        $res = \IainApi::get("api/mahasiswa?nim=$nim");
+        $nim = session("token_api")->user->kode;
+        $res = \IainApi::get("api/mahasiswa?kode=$nim");
         if (count($res->data->data)) {
             $ket = $res->data->data[0]->status->keterangan;
             if ($ket == "AKTIF") {
@@ -145,7 +145,7 @@ class CheckController extends Controller
         // matakuliah?tahun=2017&q=kpm&prod=0201
 
         $res = \IainApi::get(
-            "api/mahasiswa?nim=" . session("token_api")->user->username
+            "api/mahasiswa?kode=" . session("token_api")->user->kode
         );
         if ($res->status) {
             if (count($res->data->data)) {

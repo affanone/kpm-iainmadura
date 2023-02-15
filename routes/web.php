@@ -28,44 +28,49 @@ Route::get("/", function () {
     return view("reg_dpl.data-diri");
 });
 
-Route::group(["prefix" => "super", "middleware" => ["auth", "revalidate"]], function () {
-    Route::get("/", [DashboardController::class, "index"])->name("dashboard");
-    Route::get("/user_category", [
-        UserCategoryController::class,
-        "index",
-    ])->name("user.category");
-    Route::get("/user", [UserController::class, "index"])->name("user");
-    Route::get("/master", [MasterController::class, "index"]);
-    Route::get("/syarat", [PersyaratanController::class, "index"])->name(
-        "persyaratan"
-    );
-    Route::get("/tahun_akademik", [
-        TahunAkademikController::class,
-        "index",
-    ])->name("tahun.akademik");
-    Route::post("/tahun_akademik", [
-        TahunAkademikController::class,
-        "store",
-    ])->name("tahun_akademik.post");
-    Route::post("/tahun_akademik/data", [
-        TahunAkademikController::class,
-        "show",
-    ])->name("tahun_akademik.data");
-    Route::get("/tahun_akademik/{id}", [
-        TahunAkademikController::class,
-        "edit",
-    ])->name("tahun_akademik.edit");
-    Route::put("/tahun_akademik", [
-        TahunAkademikController::class,
-        "update",
-    ])->name("tahun_akademik.update");
-    Route::delete("/tahun_akademik", [
-        TahunAkademikController::class,
-        "destroy",
-    ])->name("tahun_akademik.delete");
+Route::group(
+    ["prefix" => "super", "middleware" => ["auth", "revalidate"]],
+    function () {
+        Route::get("/", [DashboardController::class, "index"])->name(
+            "dashboard"
+        );
+        Route::get("/user_category", [
+            UserCategoryController::class,
+            "index",
+        ])->name("user.category");
+        Route::get("/user", [UserController::class, "index"])->name("user");
+        Route::get("/master", [MasterController::class, "index"]);
+        Route::get("/syarat", [PersyaratanController::class, "index"])->name(
+            "persyaratan"
+        );
+        Route::get("/tahun_akademik", [
+            TahunAkademikController::class,
+            "index",
+        ])->name("tahun.akademik");
+        Route::post("/tahun_akademik", [
+            TahunAkademikController::class,
+            "store",
+        ])->name("tahun_akademik.post");
+        Route::post("/tahun_akademik/data", [
+            TahunAkademikController::class,
+            "show",
+        ])->name("tahun_akademik.data");
+        Route::get("/tahun_akademik/{id}", [
+            TahunAkademikController::class,
+            "edit",
+        ])->name("tahun_akademik.edit");
+        Route::put("/tahun_akademik", [
+            TahunAkademikController::class,
+            "update",
+        ])->name("tahun_akademik.update");
+        Route::delete("/tahun_akademik", [
+            TahunAkademikController::class,
+            "destroy",
+        ])->name("tahun_akademik.delete");
 
-    Route::get("/kpm", [DataKPMController::class, "index"])->name("kpm");
-});
+        Route::get("/kpm", [DataKPMController::class, "index"])->name("kpm");
+    }
+);
 
 Route::group(
     ["prefix" => "mhs", "middleware" => ["auth", "akses_mahasiswa"]],
@@ -77,89 +82,118 @@ Route::group(
     }
 );
 
-Route::group(
-    ["prefix" => "reg", "middleware" => ["mhs_register"]],
-    function () {
-        Route::post("/register", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "update_profil",
-        ])->name("reg_update_profil");
-
+Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
+    Route::group(["prefix" => "reg", "middleware" => []], function () {
         Route::get("/profil", [
-            \App\Http\Controllers\Reg\RegisterController::class,
+            \App\Http\Controllers\Reg\DplController::class,
             "profil",
-        ])->name("reg_profil");
+        ])->name("dpl.reg.profil");
 
-        Route::get("/kpm", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "kpm",
-        ])->name("reg_kpm");
-
-        Route::post("/kpm", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "update_kpm",
-        ])->name("reg_update_kpm");
-
-        Route::get("/syarat", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "syarat",
-        ])->name("reg_syarat");
-
-        Route::post("/syarat", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "upload_syarat",
-        ])->name("reg_upload_syarat");
-
-        Route::get("/final", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "finalisasi",
-        ])->name("reg_final");
-
-        Route::post("/final", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "verifikasi_dan_finalisasi",
-        ])->name("reg_verifikasi_finalisasi");
+        Route::post("/profil", [
+            \App\Http\Controllers\Reg\DplController::class,
+            "register",
+        ])->name("dpl.reg.profil.post");
 
         Route::get("/", function () {
-            return Redirect::to("reg/profil");
+            return Redirect::to(route("dpl.reg.profil"));
         });
-    }
-);
+    });
 
-Route::group(
-    ["prefix" => "unreg", "middleware" => ["mhs_unregister"]],
-    function () {
-        Route::get("/", [
-            \App\Http\Controllers\Reg\CheckController::class,
-            "index",
-        ]);
+    Route::get("/", function () {
+        return Redirect::to(route("dpl.reg.profil"));
+    });
+});
 
-        Route::post("/aktif", [
-            \App\Http\Controllers\Reg\CheckController::class,
-            "check_aktif",
-        ]);
+Route::group(["prefix" => "mhs", "middleware" => ["level_mhs"]], function () {
+    Route::group(
+        ["prefix" => "reg", "middleware" => ["mhs_register"]],
+        function () {
+            Route::post("/register", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "update_profil",
+            ])->name("mhs.reg.profil");
 
-        Route::post("/sks", [
-            \App\Http\Controllers\Reg\CheckController::class,
-            "check_sks",
-        ]);
+            Route::get("/profil", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "profil",
+            ])->name("mhs.reg.profil.get");
 
-        Route::post("/mk", [
-            \App\Http\Controllers\Reg\CheckController::class,
-            "check_mk",
-        ]);
+            Route::get("/kpm", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "kpm",
+            ])->name("mhs.reg.kpm.get");
 
-        Route::get("/valid", [
-            \App\Http\Controllers\Reg\CheckController::class,
-            "valid",
-        ]);
+            Route::post("/kpm", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "update_kpm",
+            ])->name("mhs.reg.kpm");
 
-        Route::post("/register", [
-            \App\Http\Controllers\Reg\RegisterController::class,
-            "registrasi",
-        ])->name("register");
-    }
-);
+            Route::get("/syarat", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "syarat",
+            ])->name("mhs.reg.syarat.get");
+
+            Route::post("/syarat", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "upload_syarat",
+            ])->name("mhs.reg.syarat");
+
+            Route::get("/final", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "finalisasi",
+            ])->name("mhs.reg.final.get");
+
+            Route::post("/final", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "verifikasi_dan_finalisasi",
+            ])->name("mhs.reg.final");
+
+            Route::get("/", function () {
+                return Redirect::to(route("mhs.reg.profil.get"));
+            });
+        }
+    );
+
+    Route::group(
+        ["prefix" => "unreg", "middleware" => ["mhs_unregister"]],
+        function () {
+            Route::get("/", [
+                \App\Http\Controllers\Reg\CheckController::class,
+                "index",
+            ]);
+
+            Route::post("/aktif", [
+                \App\Http\Controllers\Reg\CheckController::class,
+                "check_aktif",
+            ])->name("mhs.unreg.aktif");
+
+            Route::post("/sks", [
+                \App\Http\Controllers\Reg\CheckController::class,
+                "check_sks",
+            ])->name("mhs.unreg.sks");
+
+            Route::post("/mk", [
+                \App\Http\Controllers\Reg\CheckController::class,
+                "check_mk",
+            ])->name("mhs.unreg.mk");
+
+            Route::get("/valid", [
+                \App\Http\Controllers\Reg\CheckController::class,
+                "valid",
+            ])->name("mhs.unreg.valid");
+
+            Route::post("/register", [
+                \App\Http\Controllers\Reg\RegisterController::class,
+                "registrasi",
+            ])->name("mhs.unreg.register");
+        }
+    );
+
+    Route::get("/", function () {
+        return Redirect::to(route("mhs.reg.profil.get"));
+    });
+});
+
 Route::get("/logout", [AuthenticationController::class, "logout"]);
 Route::get("/signin", [AuthenticationController::class, "index"])
     ->name("login_page")

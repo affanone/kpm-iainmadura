@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="{{ $step > 0 ? route('reg_update_profil') : route('register') }}">
+                    <form method="post" action="{{ $step > 0 ? route('mhs.reg.profil') : route('mhs.unreg.register') }}">
                         @csrf
                         <div class="card-body">
                             @if ($errors->daftar->first())

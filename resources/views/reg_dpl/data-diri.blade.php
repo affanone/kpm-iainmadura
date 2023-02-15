@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="#">
+                    <form method="post" action="{{ route('dpl.reg.profil.post') }}">
                         @csrf
                         <div class="card-body">
                             @if ($errors->daftar->first())
@@ -34,7 +34,7 @@
                                 <label for="tgl_lhr">Tanggal Lahir</label>
                                 <input type="text" class="form-control" id="tgl_lhr" value="" disabled>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="jenis_kelamin">Jenis Kelamin</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" value="L" id="jeniskelaminl"
@@ -47,7 +47,7 @@
                                         disabled>
                                     <label class="form-check-label" for="jeniskelaminp">Perempuan</label>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group @if ($errors->has('hp')) alert alert-danger  error @endif">
                                 @if ($errors->has('hp'))
                                     <div class="font-italic">{{ $errors->first('hp') }}</div>
