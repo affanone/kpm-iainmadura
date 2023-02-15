@@ -63,10 +63,25 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('kpm') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="fas fa-project-diagram nav-icon"></i>
                                 <p>Data KPM</p>
+                                <i class="right fas fa-angle-left"></i>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('jenis_kpm') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Jenis KPM</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('data_kpm') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Nama KPM</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('user.category') }}" class="nav-link">

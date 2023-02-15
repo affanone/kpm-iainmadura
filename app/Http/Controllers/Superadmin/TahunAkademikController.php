@@ -185,7 +185,7 @@ class TahunAkademikController extends Controller
             $error = $e->errorInfo;
             $data['icon'] = 'error';
             $data['title'] = 'Gagal';
-            $data['message'] = str_contains($error[2], 'constraint') ? 'Tahun Akademik ' . $ta->tahun . ' sedang Aktif' : 'Ada Kesalahan';
+            $data['message'] = str_contains($error[2], 'constraint') ? 'Tahun Akademik ' . $ta->tahun . ' sedang digunakan' : 'Ada Kesalahan';
         }
         return response()->json($data);
     }

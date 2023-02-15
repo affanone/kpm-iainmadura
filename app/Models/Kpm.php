@@ -9,6 +9,11 @@ class Kpm extends Uuid
         return json_decode($value);
     }
 
+    public function tahun_akademik()
+    {
+        return $this->belongsTo(TahunAkademik::class);
+    }
+
     public function subkpm()
     {
         return $this->hasMany(Subkpm::class);

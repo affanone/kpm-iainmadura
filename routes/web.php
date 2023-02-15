@@ -7,6 +7,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\Superadmin\DataKPMController;
+use App\Http\Controllers\Superadmin\JenisKPMController;
 use App\Http\Controllers\Superadmin\UserCategoryController;
 use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\PersyaratanController;
@@ -64,7 +65,16 @@ Route::group(["prefix" => "super", "middleware" => ["auth", "revalidate"]], func
         "destroy",
     ])->name("tahun_akademik.delete");
 
-    Route::get("/kpm", [DataKPMController::class, "index"])->name("kpm");
+    Route::get("/kpm", [JenisKPMController::class, "index"])->name("jenis_kpm");
+    Route::post("/kpm", [JenisKPMController::class, "store"])->name("jenis_kpm.post");
+    Route::post("/kpm/data", [JenisKPMController::class, "show"])->name("jenis_kpm.data");
+    Route::get("/kpm/{id}", [JenisKPMController::class, "edit"])->name("jenis_kpm.edit");
+    Route::put("/kpm", [JenisKPMController::class, "update"])->name("jenis_kpm.update");
+    Route::delete("/kpm", [JenisKPMController::class, "destroy"])->name("jenis_kpm.delete");
+
+    Route::get("/data_kpm", [DataKPMController::class, "index"])->name("data_kpm");
+    Route::post("/data_kpm", [DataKPMController::class, "store"])->name("data_kpm.post");
+    Route::post("/data_kpm/data", [DataKPMController::class, "show"])->name("data_kpm.data");
 });
 
 Route::group(

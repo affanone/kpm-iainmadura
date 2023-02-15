@@ -1,6 +1,6 @@
 @extends('master_template')
 
-@section('title', 'Tahun Akademik KPM')
+@section('title', 'Jenis KPM')
 
 @section('content')
     <!-- Content Wrapper. Contains page content -->
@@ -10,12 +10,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Tahun Akademik KPM</h1>
+                        <h1>Jenis KPM</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active">Tahun Akademik</li>
+                            <li class="breadcrumb-item active">Jenis KPM</li>
                         </ol>
                     </div>
                 </div>
@@ -26,24 +26,24 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#modalTmbTahunAkademik"><i class="fas fa-plus-circle"></i> Tambah Data</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTmbJenisKPM"><i
+                            class="fas fa-plus-circle"></i> Tambah Data</button>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Tahun Akademik</h3>
+                                <h3 class="card-title">Data Jenis KPM</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="tblThnAkademik" class="table table-bordered table-striped table-hover">
+                                <table id="tblJenisKPM" class="table table-bordered table-striped table-hover">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
                                             <th>Tahun Akademik</th>
-                                            <th>Semester</th>
-                                            <th>Status</th>
+                                            <th>Jenis KPM</th>
+                                            <th>Deskripsi</th>
                                             <th width="7%">Opsi</th>
                                         </tr>
                                     </thead>
@@ -64,16 +64,16 @@
         <!-- /.content -->
 
         <!-- /modal Tambah -->
-        <div class="modal fade" id="modalTmbTahunAkademik" data-backdrop="static" data-keyboard="false"
-            aria-labelledby="tmbTahunAkademik" aria-hidden="true">
+        <div class="modal fade" id="modalTmbJenisKPM" data-backdrop="static" data-keyboard="false"
+            aria-labelledby="modalTmbJenisKPM" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal" id="frmTmbThnAkademik">
+                    <form class="form-horizontal" id="frmTmbJenisKPM">
                         @csrf
-                        <input class="d-none" type="text" name="id_ta" id="id_ta">
+                        <input class="d-none" type="text" name="id_jenisKPM" id="id_jenisKPM">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Tambah Tahun Akademik</h5>
+                            <h5 class="modal-title">Tambah Jenis KPM</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -81,32 +81,35 @@
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="tahun">Tahun</label>
-                                            <input type="text" class="form-control" id="tahun" name="tahun"
-                                                value="{{ old('tahun', date('Y')) }}" autocomplete="off">
+                                            <label for="tahun">Tahun Akademik</label>
+                                            <select class="form-control" id="tahun" name="tahun">
+                                                <option value="">-- Pilih Tahun Akademik --</option>
+                                                @foreach ($ta as $dt_ta)
+                                                    <option value="{{ $dt_ta->id }}">
+                                                        {{ $dt_ta->tahun . ' - ' . ucwords(strtolower($dt_ta->semester)) . ' ' . ($dt_ta->status == 1 ? '(Aktif)' : '(Tidak Aktif)') }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="semester">Semester</label>
-                                            <select class="form-control" id="semester" name="semester">
-                                                <option value="">-- Pilih Semester --</option>
-                                                <option value="gasal">Gasal</option>
-                                                <option value="genap">Genap</option>
-                                            </select>
+                                            <label for="jenis">Jenis KPM</label>
+                                            <input type="text" class="form-control" id="jenis" name="jenis"
+                                                autocomplete="off">
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
-
-                                    <div class="col-lg-2">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="status">Status</label>
-                                            <input class="form-control" type="checkbox" name="status" id="status"
-                                                data-on-text="Aktif" data-off-text="Tidak" data-off-color="danger"
-                                                data-on-color="success">
+                                            <label for="deskripsi">Deskripsi KPM</label>
+                                            <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
+                                                placeholder="Ketikan deskripsi disini ..."></textarea>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -115,7 +118,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary" id="btnSmpThnAkademik">Simpan</button>
+                            <button type="submit" class="btn btn-primary" id="btnSmpJenisKPM">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -130,27 +133,21 @@
 
 @section('script')
     <script>
-        $('#status').bootstrapSwitch();
-
-        const validFormThnAkademik = $("#frmTmbThnAkademik").validate({
+        const validFormJenisKPM = $("#frmTmbJenisKPM").validate({
             rules: {
                 tahun: {
-                    required: true,
-                    digits: true,
-                    range: [new Date().getFullYear() - 5, new Date().getFullYear()]
+                    required: true
                 },
-                semester: {
+                jenis: {
                     required: true
                 }
             },
             messages: {
                 tahun: {
-                    required: 'Harus diisi',
-                    digits: 'Hanya angka',
-                    range: 'Isi diantara rentang tahun {0} dan {1}'
-                },
-                semester: {
                     required: 'Harus dipilih'
+                },
+                jenis: {
+                    required: 'Harus diisi'
                 }
             },
             errorPlacement: function(error, element) {
@@ -165,25 +162,25 @@
             },
             submitHandler: function(form, e) {
                 e.preventDefault();
-                const id = $('#id_ta').val();
+                const id = $('#id_jenisKPM').val();
                 let method, url;
                 if (id) {
                     method = "PUT";
-                    url = "{{ route('tahun_akademik.update') }}";
+                    url = "{{ route('jenis_kpm.update') }}";
                 } else {
                     method = "POST";
-                    url = "{{ route('tahun_akademik.post') }}";
+                    url = "{{ route('jenis_kpm.post') }}";
                 }
 
                 $.ajax({
                     type: method,
                     url: url,
-                    data: $('#frmTmbThnAkademik').serialize(),
+                    data: $('#frmTmbJenisKPM').serialize(),
                     dataType: 'JSON',
                     success: function(data) {
-                        document.getElementById('frmTmbThnAkademik').reset();
-                        $('#modalTmbTahunAkademik').modal('toggle');
-                        $('#tblThnAkademik').DataTable().ajax.reload(null,
+                        document.getElementById('frmTmbJenisKPM').reset();
+                        $('#modalTmbJenisKPM').modal('toggle');
+                        $('#tblJenisKPM').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
@@ -207,11 +204,11 @@
     </script>
 
     <script>
-        let tblThnAkademik = $("#tblThnAkademik").DataTable({
+        let tblJenisKPM = $("#tblJenisKPM").DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('tahun_akademik.data') }}",
+                url: "{{ route('jenis_kpm.data') }}",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}"
@@ -224,13 +221,13 @@
                     render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
                 },
                 {
-                    data: 'tahun'
+                    data: 'tahun_akademik.tahun'
                 },
                 {
-                    data: 'semester'
+                    data: 'nama'
                 },
                 {
-                    data: 'status'
+                    data: 'deskripsi'
                 },
                 {
                     data: 'action',
@@ -240,7 +237,7 @@
                 }
             ],
             "order": [
-                [1, 'asc']
+                [1, 'desc']
             ],
             "columnDefs": [{
                 "targets": "_all",
@@ -254,43 +251,25 @@
     </script>
 
     <script>
-        function editThnAkademik(id) {
-            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+        function editJenisKPM(id) {
+            let url = '{{ route('jenis_kpm.edit', ':id') }}';
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
                 dataType: "JSON"
             }).done((response) => {
-                const smt = {
-                    "gasal": "Gasal",
-                    "genap": "Genap"
-                };
-
-                $('#id_ta').val(response.id);
-                $('#tahun').val(response.tahun);
-
-                // $('#semester')
-                //     .find('option')
-                //     .remove()
-                //     .end()
-                //     .append(
-                //         `<option value="">-- Pilih Semester --</option>`
-                //     );
-                // for (const key in smt) {
-                //     const selected = response.semester.toLowerCase() == key ? 'selected' : '';
-                //     $('#semester').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
-                // }
-                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
-
-                $('#status').bootstrapSwitch('state', response.status == 1 ? true : false);
-                $('#modalTmbTahunAkademik').modal('show');
+                $('#id_jenisKPM').val(response.id);
+                $('#tahun option[value="' + response.tahun_akademik_id + '"]').prop('selected', true);
+                $('#jenis').val(response.nama);
+                $('#deskripsi').val(response.deskripsi);
+                $('#modalTmbJenisKPM').modal('show');
             });
         }
     </script>
 
     <script>
-        function hapusThnAkademik(id) {
-            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+        function hapusJenisKPM(id) {
+            let url = '{{ route('jenis_kpm.edit', ':id') }}';
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -298,7 +277,7 @@
             }).done((response) => {
                 Swal.fire({
                     title: 'Apa Anda Yakin?',
-                    html: `Anda akan menghapus data <span class="font-weight-bold font-italic">Tahun Akademik ${response.tahun}</span>`,
+                    html: `Anda akan menghapus jenis KPM : <span class="font-weight-bold font-italic">${response.nama}</span>`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -309,14 +288,14 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('tahun_akademik.delete') }}",
+                            url: "{{ route('jenis_kpm.delete') }}",
                             type: "DELETE",
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 "id": response.id
                             },
                             success: function(res) {
-                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                $('#tblJenisKPM').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     res.title,
@@ -325,7 +304,7 @@
                                 );
                             },
                             error: function(res) {
-                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                $('#tblJenisKPM').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     'Gagal',
@@ -340,7 +319,7 @@
                     ) {
                         Swal.fire(
                             'Batal',
-                            `Tahun Akademik ${response.tahun} tidak jadi dihapus`,
+                            `jenis KPM : ${response.nama} tidak jadi dihapus`,
                             'info'
                         )
                     }

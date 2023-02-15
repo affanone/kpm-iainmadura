@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TahunAkademik;
 use App\Models\Kpm;
-use App\Models\Subkpm;
 use DataTables;
 
-class DataKPMController extends Controller
+class JenisKPMController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,13 +17,8 @@ class DataKPMController extends Controller
      */
     public function index()
     {
-        $active_kpm = Kpm::with('tahun_akademik')
-            ->whereHas('tahun_akademik', function ($query) {
-                return $query->where('status', 1);
-            })
-            ->get();
-        // return response()->json($active_kpm);
-        return view("superadmin.data_kpm", ['data_kpm' => $active_kpm]);
+        $ta = TahunAkademik::orderBy('status', 'desc')->get();
+        return view("superadmin.jenis_kpm", ['ta' => $ta]);
     }
 
     /**
@@ -47,17 +42,17 @@ class DataKPMController extends Controller
         $this->validate(
             $request,
             [
-                'jenis' => 'required',
-                'nama' => 'required'
+                'tahun' => 'required',
+                'jenis' => 'required'
             ],
             [
-                'jenis.required'    => 'Jenis KPM harus dipilih',
-                'nama.required'    => 'Nama KPM harus diisi'
+                'tahun.required'    => 'Tahun Akademik harus dipilih',
+                'jenis.required'    => 'Jenis KPM harus diisi'
             ]
         );
 
-        $jenis = strip_tags($request->jenis);
-        $nama = strtoupper(strip_tags($request->nama));
+        $tahun = strip_tags($request->tahun);
+        $jenis = strtoupper(strip_tags($request->jenis));
         $deskripsi = strip_tags($request->deskripsi);
 
         $unik = uniqid();
@@ -99,16 +94,16 @@ class DataKPMController extends Controller
             "validate" => false
         ];
 
-        $kpm = new Subkpm;
-        $kpm->kpm_id = $jenis;
-        $kpm->nama = $nama;
+        $kpm = new Kpm;
+        $kpm->tahun_akademik_id = $tahun;
+        $kpm->nama = $jenis;
         $kpm->deskripsi = $deskripsi;
         $kpm->config = json_encode($config);
         $kpm->save();
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Data KPM : ' . $nama . ' Berhasil Disimpan'
+            'message' => 'Jenis KPM : ' . $jenis . ' Berhasil Disimpan'
         );
         return response()->json($data);
     }
@@ -122,15 +117,15 @@ class DataKPMController extends Controller
     public function show(Request $request)
     {
         if ($request->ajax()) {
-            $data = Subkpm::with('kpm')->get();
+            $data = KPM::with('tahun_akademik')->get();
 
             return DataTables::of($data)
                 ->addColumn('action', function ($data) {
                     return '
                     <div class="btn-group">
-                        <button type="button" class="btn btn-warning btn-sm" onClick="editDataKPM(\'' . $data->id . '\')" title="Edit Data KPM"><i
+                        <button type="button" class="btn btn-warning btn-sm" onClick="editJenisKPM(\'' . $data->id . '\')" title="Edit Jenis KPM"><i
                                 class="fas fa-edit"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" onClick="hapusDataKPM(\'' . $data->id . '\')" title="Hapus Data KPM"><i
+                        <button type="button" class="btn btn-danger btn-sm" onClick="hapusJenisKPM(\'' . $data->id . '\')" title="Hapus Jenis KPM"><i
                                 class="fas fa-eraser"></i></button>
                     </div>';
                 })
@@ -147,7 +142,8 @@ class DataKPMController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = KPM::find($id);
+        return response()->json($data);
     }
 
     /**
@@ -157,9 +153,36 @@ class DataKPMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'tahun' => 'required',
+                'jenis' => 'required'
+            ],
+            [
+                'tahun.required'    => 'Tahun Akademik harus dipilih',
+                'jenis.required'    => 'Jenis KPM harus diisi'
+            ]
+        );
+
+        $id = $request->id_jenisKPM;
+        $tahun = strip_tags($request->tahun);
+        $jenis = strtoupper(strip_tags($request->jenis));
+        $deskripsi = strip_tags($request->deskripsi);
+
+        $kpm = Kpm::find($id);
+        $kpm->tahun_akademik_id = $tahun;
+        $kpm->nama = $jenis;
+        $kpm->deskripsi = $deskripsi;
+        $kpm->update();
+
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Jenis KPM ' . $jenis . ' Berhasil Diupdate'
+        );
+        return response()->json($data);
     }
 
     /**
@@ -168,8 +191,25 @@ class DataKPMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $kpm = Kpm::find($id);
+
+        $data = array();
+        try {
+            $proc = $kpm->delete();
+            if ($proc) {
+                $data['icon'] = 'success';
+                $data['title'] = 'Berhasil';
+                $data['message'] = 'Jenis KPM : ' . $kpm->nama . ' Berhasil Dihapus';
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            $error = $e->errorInfo;
+            $data['icon'] = 'error';
+            $data['title'] = 'Gagal';
+            $data['message'] = str_contains($error[2], 'constraint') ? 'Jenis KPM : ' . $kpm->nama . ' sedang digunakan' : 'Ada Kesalahan';
+        }
+        return response()->json($data);
     }
 }
