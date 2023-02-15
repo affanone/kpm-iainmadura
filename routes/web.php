@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Superadmin\DashboardController;
+use App\Http\Controllers\Superadmin\DataKPMController;
 use App\Http\Controllers\Superadmin\UserCategoryController;
 use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\PersyaratanController;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Redirect;
  */
 
 Route::get("/", function () {
-    return view("welcome");
+    return view("reg_dpl.data-diri");
 });
 
 Route::group(["prefix" => "super", "middleware" => ["auth", "revalidate"]], function () {
@@ -62,6 +63,8 @@ Route::group(["prefix" => "super", "middleware" => ["auth", "revalidate"]], func
         TahunAkademikController::class,
         "destroy",
     ])->name("tahun_akademik.delete");
+
+    Route::get("/kpm", [DataKPMController::class, "index"])->name("kpm");
 });
 
 Route::group(

@@ -1,6 +1,6 @@
 @extends('master_template')
 
-@section('title', 'Tahun Akademik KPM')
+@section('title', 'Tahun Akademik')
 
 @section('content')
     <!-- Content Wrapper. Contains page content -->

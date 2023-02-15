@@ -63,7 +63,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('kpm') }}" class="nav-link">
                                 <i class="fas fa-project-diagram nav-icon"></i>
                                 <p>Data KPM</p>
                             </a>

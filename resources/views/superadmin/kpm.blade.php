@@ -105,7 +105,7 @@
                                         <div class="form-group">
                                             <label for="status">Status</label>
                                             <input class="form-control" type="checkbox" name="status" id="status"
-                                                data-on-text="Aktif" data-off-text="Tidak" checked data-off-color="danger"
+                                                data-on-text="Aktif" data-off-text="Tidak" data-off-color="danger"
                                                 data-on-color="success">
                                         </div>
                                         <!-- /.form-group -->
@@ -282,10 +282,7 @@
                 // }
                 $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
 
-                response.status == 1 ? $('#status').bootstrapSwitch('state', true) : $('#status')
-                    .bootstrapSwitch(
-                        'state',
-                        false);
+                $('#status').bootstrapSwitch('state', response.status == 1 ? true : false);
                 $('#modalTmbTahunAkademik').modal('show');
             });
         }
