@@ -161,6 +161,44 @@
             form.find('.is-valid').removeClass('is-valid');
         });
     </script>
+
+    <script>
+        function logoutConfirm() {
+            Swal.fire({
+                title: 'Apa Anda Yakin?',
+                html: 'Anda akan keluar dari aplikasi',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Yakin!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('/logout') }}",
+                        success: function(res) {
+                            Swal.fire(
+                                'Berhasil',
+                                'Anda telah keluar dari aplikasi',
+                                'success'
+                            ).then((result) => {
+                                window.location.href = "{{ url('signin') }}";
+                            });
+                        },
+                        error: function(res) {
+                            Swal.fire(
+                                'Gagal',
+                                'Ada Kesalahan',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

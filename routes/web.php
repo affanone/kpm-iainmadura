@@ -27,7 +27,7 @@ Route::get("/", function () {
     return view("welcome");
 });
 
-Route::group(["prefix" => "super"], function () {
+Route::group(["prefix" => "super", "middleware" => ["auth", "revalidate"]], function () {
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
     Route::get("/user_category", [
         UserCategoryController::class,
