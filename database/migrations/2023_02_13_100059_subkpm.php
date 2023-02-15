@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->uuid("kpm_id");
             $table->string("nama");
             $table->string("deskripsi")->unique();
-            $table->text("config_upload");
+            $table->text("config");
             $table->timestamps();
             $table
                 ->foreign("kpm_id")

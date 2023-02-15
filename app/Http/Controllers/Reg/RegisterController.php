@@ -273,7 +273,7 @@ class RegisterController extends Controller
 
         $rules = [];
         $message_error = [];
-        foreach ($pend->subkpm->config_upload as $key => $conf) {
+        foreach ($pend->subkpm->config->upload as $key => $conf) {
             $f = collect($doc)->first(function ($d) use ($conf) {
                 return $d ? $d->desc->name == $conf->name : false;
             });
@@ -287,7 +287,7 @@ class RegisterController extends Controller
                 $rules[$conf->name] = join("|", $rule);
             }
         }
-        foreach ($pend->subkpm->kpm->config_upload as $key => $conf) {
+        foreach ($pend->subkpm->kpm->config->upload as $key => $conf) {
             $f = collect($doc)->first(function ($d) use ($conf) {
                 return $d ? $d->desc->name == $conf->name : false;
             });
@@ -309,7 +309,7 @@ class RegisterController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        foreach ($pend->subkpm->config_upload as $key => $conf) {
+        foreach ($pend->subkpm->config->upload as $key => $conf) {
             if ($request->hasFile($conf->name)) {
                 $file = \Helper::upload(
                     $request->file($conf->name),
@@ -337,7 +337,7 @@ class RegisterController extends Controller
                 $doc->save();
             }
         }
-        foreach ($pend->subkpm->kpm->config_upload as $key => $conf) {
+        foreach ($pend->subkpm->kpm->config->upload as $key => $conf) {
             if ($request->hasFile($conf->name)) {
                 $file = \Helper::upload(
                     $request->file($conf->name),
@@ -383,8 +383,8 @@ class RegisterController extends Controller
             ->first();
 
         $tup =
-            count($pend->subkpm->kpm->config_upload) +
-            count($pend->subkpm->config_upload);
+            count($pend->subkpm->kpm->config->upload) +
+            count($pend->subkpm->config->upload);
         if ($tup > 0) {
             $doc = DokumenPendaftaran::where(
                 "pendaftaran_id",
@@ -437,7 +437,7 @@ class RegisterController extends Controller
             $message = "Alamat belum anda centang !!";
         } else {
             foreach (
-                $pendaftaran->subkpm->kpm->config_upload
+                $pendaftaran->subkpm->kpm->config->upload
                 as $key => $config
             ) {
                 $a = collect($document)->first(function ($i) use ($config) {
@@ -450,7 +450,7 @@ class RegisterController extends Controller
                 }
             }
 
-            foreach ($pendaftaran->subkpm->config_upload as $key => $config) {
+            foreach ($pendaftaran->subkpm->config->upload as $key => $config) {
                 $a = collect($document)->first(function ($i) use ($config) {
                     return $i ? $i->desc->name == $config->name : false;
                 });
@@ -470,10 +470,10 @@ class RegisterController extends Controller
             if (!in_array(session("status"), [0, 2])) {
                 return Redirect::to("reg/final");
             }
-
-            $pendaftaran->status = 1;
+            $status = $pendaftaran->subkpm->config->validate ? 1 : 3;
+            $pendaftaran->status = $status;
             $pendaftaran->save();
-            session()->put("status", 1);
+            session()->put("status", $status);
             return Redirect::to("reg/final");
         }
     }
