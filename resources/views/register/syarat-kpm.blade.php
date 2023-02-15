@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" action="{{ route('reg_upload_syarat') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('mhs.reg.syarat') }}" enctype="multipart/form-data">
 
                         @if (count($pendaftaran->subkpm->kpm->config->upload) || count($pendaftaran->subkpm->config->upload))
                             @csrf

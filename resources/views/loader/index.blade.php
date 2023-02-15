@@ -349,7 +349,7 @@
             $('#is-loading').text('Cek Status anda..!');
             $.ajax({
                 type: 'post',
-                url: 'unreg/aktif',
+                url: "{{ route('mhs.unreg.aktif') }}",
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
@@ -376,7 +376,7 @@
             $('#is-loading').text('Cek minimal SKS yang ditempuh..!');
             $.ajax({
                 type: 'post',
-                url: 'unreg/sks',
+                url: "{{ route('mhs.unreg.sks') }}",
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
@@ -403,13 +403,13 @@
             $('#is-loading').text('Cek Matakuliah KPM..!');
             $.ajax({
                 type: 'post',
-                url: 'unreg/mk',
+                url: "{{ route('mhs.unreg.mk') }}",
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: res => {
                     if (res.next) {
-                        window.location = "{{ url('/unreg/valid') }}"
+                        window.location = "{{ route('mhs.unreg.valid') }}"
                     } else {
                         Swal.fire({
                             icon: 'error',

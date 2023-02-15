@@ -71,19 +71,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Left navbar links -->
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a href="{{ route('reg_profil') }}"
+                                <a href="{{ route('mhs.reg.profil.get') }}"
                                     class="nav-link @if ($step == 1) active @endif">Data Diri</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('reg_kpm') }}"
+                                <a href="{{ route('mhs.reg.kpm.get') }}"
                                     class="nav-link @if ($step == 2) active @endif">Jenis KPM</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('reg_syarat') }}"
+                                <a href="{{ route('mhs.reg.syarat.get') }}"
                                     class="nav-link @if ($step == 3) active @endif">Persyaratan KPM</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('reg_final') }}"
+                                <a href="{{ route('mhs.reg.final.get') }}"
                                     class="nav-link @if ($step == 4) active @endif">Finalisasi</a>
                             </li>
                         </ul>
