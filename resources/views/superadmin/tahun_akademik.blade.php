@@ -165,6 +165,14 @@
             },
             submitHandler: function(form, e) {
                 e.preventDefault();
+
+                // disable button
+                $('#btnSmpThnAkademik').prop("disabled", true);
+                // add spinner to button
+                $('#btnSmpThnAkademik').html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+                );
+
                 const id = $('#id_ta').val();
                 let method, url;
                 if (id) {
@@ -183,6 +191,8 @@
                     success: function(data) {
                         document.getElementById('frmTmbThnAkademik').reset();
                         $('#modalTmbTahunAkademik').modal('toggle');
+                        $('#btnSmpThnAkademik').prop("disabled", false);
+                        $('#btnSmpThnAkademik').html('Simpan');
                         $('#tblThnAkademik').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));

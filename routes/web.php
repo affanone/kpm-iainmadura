@@ -79,6 +79,9 @@ Route::group(
         Route::get("/data_kpm", [DataKPMController::class, "index"])->name("data_kpm");
         Route::post("/data_kpm", [DataKPMController::class, "store"])->name("data_kpm.post");
         Route::post("/data_kpm/data", [DataKPMController::class, "show"])->name("data_kpm.data");
+        Route::get("/data_kpm/{id}", [DataKPMController::class, "edit"])->name("data_kpm.edit");
+        Route::put("/data_kpm", [DataKPMController::class, "update"])->name("data_kpm.update");
+        Route::delete("/data_kpm", [DataKPMController::class, "destroy"])->name("data_kpm.delete");
     }
 );
 

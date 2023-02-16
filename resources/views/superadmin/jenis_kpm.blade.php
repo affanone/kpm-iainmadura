@@ -162,6 +162,14 @@
             },
             submitHandler: function(form, e) {
                 e.preventDefault();
+                
+                // disable button
+                $('#btnSmpJenisKPM').prop("disabled", true);
+                // add spinner to button
+                $('#btnSmpJenisKPM').html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+                );
+                
                 const id = $('#id_jenisKPM').val();
                 let method, url;
                 if (id) {
@@ -180,6 +188,8 @@
                     success: function(data) {
                         document.getElementById('frmTmbJenisKPM').reset();
                         $('#modalTmbJenisKPM').modal('toggle');
+                        $('#btnSmpJenisKPM').prop("disabled", false);
+                        $('#btnSmpJenisKPM').html('Simpan');
                         $('#tblJenisKPM').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));
@@ -319,7 +329,7 @@
                     ) {
                         Swal.fire(
                             'Batal',
-                            `jenis KPM : ${response.nama} tidak jadi dihapus`,
+                            `Jenis KPM : ${response.nama} tidak jadi dihapus`,
                             'info'
                         )
                     }

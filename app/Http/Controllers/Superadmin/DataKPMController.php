@@ -122,7 +122,7 @@ class DataKPMController extends Controller
     public function show(Request $request)
     {
         if ($request->ajax()) {
-            $data = Subkpm::with('kpm')->get();
+            $data = Subkpm::with('kpm', 'kpm.tahun_akademik')->get();
 
             return DataTables::of($data)
                 ->addColumn('action', function ($data) {
@@ -133,6 +133,9 @@ class DataKPMController extends Controller
                         <button type="button" class="btn btn-danger btn-sm" onClick="hapusDataKPM(\'' . $data->id . '\')" title="Hapus Data KPM"><i
                                 class="fas fa-eraser"></i></button>
                     </div>';
+                })
+                ->editColumn('kpm.nama', function ($data) {
+                    return $data->kpm->nama . ' (' . $data->kpm->tahun_akademik->tahun . ' - ' . $data->kpm->tahun_akademik->semester . ')';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -147,7 +150,8 @@ class DataKPMController extends Controller
      */
     public function edit($id)
     {
-        //
+        $kpm = Subkpm::find($id);
+        return response()->json($kpm);
     }
 
     /**
@@ -157,9 +161,36 @@ class DataKPMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'jenis' => 'required',
+                'nama' => 'required'
+            ],
+            [
+                'jenis.required'    => 'Jenis KPM harus dipilih',
+                'nama.required'    => 'Nama KPM harus diisi'
+            ]
+        );
+
+        $id = $request->id_dataKPM;
+        $jenis = strip_tags($request->jenis);
+        $nama = strip_tags($request->nama);
+        $deskripsi = strip_tags($request->deskripsi);
+
+        $kpm = Subkpm::find($id);
+        $kpm->kpm_id = $jenis;
+        $kpm->nama = $nama;
+        $kpm->deskripsi = $deskripsi;
+        $kpm->update();
+
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Data KPM ' . $nama . ' Berhasil Diupdate'
+        );
+        return response()->json($data);
     }
 
     /**
@@ -168,8 +199,25 @@ class DataKPMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $kpm = Subkpm::find($id);
+
+        $data = array();
+        try {
+            $proc = $kpm->delete();
+            if ($proc) {
+                $data['icon'] = 'success';
+                $data['title'] = 'Berhasil';
+                $data['message'] = 'Data KPM : ' . $kpm->nama . ' Berhasil Dihapus';
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            $error = $e->errorInfo;
+            $data['icon'] = 'error';
+            $data['title'] = 'Gagal';
+            $data['message'] = str_contains($error[2], 'constraint') ? 'Data KPM : ' . $kpm->nama . ' sedang digunakan' : 'Ada Kesalahan';
+        }
+        return response()->json($data);
     }
 }

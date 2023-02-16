@@ -129,6 +129,9 @@ class JenisKPMController extends Controller
                                 class="fas fa-eraser"></i></button>
                     </div>';
                 })
+                ->editColumn('tahun_akademik.tahun', function ($data) {
+                    return $data->tahun_akademik->tahun . ' - ' . $data->tahun_akademik->semester;
+                })
                 ->rawColumns(['action'])
                 ->make(true);
         }
