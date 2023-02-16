@@ -1,18 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\MasterController;
-use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\Superadmin\DataKPMController;
 use App\Http\Controllers\Superadmin\JenisKPMController;
-use App\Http\Controllers\Superadmin\UserCategoryController;
-use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
+use App\Http\Controllers\Superadmin\UserCategoryController;
+use App\Http\Controllers\Superadmin\UserController;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,7 +95,7 @@ Route::group(
 );
 
 Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
-    Route::group(["prefix" => "reg", "middleware" => []], function () {
+    Route::group(["prefix" => "reg", "middleware" => ['dpl_unregister']], function () {
         Route::get("/profil", [
             \App\Http\Controllers\Reg\DplController::class,
             "profil",
@@ -112,8 +111,15 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
         });
     });
 
-    Route::get("/", function () {
-        return Redirect::to(route("dpl.reg.profil"));
+    Route::group(["prefix" => "/", "middleware" => ['dpl_register']], function () {
+        Route::get("/dashboard", [
+            \App\Http\Controllers\Dpl\DashboardController::class,
+            "index",
+        ])->name("dpl.dashboard");
+
+        Route::get("/", function () {
+            return Redirect::to(route("dpl.reg.profil"));
+        });
     });
 });
 
@@ -173,7 +179,7 @@ Route::group(["prefix" => "mhs", "middleware" => ["level_mhs"]], function () {
             Route::get("/", [
                 \App\Http\Controllers\Reg\CheckController::class,
                 "index",
-            ]);
+            ])->name("mhs.unreg.index");
 
             Route::post("/aktif", [
                 \App\Http\Controllers\Reg\CheckController::class,
@@ -202,9 +208,19 @@ Route::group(["prefix" => "mhs", "middleware" => ["level_mhs"]], function () {
         }
     );
 
-    Route::get("/", function () {
-        return Redirect::to(route("mhs.reg.profil.get"));
-    });
+    Route::group(
+        ["prefix" => "/", "middleware" => ["mhs_dashboard"]],
+        function () {
+            Route::get("/dashboard", [
+                \App\Http\Controllers\Mhs\DashboardController::class,
+                "index",
+            ])->name("mhs.dashboard");
+
+            Route::get("/", function () {
+                return Redirect::to(route("mhs.reg.profil.get"));
+            });
+        }
+    );
 });
 
 Route::get("/logout", [AuthenticationController::class, "logout"]);

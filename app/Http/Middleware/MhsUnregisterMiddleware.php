@@ -16,13 +16,12 @@ class MhsUnregisterMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (
-            !(
-                $request->session()->exists("token_api") &&
-                !$request->session()->get("register")
-            )
-        ) {
-            return abort(404, "Access denied to open page !!");
+        if ($request->session()->get("status") > 3) {
+            return redirect()->to(route('mhs.dashboard'));
+        }
+
+        if ($request->session()->get("register")) {
+            return redirect()->to(route('mhs.reg.profil'));
         }
         return $next($request);
     }

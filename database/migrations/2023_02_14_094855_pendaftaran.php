@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -18,8 +18,9 @@ return new class extends Migration {
             // 1 = final dan minta persetujuan
             // 2 = persetujuan direject
             // 3 = persetujuan diterima
-            // 4 = tidak lulus
-            // 5 = lulus
+            // 4 = sudah masuk ke posko
+            // 5 = tidak lulus
+            // 6 = lulus
             $table
                 ->tinyInteger("status")
                 ->default(0)

@@ -72,9 +72,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li class="nav-item">
                             <a href="#" class="nav-link active">Data Diri</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="#" class="nav-link">Finalisasi</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
 
@@ -96,10 +96,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             sdfdsf
                                         </h3>
                                         <p class="text-sm text-muted">
-                                            <i class="fas fa-id-badge mr-1"></i> 3423424
+                                            <i class="fas fa-id-badge mr-1"></i> {{ $nama }}
                                         </p>
                                         <p class="text-sm text-muted">
-                                            <i class="fas fa-graduation-cap"></i> sdfdsf / dgdg
+                                            <i class="fas fa-graduation-cap"></i> {{ $nip ?? $nidn }}
                                         </p>
                                     </div>
                                 </div>
