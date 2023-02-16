@@ -92,7 +92,7 @@ Route::group(
 );
 
 Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
-    Route::group(["prefix" => "reg", "middleware" => ['unreg_dpl']], function () {
+    Route::group(["prefix" => "reg", "middleware" => ['dpl_unregister']], function () {
         Route::get("/profil", [
             \App\Http\Controllers\Reg\DplController::class,
             "profil",
@@ -108,7 +108,7 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
         });
     });
 
-    Route::group(["prefix" => "/", "middleware" => []], function () {
+    Route::group(["prefix" => "/", "middleware" => ['dpl_register']], function () {
         Route::get("/dashboard", [
             \App\Http\Controllers\Dpl\DashboardController::class,
             "profil",
