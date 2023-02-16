@@ -15,6 +15,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        return view('mhs.dashboard');
         return Auth::user()->access;
         return response()->json(is_array([]));
     }
