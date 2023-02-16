@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         "level_mhs" => \App\Http\Middleware\LevelMhsMiddleware::class,
         "dpl_register" => \App\Http\Middleware\DplRegMiddleware::class,
         "dpl_unregister" => \App\Http\Middleware\DplUnregMiddleware::class,
+        "mhs_dashboard" => \App\Http\Middleware\MhsDashboardMiddleware::class,
     ];
 }

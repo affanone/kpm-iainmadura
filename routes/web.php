@@ -205,9 +205,19 @@ Route::group(["prefix" => "mhs", "middleware" => ["level_mhs"]], function () {
         }
     );
 
-    Route::get("/", function () {
-        return Redirect::to(route("mhs.reg.profil.get"));
-    });
+    Route::group(
+        ["prefix" => "/", "middleware" => ["mhs_dashboard"]],
+        function () {
+            Route::get("/dashboard", [
+                \App\Http\Controllers\Mhs\DashboardController::class,
+                "index",
+            ])->name("mhs.dashboard");
+
+            Route::get("/", function () {
+                return Redirect::to(route("mhs.reg.profil.get"));
+            });
+        }
+    );
 });
 
 Route::get("/logout", [AuthenticationController::class, "logout"]);
