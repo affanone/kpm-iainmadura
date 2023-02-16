@@ -16,6 +16,9 @@ class DplUnregMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if (session('register')) {
+            return redirect()->to(route('dpl.dashboard'));
+        }
         return $next($request);
     }
 }

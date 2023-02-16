@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pendaftaran;
+use App\Models\TahunAkademik;
+use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use GuzzleHttp\Client;
-
-use App\Models\User;
-use App\Models\TahunAkademik;
-use App\Models\Pendaftaran;
+use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
 {
@@ -141,13 +140,21 @@ class AuthenticationController extends Controller
                     }
                 } elseif ($token->user->level == 1) {
                     // setting untuk dosen
+                    $user = User::where(
+                        "username",
+                        $token->user->kode
+                    )->first();
                     session([
                         "token_api" => $token, // token hasil login api
-                        "register" => false, // false artinya tidak ada di database
-                        "status" => 0, // status pendaftaran
                         "level" => 1, // level user
                     ]);
-                    return Redirect::to("dpl/reg");
+                    if ($user) {
+                        session()->put('register', true);
+                        return Redirect::to(route('dpl.dashboard'));
+                    } else {
+                        session()->put('register', false);
+                        return Redirect::to(route('dpl.reg.profil'));
+                    }
                 }
             }
 
@@ -164,7 +171,7 @@ class AuthenticationController extends Controller
             //     )
             //     ->withInput();
             // }
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        } catch (\GuzzleHttp\Exception\ClientException$e) {
             $response = $e->getResponse();
             $result = json_decode($response->getBody()->getContents(), true);
             return Redirect::to("signin")

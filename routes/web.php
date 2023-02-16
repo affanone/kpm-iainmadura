@@ -111,7 +111,7 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
     Route::group(["prefix" => "/", "middleware" => ['dpl_register']], function () {
         Route::get("/dashboard", [
             \App\Http\Controllers\Dpl\DashboardController::class,
-            "profil",
+            "index",
         ])->name("dpl.dashboard");
 
         Route::get("/", function () {
@@ -176,7 +176,7 @@ Route::group(["prefix" => "mhs", "middleware" => ["level_mhs"]], function () {
             Route::get("/", [
                 \App\Http\Controllers\Reg\CheckController::class,
                 "index",
-            ]);
+            ])->name("mhs.unreg.index");
 
             Route::post("/aktif", [
                 \App\Http\Controllers\Reg\CheckController::class,

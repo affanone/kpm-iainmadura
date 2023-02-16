@@ -16,6 +16,9 @@ class DplRegMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if (!session('register')) {
+            return redirect()->to(route('dpl.reg.profil'));
+        }
         return $next($request);
     }
 }
