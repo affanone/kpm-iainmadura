@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\Superadmin\DataKPMController;
+use App\Http\Controllers\Superadmin\DplController;
 use App\Http\Controllers\Superadmin\JenisKPMController;
 use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
@@ -31,42 +32,18 @@ Route::get("/", function () {
 Route::group(
     ["prefix" => "super", "middleware" => ["auth", "revalidate"]],
     function () {
-        Route::get("/", [DashboardController::class, "index"])->name(
-            "dashboard"
-        );
-        Route::get("/user_category", [
-            UserCategoryController::class,
-            "index",
-        ])->name("user.category");
+        Route::get("/", [DashboardController::class, "index"])->name("dashboard");
+        Route::get("/user_category", [UserCategoryController::class, "index"])->name("user.category");
         Route::get("/user", [UserController::class, "index"])->name("user");
         Route::get("/master", [MasterController::class, "index"]);
-        Route::get("/syarat", [PersyaratanController::class, "index"])->name(
-            "persyaratan"
-        );
-        Route::get("/tahun_akademik", [
-            TahunAkademikController::class,
-            "index",
-        ])->name("tahun.akademik");
-        Route::post("/tahun_akademik", [
-            TahunAkademikController::class,
-            "store",
-        ])->name("tahun_akademik.post");
-        Route::post("/tahun_akademik/data", [
-            TahunAkademikController::class,
-            "show",
-        ])->name("tahun_akademik.data");
-        Route::get("/tahun_akademik/{id}", [
-            TahunAkademikController::class,
-            "edit",
-        ])->name("tahun_akademik.edit");
-        Route::put("/tahun_akademik", [
-            TahunAkademikController::class,
-            "update",
-        ])->name("tahun_akademik.update");
-        Route::delete("/tahun_akademik", [
-            TahunAkademikController::class,
-            "destroy",
-        ])->name("tahun_akademik.delete");
+        Route::get("/syarat", [PersyaratanController::class, "index"])->name("persyaratan");
+
+        Route::get("/tahun_akademik", [TahunAkademikController::class, "index"])->name("tahun.akademik");
+        Route::post("/tahun_akademik", [TahunAkademikController::class, "store"])->name("tahun_akademik.post");
+        Route::post("/tahun_akademik/data", [TahunAkademikController::class, "show"])->name("tahun_akademik.data");
+        Route::get("/tahun_akademik/{id}", [TahunAkademikController::class, "edit"])->name("tahun_akademik.edit");
+        Route::put("/tahun_akademik", [TahunAkademikController::class, "update"])->name("tahun_akademik.update");
+        Route::delete("/tahun_akademik", [TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
 
         Route::get("/kpm", [JenisKPMController::class, "index"])->name("jenis_kpm");
         Route::post("/kpm", [JenisKPMController::class, "store"])->name("jenis_kpm.post");
@@ -81,6 +58,9 @@ Route::group(
         Route::get("/data_kpm/{id}", [DataKPMController::class, "edit"])->name("data_kpm.edit");
         Route::put("/data_kpm", [DataKPMController::class, "update"])->name("data_kpm.update");
         Route::delete("/data_kpm", [DataKPMController::class, "destroy"])->name("data_kpm.delete");
+
+        Route::get("/dpl", [DplController::class, "index"])->name("dpl");
+        Route::post("/dpl/data", [DplController::class, "show"])->name("dpl.data");
     }
 );
 

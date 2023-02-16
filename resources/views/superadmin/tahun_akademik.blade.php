@@ -73,7 +73,7 @@
                         @csrf
                         <input class="d-none" type="text" name="id_ta" id="id_ta">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Tambah Tahun Akademik</h5>
+                            <h5 class="modal-title">Tambah/Ubah Tahun Akademik</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -203,6 +203,8 @@
                         });
                     },
                     error: function(data) {
+                        $('#btnSmpThnAkademik').prop("disabled", false);
+                        $('#btnSmpThnAkademik').html('Simpan');
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
                             icon: 'error',
@@ -265,19 +267,19 @@
 
     <script>
         function editThnAkademik(id) {
-            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+            let url = "{{ route('tahun_akademik.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
                 dataType: "JSON"
             }).done((response) => {
+                $('#id_ta').val(response.id);
+                $('#tahun').val(response.tahun);
+
                 // const smt = {
                 //     "gasal": "Gasal",
                 //     "genap": "Genap"
                 // };
-
-                $('#id_ta').val(response.id);
-                $('#tahun').val(response.tahun);
 
                 // $('#semester')
                 //     .find('option')
@@ -290,8 +292,8 @@
                 //     const selected = response.semester.toLowerCase() == key ? 'selected' : '';
                 //     $('#semester').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
                 // }
-                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
 
+                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
                 $('#status').bootstrapSwitch('state', response.status == 1 ? true : false);
                 $('#modalTmbTahunAkademik').modal('show');
             });
@@ -300,7 +302,7 @@
 
     <script>
         function hapusThnAkademik(id) {
-            let url = '{{ route('tahun_akademik.edit', ':id') }}';
+            let url = "{{ route('tahun_akademik.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,

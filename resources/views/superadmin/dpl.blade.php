@@ -1,6 +1,6 @@
 @extends('master_template')
 
-@section('title', 'Data KPM')
+@section('title', 'DPL')
 
 @section('content')
     <!-- Content Wrapper. Contains page content -->
@@ -10,12 +10,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Data KPM</h1>
+                        <h1>Data DPL</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active">Data KPM</li>
+                            <li class="breadcrumb-item active">Data DPL</li>
                         </ol>
                     </div>
                 </div>
@@ -26,24 +26,25 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTmbDataKPM"><i
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTmbDPL"><i
                             class="fas fa-plus-circle"></i> Tambah Data</button>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data KPM</h3>
+                                <h3 class="card-title">Data DPL</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="tblDataKPM" class="table table-bordered table-striped table-hover">
+                                <table id="tblDPL" class="table table-bordered table-striped table-hover">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th>Jenis KPM</th>
-                                            <th>Nama KPM</th>
-                                            <th>Deskripsi</th>
+                                            <th>Nama</th>
+                                            <th>Prodi</th>
+                                            <th>No. HP</th>
+                                            <th>Alamat</th>
                                             <th width="7%">Opsi</th>
                                         </tr>
                                     </thead>
@@ -64,16 +65,16 @@
         <!-- /.content -->
 
         <!-- /modal Tambah -->
-        <div class="modal fade" id="modalTmbDataKPM" data-backdrop="static" data-keyboard="false"
-            aria-labelledby="modalTmbDataKPM" aria-hidden="true">
+        <div class="modal fade" id="modalTmbDPL" data-backdrop="static" data-keyboard="false" aria-labelledby="tmbDPL"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal" id="frmTmbDataKPM">
+                    <form class="form-horizontal" id="frmTmbDPL">
                         @csrf
-                        <input class="d-none" type="text" name="id_dataKPM" id="id_dataKPM">
+                        <input class="d-none" type="text" name="id_dpl" id="id_dpl">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Tambah/Ubah Data KPM</h5>
+                            <h5 class="modal-title">Ubah DPL</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -83,42 +84,52 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="jenis">Jenis KPM</label>
-                                            <select class="form-control" id="jenis" name="jenis">
-                                                <option value="">-- Pilih Jenis KPM --</option>
-                                                @foreach ($data_kpm as $kpm)
-                                                    <option value="{{ $kpm->id }}">
-                                                        {{ $kpm->nama . ' (' . $kpm->tahun_akademik->tahun . ' - ' . ucwords(strtolower($kpm->tahun_akademik->semester)) . ')' }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                            <label for="nama">Nama</label>
+                                            <input type="text" class="form-control" id="nama" name="nama"
+                                                disabled>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-2">
                                         <div class="form-group">
-                                            <label for="nama">Nama KPM</label>
-                                            <input type="text" class="form-control" id="nama" name="nama"
-                                                autocomplete="off">
+                                            <label for="kelamin">Jenis Kelamin</label>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio" id="kelaminL"
+                                                    name="kelamin" checked>
+                                                <label for="kelaminL" class="custom-control-label">Laki-laki</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio" id="kelaminP"
+                                                    name="kelamin">
+                                                <label for="kelaminP" class="custom-control-label">Perempuan</label>
+                                            </div>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="hp">No. HP</label>
+                                            <input type="text" class="form-control" id="hp" name="hp"
+                                                data-inputmask='"mask": "(62) 99-999-999-999"' data-mask>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="deskripsi">Deskripsi KPM</label>
-                                            <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
-                                                placeholder="Ketikan deskripsi disini ..."></textarea>
+                                            <label for="alamat">Alamat</label>
+                                            <textarea name="alamat" id="alamat" cols="3" class="form-control"></textarea>
                                         </div>
-                                        <!-- /.form-group -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary" id="btnSmpDataKPM">Simpan</button>
+                            <button type="submit" class="btn btn-primary" id="btnSmpDPL">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -133,20 +144,28 @@
 
 @section('script')
     <script>
-        const validFormDataKPM = $("#frmTmbDataKPM").validate({
+        $('[data-mask]').inputmask()
+
+        const validFormDPL = $("#frmTmbDPL").validate({
             rules: {
-                jenis: {
+                kelamin: {
                     required: true
                 },
-                nama: {
+                hp: {
+                    required: true
+                },
+                alamat: {
                     required: true
                 }
             },
             messages: {
-                jenis: {
+                kelamin: {
                     required: 'Harus dipilih'
                 },
-                nama: {
+                hp: {
+                    required: 'Harus diisi'
+                },
+                alamat: {
                     required: 'Harus diisi'
                 }
             },
@@ -164,33 +183,33 @@
                 e.preventDefault();
 
                 // disable button
-                $('#btnSmpDataKPM').prop("disabled", true);
+                $('#btnSmpDPL').prop("disabled", true);
                 // add spinner to button
-                $('#btnSmpDataKPM').html(
+                $('#btnSmpDPL').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
                 );
 
-                const id = $('#id_dataKPM').val();
+                const id = $('#id_dpl').val();
                 let method, url;
                 if (id) {
                     method = "PUT";
-                    url = "{{ route('data_kpm.update') }}";
+                    url = "{{ route('tahun_akademik.update') }}";
                 } else {
                     method = "POST";
-                    url = "{{ route('data_kpm.post') }}";
+                    url = "{{ route('tahun_akademik.post') }}";
                 }
 
                 $.ajax({
                     type: method,
                     url: url,
-                    data: $('#frmTmbDataKPM').serialize(),
+                    data: $('#frmTmbDPL').serialize(),
                     dataType: 'JSON',
                     success: function(data) {
-                        document.getElementById('frmTmbDataKPM').reset();
-                        $('#modalTmbDataKPM').modal('toggle');
-                        $('#btnSmpDataKPM').prop("disabled", false);
-                        $('#btnSmpDataKPM').html('Simpan');
-                        $('#tblDataKPM').DataTable().ajax.reload(null,
+                        document.getElementById('frmTmbDPL').reset();
+                        $('#modalTmbDPL').modal('toggle');
+                        $('#btnSmpDPL').prop("disabled", false);
+                        $('#btnSmpDPL').html('Simpan');
+                        $('#tblDPL').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
@@ -200,8 +219,8 @@
                         });
                     },
                     error: function(data) {
-                        $('#btnSmpDataKPM').prop("disabled", false);
-                        $('#btnSmpDataKPM').html('Simpan');
+                        $('#btnSmpDPL').prop("disabled", false);
+                        $('#btnSmpDPL').html('Simpan');
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
                             icon: 'error',
@@ -216,11 +235,11 @@
     </script>
 
     <script>
-        let tblDataKPM = $("#tblDataKPM").DataTable({
+        let tblDPL = $("#tblDPL").DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('data_kpm.data') }}",
+                url: "{{ route('dpl.data') }}",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}"
@@ -233,13 +252,16 @@
                     render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
                 },
                 {
-                    data: 'kpm.nama'
-                },
-                {
                     data: 'nama'
                 },
                 {
-                    data: 'deskripsi'
+                    data: 'prodi'
+                },
+                {
+                    data: 'hp'
+                },
+                {
+                    data: 'alamat'
                 },
                 {
                     data: 'action',
@@ -249,39 +271,61 @@
                 }
             ],
             "order": [
-                [1, 'desc']
+                [1, 'asc']
             ],
             "columnDefs": [{
-                "targets": "_all",
-                "className": "dt-center cell-border",
-                "visible": true
-            }],
+                    "targets": "_all",
+                    "className": "dt-head-center"
+                },
+                {
+                    "targets": [0, 2, 3, 4, 5],
+                    "className": "dt-center cell-border",
+                    "visible": true
+                }
+            ],
             "responsive": true,
-            "autoWidth": true,
-            "fixedColumns": true
+            "autoWidth": true
         });
     </script>
 
     <script>
-        function editDataKPM(id) {
-            let url = "{{ route('data_kpm.edit', ':id') }}";
+        function editThnAkademik(id) {
+            let url = "{{ route('tahun_akademik.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
                 dataType: "JSON"
             }).done((response) => {
-                $('#id_dataKPM').val(response.id);
-                $('#jenis option[value="' + response.kpm_id + '"]').prop('selected', true);
-                $('#nama').val(response.nama);
-                $('#deskripsi').val(response.deskripsi);
-                $('#modalTmbDataKPM').modal('show');
+                // const smt = {
+                //     "gasal": "Gasal",
+                //     "genap": "Genap"
+                // };
+
+                $('#id_ta').val(response.id);
+                $('#tahun').val(response.tahun);
+
+                // $('#semester')
+                //     .find('option')
+                //     .remove()
+                //     .end()
+                //     .append(
+                //         `<option value="">-- Pilih Semester --</option>`
+                //     );
+                // for (const key in smt) {
+                //     const selected = response.semester.toLowerCase() == key ? 'selected' : '';
+                //     $('#semester').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
+                // }
+                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
+
+                $('#status').bootstrapSwitch('state', response.status == 1 ? true : false);
+                $('#modalTmbTahunAkademik').modal('show');
             });
         }
     </script>
 
     <script>
-        function hapusDataKPM(id) {
-            let url = "{{ route('data_kpm.edit', ':id') }}";
+        function hapusThnAkademik(id) {
+            let url = "{{ route('tahun_akademik.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -289,28 +333,25 @@
             }).done((response) => {
                 Swal.fire({
                     title: 'Apa Anda Yakin?',
-                    html: `Anda akan menghapus data KPM : <span class="font-weight-bold font-italic">${response.nama}</span>`,
+                    html: `Anda akan menghapus data <span class="font-weight-bold font-italic">Tahun Akademik ${response.tahun}</span>`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Ya, Hapus!',
                     cancelButtonText: 'Batal',
-                    showLoaderOnConfirm: true,
-                    preConfirm: false,
-                    allowOutsideClick: () => !Swal.isLoading(),
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('data_kpm.delete') }}",
+                            url: "{{ route('tahun_akademik.delete') }}",
                             type: "DELETE",
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 "id": response.id
                             },
                             success: function(res) {
-                                $('#tblDataKPM').DataTable().ajax.reload(null,
+                                $('#tblThnAkademik').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     res.title,
@@ -319,7 +360,7 @@
                                 );
                             },
                             error: function(res) {
-                                $('#tblDataKPM').DataTable().ajax.reload(null,
+                                $('#tblThnAkademik').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     'Gagal',
@@ -334,7 +375,7 @@
                     ) {
                         Swal.fire(
                             'Batal',
-                            `Data KPM : ${response.nama} tidak jadi dihapus`,
+                            `Tahun Akademik ${response.tahun} tidak jadi dihapus`,
                             'info'
                         )
                     }

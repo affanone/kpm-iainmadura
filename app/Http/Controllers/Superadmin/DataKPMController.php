@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Kpm;
 use App\Models\Subkpm;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class DataKPMController extends Controller
 {

@@ -84,6 +84,12 @@
                             </ul>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('dpl') }}" class="nav-link">
+                                <i class="fas fa-user-tie nav-icon"></i>
+                                <p>DPL</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('user.category') }}" class="nav-link">
                                 <i class="fas fa-user-cog nav-icon"></i>
                                 <p>Kategori Pengguna</p>

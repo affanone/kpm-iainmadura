@@ -73,7 +73,7 @@
                         @csrf
                         <input class="d-none" type="text" name="id_jenisKPM" id="id_jenisKPM">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Tambah Jenis KPM</h5>
+                            <h5 class="modal-title">Tambah/Ubah Jenis KPM</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -162,14 +162,14 @@
             },
             submitHandler: function(form, e) {
                 e.preventDefault();
-                
+
                 // disable button
                 $('#btnSmpJenisKPM').prop("disabled", true);
                 // add spinner to button
                 $('#btnSmpJenisKPM').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
                 );
-                
+
                 const id = $('#id_jenisKPM').val();
                 let method, url;
                 if (id) {
@@ -200,6 +200,8 @@
                         });
                     },
                     error: function(data) {
+                        $('#btnSmpJenisKPM').prop("disabled", false);
+                        $('#btnSmpJenisKPM').html('Simpan');
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
                             icon: 'error',
@@ -262,7 +264,7 @@
 
     <script>
         function editJenisKPM(id) {
-            let url = '{{ route('jenis_kpm.edit', ':id') }}';
+            let url = "{{ route('jenis_kpm.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -279,7 +281,7 @@
 
     <script>
         function hapusJenisKPM(id) {
-            let url = '{{ route('jenis_kpm.edit', ':id') }}';
+            let url = "{{ route('jenis_kpm.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,

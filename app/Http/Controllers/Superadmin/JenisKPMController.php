@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\Kpm;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class JenisKPMController extends Controller
 {
