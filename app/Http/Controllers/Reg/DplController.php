@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Reg;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dpl;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\Dpl;
+use Illuminate\Support\Facades\Validator;
 
 class DplController extends Controller
 {
@@ -48,26 +49,30 @@ class DplController extends Controller
                 ->withInput();
         }
 
-        $nim = session("token_api")->user->kode;
-        $res = \IainApi::get("api/mahasiswa?kode=$nim");
-        $mhs = $res->data->data[0];
+        $kode = session("token_api")->user->kode;
+        $res = \IainApi::get("api/dosen?kode=$kode");
+        if (!count($res->data->data)) {
+            return "Data anda tidak ditemukan !";
+        }
+        $dosen = $res->data->data[0];
 
         $n = new User();
         $n->username = session("token_api")->user->kode;
         $n->email = session("token_api")->user->email;
         $n->email_verified_at = now();
-        $n->access = "[2]";
+        $n->access = "[1]";
         $n->save();
 
-        $m = new Mahasiswa();
+        $m = new Dpl();
         $m->user_id = $n->id;
-        $m->nim = $mhs->nim;
-        $m->nama = $mhs->nama;
-        $m->kelamin = $mhs->kelamin;
+        $m->nip = $dosen->nip;
+        $m->nidn = $dosen->nidn;
+        $m->nama = $dosen->nama;
+        $m->kelamin = $dosen->kelamin ?? null;
         $m->prodi =
-            $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
+        $dosen->prodi->id . "|" . $dosen->prodi->long . "|" . $dosen->prodi->sort;
         $m->fakultas =
-            $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
+        $dosen->prodi->fakultas->id . "|" . $dosen->prodi->fakultas->nama;
         $m->hp = $request->hp;
         $m->alamat = $request->alamat;
         $m->save();
@@ -76,6 +81,6 @@ class DplController extends Controller
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
-        return Redirect::to("mhs/reg/kpm");
+        return Redirect::to(route('dpl.dashboard'));
     }
 }
