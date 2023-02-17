@@ -69,15 +69,15 @@ class DplController extends Controller
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 NIP
-                                <span class="badge badge-primary">' . $data->nip . '</span>
+                                <span class="badge badge-dark">' . $data->nip . '</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 NIDN
-                                <span class="badge badge-primary">' . $data->nidn . '</span>
+                                <span class="badge badge-dark">' . $data->nidn . '</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Jenis Kelamin
-                                <span class="badge badge-primary">' . (is_null($data->kelamin) ? '-' : ($data->kelamin == 'L' ? 'Laki-laki' : 'Perempuan'))  . '</span>
+                                <span class="badge badge-dark">' . (is_null($data->kelamin) ? '-' : ($data->kelamin == 'L' ? 'Laki-laki' : 'Perempuan'))  . '</span>
                             </li>
                         </ul>
                     </div>
@@ -165,6 +165,8 @@ class DplController extends Controller
                 $data['icon'] = 'success';
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'DPL : ' . $dpl->nama . ' Berhasil Dihapus';
+
+                Log::set("Melakukan hapus data DPL", "delete");
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

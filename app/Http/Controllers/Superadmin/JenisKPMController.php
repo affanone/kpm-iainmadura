@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\Kpm;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
+use App\Log;
 
 class JenisKPMController extends Controller
 {
@@ -55,7 +57,7 @@ class JenisKPMController extends Controller
         $jenis = strtoupper(strip_tags($request->jenis));
         $deskripsi = strip_tags($request->deskripsi);
 
-        $unik = uniqid();
+        $unik = Str::random(5);
         $config = [
             "upload" => [
                 [
@@ -100,6 +102,8 @@ class JenisKPMController extends Controller
         $kpm->deskripsi = $deskripsi;
         $kpm->config = json_encode($config);
         $kpm->save();
+
+        Log::set("Melakukan tambah jenis KPM", "insert");
 
         $data = array(
             'icon' => 'success',
@@ -181,6 +185,8 @@ class JenisKPMController extends Controller
         $kpm->deskripsi = $deskripsi;
         $kpm->update();
 
+        Log::set("Melakukan sunting jenis KPM", "update");
+
         $data = array(
             'icon' => 'success',
             'message' => 'Jenis KPM ' . $jenis . ' Berhasil Diupdate'
@@ -206,6 +212,8 @@ class JenisKPMController extends Controller
                 $data['icon'] = 'success';
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Jenis KPM : ' . $kpm->nama . ' Berhasil Dihapus';
+
+                Log::set("Melakukan hapus jenis KPM", "delete");
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

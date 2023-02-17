@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Kpm;
 use App\Models\Subkpm;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
+use App\Log;
 
 class DataKPMController extends Controller
 {
@@ -60,7 +62,7 @@ class DataKPMController extends Controller
         $nama = strtoupper(strip_tags($request->nama));
         $deskripsi = strip_tags($request->deskripsi);
 
-        $unik = uniqid();
+        $unik = Str::random(5);
         $config = [
             "upload" => [
                 [
@@ -105,6 +107,8 @@ class DataKPMController extends Controller
         $kpm->deskripsi = $deskripsi;
         $kpm->config = json_encode($config);
         $kpm->save();
+
+        Log::set("Melakukan tambah data KPM", "insert");
 
         $data = array(
             'icon' => 'success',
@@ -177,7 +181,7 @@ class DataKPMController extends Controller
 
         $id = $request->id_dataKPM;
         $jenis = strip_tags($request->jenis);
-        $nama = strip_tags($request->nama);
+        $nama = strtoupper(strip_tags($request->nama));
         $deskripsi = strip_tags($request->deskripsi);
 
         $kpm = Subkpm::find($id);
@@ -186,9 +190,11 @@ class DataKPMController extends Controller
         $kpm->deskripsi = $deskripsi;
         $kpm->update();
 
+        Log::set("Melakukan sunting data KPM", "update");
+
         $data = array(
             'icon' => 'success',
-            'message' => 'Data KPM ' . $nama . ' Berhasil Diupdate'
+            'message' => 'Data KPM : ' . $nama . ' Berhasil Diupdate'
         );
         return response()->json($data);
     }
@@ -211,6 +217,8 @@ class DataKPMController extends Controller
                 $data['icon'] = 'success';
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Data KPM : ' . $kpm->nama . ' Berhasil Dihapus';
+
+                Log::set("Melakukan hapus data KPM", "delete");
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

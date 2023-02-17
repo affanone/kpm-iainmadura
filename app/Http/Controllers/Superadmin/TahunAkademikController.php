@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use Yajra\DataTables\Facades\DataTables;
+use App\Log;
 
 class TahunAkademikController extends Controller
 {
@@ -63,6 +64,8 @@ class TahunAkademikController extends Controller
         $ta->semester = $semester;
         $ta->status = $status;
         $ta->save();
+
+        Log::set("Melakukan tambah tahun akademik", "insert");
 
         $data = array(
             'icon' => 'success',
@@ -155,6 +158,8 @@ class TahunAkademikController extends Controller
         $ta->status = $status;
         $ta->update();
 
+        Log::set("Melakukan sunting tahun akademik", "update");
+
         $data = array(
             'icon' => 'success',
             'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Diupdate'
@@ -180,6 +185,8 @@ class TahunAkademikController extends Controller
                 $data['icon'] = 'success';
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Tahun Akademik ' . $ta->tahun . ' Berhasil Dihapus';
+
+                Log::set("Melakukan hapus tahun akademik", "delete");
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;
