@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Dpl;
 use Yajra\DataTables\Facades\DataTables;
+use App\Log;
 
 class DplController extends Controller
 {
@@ -98,7 +99,8 @@ class DplController extends Controller
      */
     public function edit($id)
     {
-        //
+        $dpl = Dpl::find($id);
+        return response()->json($dpl);
     }
 
     /**
@@ -108,9 +110,41 @@ class DplController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'kelamin'   => 'required',
+                'hp'        => 'required',
+                'alamat'    => 'required'
+            ],
+            [
+                'kelamin.required'  => 'Jenis kelamin harus dipilih',
+                'hp.required'       => 'Nomor HP harus diisi',
+                'alamat.required'   => 'Alamat harus diisi'
+            ]
+        );
+
+        $id = $request->id_dpl;
+        $nama = $request->nama;
+        $kelamin = $request->kelamin;
+        $hp = str_replace(array('(', ')', '-', '_', ' '), '', strip_tags($request->hp));
+        $alamat = strip_tags($request->alamat);
+
+        $dpl = Dpl::find($id);
+        $dpl->kelamin = $kelamin;
+        $dpl->hp = $hp;
+        $dpl->alamat = $alamat;
+        $dpl->update();
+
+        Log::set("Melakukan sunting data DPL", "update");
+
+        $data = array(
+            'icon' => 'success',
+            'message' => 'DPL : ' . $nama . ' Berhasil Diupdate'
+        );
+        return response()->json($data);
     }
 
     /**
@@ -119,8 +153,25 @@ class DplController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $dpl = Dpl::find($id);
+
+        $data = array();
+        try {
+            $proc = $dpl->delete();
+            if ($proc) {
+                $data['icon'] = 'success';
+                $data['title'] = 'Berhasil';
+                $data['message'] = 'DPL : ' . $dpl->nama . ' Berhasil Dihapus';
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            $error = $e->errorInfo;
+            $data['icon'] = 'error';
+            $data['title'] = 'Gagal';
+            $data['message'] = str_contains($error[2], 'constraint') ? 'DPL : ' . $dpl->nama . ' tidak dapat dihapus, data digunakan' : 'Ada Kesalahan';
+        }
+        return response()->json($data);
     }
 }

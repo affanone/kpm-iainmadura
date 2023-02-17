@@ -25,10 +25,10 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <div class="btn-group mb-3">
+                {{-- <div class="btn-group mb-3">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTmbDPL"><i
                             class="fas fa-plus-circle"></i> Tambah Data</button>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -86,7 +86,7 @@
                                         <div class="form-group">
                                             <label for="nama">Nama</label>
                                             <input type="text" class="form-control" id="nama" name="nama"
-                                                disabled>
+                                                readonly>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -95,12 +95,12 @@
                                             <label for="kelamin">Jenis Kelamin</label>
                                             <div class="custom-control custom-radio">
                                                 <input class="custom-control-input" type="radio" id="kelaminL"
-                                                    name="kelamin" checked>
+                                                    name="kelamin" value="L" checked>
                                                 <label for="kelaminL" class="custom-control-label">Laki-laki</label>
                                             </div>
                                             <div class="custom-control custom-radio">
                                                 <input class="custom-control-input" type="radio" id="kelaminP"
-                                                    name="kelamin">
+                                                    name="kelamin" value="P">
                                                 <label for="kelaminP" class="custom-control-label">Perempuan</label>
                                             </div>
                                         </div>
@@ -191,13 +191,8 @@
 
                 const id = $('#id_dpl').val();
                 let method, url;
-                if (id) {
-                    method = "PUT";
-                    url = "{{ route('tahun_akademik.update') }}";
-                } else {
-                    method = "POST";
-                    url = "{{ route('tahun_akademik.post') }}";
-                }
+                method = "PUT";
+                url = "{{ route('dpl.update') }}";
 
                 $.ajax({
                     type: method,
@@ -289,43 +284,26 @@
     </script>
 
     <script>
-        function editThnAkademik(id) {
-            let url = "{{ route('tahun_akademik.edit', ':id') }}";
+        function editDPL(id) {
+            let url = "{{ route('dpl.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
                 dataType: "JSON"
             }).done((response) => {
-                // const smt = {
-                //     "gasal": "Gasal",
-                //     "genap": "Genap"
-                // };
-
-                $('#id_ta').val(response.id);
-                $('#tahun').val(response.tahun);
-
-                // $('#semester')
-                //     .find('option')
-                //     .remove()
-                //     .end()
-                //     .append(
-                //         `<option value="">-- Pilih Semester --</option>`
-                //     );
-                // for (const key in smt) {
-                //     const selected = response.semester.toLowerCase() == key ? 'selected' : '';
-                //     $('#semester').append(`<option value="${key}" ${selected}>${smt[key]}</option>`);
-                // }
-                $('#semester option[value="' + response.semester.toLowerCase() + '"]').prop('selected', true);
-
-                $('#status').bootstrapSwitch('state', response.status == 1 ? true : false);
-                $('#modalTmbTahunAkademik').modal('show');
+                $('#id_dpl').val(response.id);
+                $('#nama').val(response.nama);
+                $('input[name="kelamin"][value="' + response.kelamin + '"]').prop('checked', true);
+                $('#hp').val(response.hp);
+                $('#alamat').val(response.alamat);
+                $('#modalTmbDPL').modal('show');
             });
         }
     </script>
 
     <script>
-        function hapusThnAkademik(id) {
-            let url = "{{ route('tahun_akademik.edit', ':id') }}";
+        function hapusDPL(id) {
+            let url = "{{ route('dpl.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -333,7 +311,7 @@
             }).done((response) => {
                 Swal.fire({
                     title: 'Apa Anda Yakin?',
-                    html: `Anda akan menghapus data <span class="font-weight-bold font-italic">Tahun Akademik ${response.tahun}</span>`,
+                    html: `Anda akan menghapus DPL : <span class="font-weight-bold font-italic"> ${response.nama}</span>`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -344,14 +322,14 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('tahun_akademik.delete') }}",
+                            url: "{{ route('dpl.delete') }}",
                             type: "DELETE",
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 "id": response.id
                             },
                             success: function(res) {
-                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                $('#tblDPL').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     res.title,
@@ -360,7 +338,7 @@
                                 );
                             },
                             error: function(res) {
-                                $('#tblThnAkademik').DataTable().ajax.reload(null,
+                                $('#tblDPl').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     'Gagal',
@@ -375,7 +353,7 @@
                     ) {
                         Swal.fire(
                             'Batal',
-                            `Tahun Akademik ${response.tahun} tidak jadi dihapus`,
+                            `DPL : ${response.nama} tidak jadi dihapus`,
                             'info'
                         )
                     }

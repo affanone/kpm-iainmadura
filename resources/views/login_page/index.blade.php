@@ -23,6 +23,16 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('login/css/main.css') }}">
     <!--===============================================================================================-->
     <style>
+        .toggle-password {
+            float: right;
+            color: #666666;
+            margin-top: -34px;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+            z-index: 2;
+        }
+
         .error-login {
             background: #99333c;
             color: white;
@@ -65,18 +75,21 @@
 
                     <div class="wrap-input100 validate-input" data-validate="Password harus diisi">
                         <input class="input100" type="password" value="{{ old('password', 'barokallah') }}"
-                            name="password" placeholder="Password">
+                            name="password" id="password" placeholder="Password">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
+                        <span toggle="#password" class="fa fa-fw fa-eye toggle-password"></span>
                     </div>
 
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
-                            <i class="fa fa-sign-in" aria-hidden="true"></i>
-                            &nbsp;
-                            Login
+                            <span class="login_text"><i class="fa fa-sign-in" aria-hidden="true"></i>
+                                &nbsp;Login
+                            </span>
+                            <span class="loading_text d-none"><i
+                                    class="fa fa-spinner fa-spin"></i>&nbsp;Loading...</span>
                         </button>
                     </div>
 
@@ -116,6 +129,26 @@
     </script>
     <!--===============================================================================================-->
     <script src="{{ asset('login/js/main.js') }}"></script>
+
+    <script>
+        $('input[name="password"]').on('keyup', () => {
+            if ($('input[name="password"]').val()) {
+                $('.toggle-password').removeClass('d-none');
+            } else {
+                $('.toggle-password').addClass('d-none');
+            }
+        });
+
+        $(".toggle-password").click(function() {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($('.toggle-password').attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    </script>
 
 </body>
 

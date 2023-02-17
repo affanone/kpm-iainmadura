@@ -61,6 +61,9 @@ Route::group(
 
         Route::get("/dpl", [DplController::class, "index"])->name("dpl");
         Route::post("/dpl/data", [DplController::class, "show"])->name("dpl.data");
+        Route::get("/dpl/{id}", [DplController::class, "edit"])->name("dpl.edit");
+        Route::put("/dpl", [DplController::class, "update"])->name("dpl.update");
+        Route::delete("/dpl", [DplController::class, "destroy"])->name("dpl.delete");
     }
 );
 

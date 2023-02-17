@@ -15,6 +15,11 @@
             }
         }
 
+        if (check) {
+            $(".login_text").addClass("d-none");
+            $(".loading_text").removeClass("d-none");
+        }
+
         return check;
     });
 
