@@ -355,7 +355,7 @@
                 },
                 success: res => {
                     if (res.next) {
-                        cekSKS();
+                        window.location = "{{ route('mhs.unreg.valid') }}"
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -409,7 +409,7 @@
                 },
                 success: res => {
                     if (res.next) {
-                        window.location = "{{ route('mhs.unreg.valid') }}"
+                        cekAktif();
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -428,7 +428,7 @@
 
         setTimeout(() => {
             $('p').attr('id', 'is-loading');
-            cekAktif();
+            cekSKS();
         }, 2000);
     </script>
 </body>

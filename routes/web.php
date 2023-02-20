@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\Superadmin\AdminFakultasController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\Superadmin\DataKPMController;
 use App\Http\Controllers\Superadmin\DplController;
@@ -64,6 +65,9 @@ Route::group(
         Route::get("/dpl/{id}", [DplController::class, "edit"])->name("dpl.edit");
         Route::put("/dpl", [DplController::class, "update"])->name("dpl.update");
         Route::delete("/dpl", [DplController::class, "destroy"])->name("dpl.delete");
+
+        Route::get("/admin_fakultas", [AdminFakultasController::class, "index"])->name("admin_fakultas");
+
     }
 );
 

@@ -90,6 +90,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin_fakultas') }}" class="nav-link">
+                                <i class="fas fa-user-tie nav-icon"></i>
+                                <p>Admin Fakultas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('user.category') }}" class="nav-link">
                                 <i class="fas fa-user-cog nav-icon"></i>
                                 <p>Kategori Pengguna</p>

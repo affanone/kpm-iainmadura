@@ -25,6 +25,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
+                <div class="alert alert-info">Data DPL hanya dapat ditambahkan melalui login masing-masing dosen !</div>
                 {{-- <div class="btn-group mb-3">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTmbDPL"><i
                             class="fas fa-plus-circle"></i> Tambah Data</button>

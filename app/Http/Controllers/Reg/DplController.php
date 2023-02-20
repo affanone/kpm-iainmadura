@@ -78,6 +78,7 @@ class DplController extends Controller
         $m->save();
 
         Auth::login($n);
+        session()->push("user", Auth::user());
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
