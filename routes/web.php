@@ -67,7 +67,6 @@ Route::group(
         Route::delete("/dpl", [DplController::class, "destroy"])->name("dpl.delete");
 
         Route::get("/admin_fakultas", [AdminFakultasController::class, "index"])->name("admin_fakultas");
-
     }
 );
 
