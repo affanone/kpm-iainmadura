@@ -112,7 +112,7 @@
                                         <div class="form-group">
                                             <label for="hp">No. HP</label>
                                             <input type="text" class="form-control" id="hp" name="hp"
-                                                data-inputmask='"mask": "(62) 99-999-999-999"' data-mask>
+                                                data-inputmask='"mask": "(99) 99-999-999-999"' data-mask>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -270,17 +270,31 @@
                 [1, 'asc']
             ],
             "columnDefs": [{
-                    "targets": "_all",
-                    "className": "dt-head-center"
+                    "targets": 1,
+                    "className": "dt-body-left",
+                    "visible": true
                 },
                 {
-                    "targets": [0, 2, 3, 4, 5],
-                    "className": "dt-center cell-border",
-                    "visible": true
+                    "targets": "_all",
+                    "className": "dt-center cell-border"
                 }
             ],
             "responsive": true,
-            "autoWidth": true
+            "autoWidth": true,
+            "dom": '<"mb-3"B><"clearfix"<"float-left"l><"float-right"f>>t<"d-flex justify-content-between"ip>',
+            "buttons": [{
+                "extend": "excelHtml5",
+                "text": "<i class='far fa-file-excel'></i> Download Excel",
+                "className": "btn btn-sm btn-success"
+            }, {
+                "extend": "pdfHtml5",
+                "text": "<i class='far fa-file-pdf'></i> Download PDF",
+                "className": "btn btn-sm btn-danger"
+            }, {
+                "extend": "print",
+                "text": "<i class='fas fa-print'></i> Print",
+                "className": "btn btn-sm btn-info"
+            }]
         });
     </script>
 
