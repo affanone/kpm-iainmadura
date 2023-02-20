@@ -89,28 +89,11 @@
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="kelamin">Jenis Kelamin</label>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" id="kelaminL"
-                                                    name="kelamin" value="L" checked>
-                                                <label for="kelaminL" class="custom-control-label">Laki-laki</label>
-                                            </div>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" id="kelaminP"
-                                                    name="kelamin" value="P">
-                                                <label for="kelaminP" class="custom-control-label">Perempuan</label>
-                                            </div>
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="hp">No. HP</label>
-                                            <input type="text" class="form-control" id="hp" name="hp"
-                                                data-inputmask='"mask": "(99) 99-999-999-999"' data-mask>
+                                            <label for="fakultas">Fakultas</label>
+                                            <select class="form-control select2" id="fakultas" name="fakultas"
+                                                style="width: 100%;"></select>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -162,6 +145,29 @@
                                 var opt = new Option(item.kode + ' - ' +
                                     item.nama, item.kode);
                                 $("#nama").append(opt);
+                            });
+                        }
+                    });
+                }
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: "https://api.iainmadura.ac.id/api/fakultas",
+                dataType: "json",
+                success: function(response) {
+                    const total = response.total;
+                    $.ajax({
+                        type: 'GET',
+                        url: `https://api.iainmadura.ac.id/api/fakultas?limit=${total}`,
+                        dataType: "json",
+                        success: function(res) {
+                            const data = res.data;
+                            data.forEach((item) => {
+                                // console.log(item);
+                                var opt = new Option(item.id + ' - ' +
+                                    item.nama, item.id);
+                                $("#fakultas").append(opt);
                             });
                         }
                     });

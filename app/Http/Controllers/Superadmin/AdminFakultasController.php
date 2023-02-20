@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\IainApi;
 
 class AdminFakultasController extends Controller
 {
@@ -12,9 +13,14 @@ class AdminFakultasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        return view('superadmin.admin_fakultas');
+        $total_fakultas = IainApi::get('api/fakultas')->data->total;
+        $fakultas = IainApi::get('api/fakultas?limit=' . $total_fakultas);
+        return view('superadmin.admin_fakultas', [
+            'fakultas' => $fakultas->data->data
+        ]);
     }
 
     /**
