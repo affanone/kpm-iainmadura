@@ -41,12 +41,12 @@ class AuthenticationController extends Controller
                     "password" => $request->password,
                 ])
             ) {
-                // superadmin
+                $user = Auth::user();
                 session([
-                    "user" => Auth::user(), // uthor
-                    "level" => 0, // level user
+                    'user' => $user,
+                    "level" => $user->access[0], // level user
                 ]);
-                return Redirect::to("super");
+                return Redirect::to(route('dashboard'));
             } else {
                 $client = new Client();
                 $response = $client->post(env("API_SERVER") . "/api/auth", [
@@ -110,7 +110,8 @@ class AuthenticationController extends Controller
                             "token_api" => $token, // token hasil login api
                             "register" => true, // false artinya tidak ada di database
                             "status" => $pend ? $pend->status : 0, // status pendaftaran
-                            "level" => 2, // level user
+                            'user' => $user,
+                            "level" => $user->access[0], // level user
                         ]);
 
                         if ($pend && in_array($pend->status, [1, 3])) {
@@ -146,9 +147,10 @@ class AuthenticationController extends Controller
                     )->first();
                     session([
                         "token_api" => $token, // token hasil login api
-                        "level" => 1, // level user
+                        "level" => $user->access[0], // level user
                     ]);
                     if ($user) {
+                        session()->put('user', $user);
                         session()->put('register', true);
                         return Redirect::to(route('dpl.dashboard'));
                     } else {
@@ -157,20 +159,6 @@ class AuthenticationController extends Controller
                     }
                 }
             }
-
-            // if ($user) {
-            //     Auth::login($user);
-            //     Session::put("token_api", $token->token);
-            //     Log::set("Melakukan login", "login");
-            //     return Redirect::to("mhs");
-            // } else {
-            // return Redirect::to("signin")
-            //     ->withErrors(
-            //         "Data anda tidak ditemukan pada sistem, silahkan untuk menghubungi pengembang",
-            //         "login"
-            //     )
-            //     ->withInput();
-            // }
         } catch (\GuzzleHttp\Exception\ClientException$e) {
             $response = $e->getResponse();
             $result = json_decode($response->getBody()->getContents(), true);

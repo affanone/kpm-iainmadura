@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Reg;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
-use App\Models\Mahasiswa;
-use App\Models\TahunAkademik;
-use App\Models\User;
-use App\Models\Pendaftaran;
 use App\Models\DokumenPendaftaran;
 use App\Models\Kpm;
+use App\Models\Mahasiswa;
+use App\Models\Pendaftaran;
+use App\Models\TahunAkademik;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    function update_profil(Request $request)
+    public function update_profil(Request $request)
     {
         // Validate form data
         $validator = Validator::make(
@@ -56,7 +56,7 @@ class RegisterController extends Controller
         return Redirect::to("mhs/reg/kpm");
     }
 
-    function registrasi(Request $request)
+    public function registrasi(Request $request)
     {
         // Validate form data
         $validator = Validator::make(
@@ -95,14 +95,15 @@ class RegisterController extends Controller
         $m->nama = $mhs->nama;
         $m->kelamin = $mhs->kelamin;
         $m->prodi =
-            $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
+        $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
         $m->fakultas =
-            $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
+        $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
         $m->hp = $request->hp;
         $m->alamat = $request->alamat;
         $m->save();
 
         Auth::login($n);
+        session()->push("user", Auth::user());
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
@@ -127,8 +128,8 @@ class RegisterController extends Controller
             "alamat" => $mhs->alamat,
             "pendaftaran" => $pend,
             "nama_kpm" =>
-                "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
-                ($ta->tahun + 1),
+            "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
+            ($ta->tahun + 1),
         ]);
     }
 
@@ -157,8 +158,8 @@ class RegisterController extends Controller
             "pendaftaran" => $pend,
             "jeniskpm" => $pend->subkpm_id ?? "",
             "nama_kpm" =>
-                "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
-                ($ta->tahun + 1),
+            "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
+            ($ta->tahun + 1),
         ]);
     }
 
@@ -247,8 +248,8 @@ class RegisterController extends Controller
             "document" => $doc,
             "pendaftaran" => $pend,
             "nama_kpm" =>
-                "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
-                ($ta->tahun + 1),
+            "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
+            ($ta->tahun + 1),
         ]);
     }
 
@@ -285,7 +286,7 @@ class RegisterController extends Controller
                 foreach ($conf->validator as $kv => $vv) {
                     array_push($rule, $vv->rule);
                     $message_error[$conf->name . "." . $vv->rule] =
-                        $vv->message;
+                    $vv->message;
                 }
                 $rules[$conf->name] = join("|", $rule);
             }
@@ -299,7 +300,7 @@ class RegisterController extends Controller
                 foreach ($conf->validator as $kv => $vv) {
                     array_push($rule, $vv->rule);
                     $message_error[$conf->name . "." . $vv->rule] =
-                        $vv->message;
+                    $vv->message;
                 }
                 $rules[$conf->name] = join("|", $rule);
             }
@@ -386,8 +387,8 @@ class RegisterController extends Controller
             ->first();
 
         $tup =
-            count($pend->subkpm->kpm->config->upload) +
-            count($pend->subkpm->config->upload);
+        count($pend->subkpm->kpm->config->upload) +
+        count($pend->subkpm->config->upload);
         if ($tup > 0) {
             $doc = DokumenPendaftaran::where(
                 "pendaftaran_id",
@@ -410,8 +411,8 @@ class RegisterController extends Controller
             "document" => $doc,
             "pendaftaran" => $pend,
             "nama_kpm" =>
-                "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
-                ($ta->tahun + 1),
+            "KPM IAIN Madura Semester $ta->semester $ta->tahun/" .
+            ($ta->tahun + 1),
         ]);
     }
 
@@ -440,8 +441,7 @@ class RegisterController extends Controller
             $message = "Alamat belum anda centang !!";
         } else {
             foreach (
-                $pendaftaran->subkpm->kpm->config->upload
-                as $key => $config
+                $pendaftaran->subkpm->kpm->config->upload as $key => $config
             ) {
                 $a = collect($document)->first(function ($i) use ($config) {
                     return $i ? $i->desc->name == $config->name : false;

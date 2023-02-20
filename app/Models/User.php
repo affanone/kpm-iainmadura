@@ -45,11 +45,11 @@ class User extends Authenticatable
     public function getAccessAttribute($value)
     {
         /*
-            0 => lp2m,
-            1 => dpl,
-            2 => mhs
-            */
+        0 => lp2m,
+        1 => dpl,
+        2 => mhs
+         */
 
-        return $value ? json_decode($value) : [];
+        return $value ? json_decode($value) : [1];
     }
 }

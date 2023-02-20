@@ -15,7 +15,7 @@ class DplController extends Controller
     public function profil(Request $request)
     {
         $kode = session("token_api")->user->kode;
-        $res = \IainApi::get("api/dosen?kode=$kode");
+        $res = \IainApi::get("api/pegawai?kode=$kode");
         if (!count($res->data->data)) {
             return "Data anda tidak ditemukan !";
         }
@@ -50,7 +50,7 @@ class DplController extends Controller
         }
 
         $kode = session("token_api")->user->kode;
-        $res = \IainApi::get("api/dosen?kode=$kode");
+        $res = \IainApi::get("api/pegawai?kode=$kode");
         if (!count($res->data->data)) {
             return "Data anda tidak ditemukan !";
         }
@@ -78,6 +78,7 @@ class DplController extends Controller
         $m->save();
 
         Auth::login($n);
+        session()->push("user", Auth::user());
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
