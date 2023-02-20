@@ -22,13 +22,15 @@ class IsLoginMiddleware
                 0 => lp2m,
                 1 => dpl,
                 2 => mhs
-                */
+                 */
                 case 0:
                     return redirect()->to("super");
                 case 1:
                     return redirect()->to("dpl");
                 case 2:
                     return redirect()->to("mhs");
+                case 3:
+                    return redirect()->to("fakultas");
             }
         }
         return $next($request);

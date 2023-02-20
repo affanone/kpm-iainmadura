@@ -81,6 +81,18 @@ Route::group(
     }
 );
 
+Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], function () {
+    Route::get("/dashboard", [
+        \App\Http\Controllers\Fakultas\DashboardController::class,
+        "index",
+    ])->name("fakultas.dashboard");
+
+    Route::get("/", function () {
+        return Redirect::to(route("fakultas.dashboard"));
+    })->name("fakultas");
+
+});
+
 Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
     Route::group(["prefix" => "reg", "middleware" => ['dpl_unregister']], function () {
         Route::get("/profil", [
