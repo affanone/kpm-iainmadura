@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
         "revalidate" => \App\Http\Middleware\RevalidateBackHistory::class,
         "level_dpl" => \App\Http\Middleware\LevelDplMiddleware::class,
         "level_mhs" => \App\Http\Middleware\LevelMhsMiddleware::class,
+        "level_fakultas" => \App\Http\Middleware\LevelFakultasMiddleware::class,
         "dpl_register" => \App\Http\Middleware\DplRegMiddleware::class,
         "dpl_unregister" => \App\Http\Middleware\DplUnregMiddleware::class,
         "mhs_dashboard" => \App\Http\Middleware\MhsDashboardMiddleware::class,

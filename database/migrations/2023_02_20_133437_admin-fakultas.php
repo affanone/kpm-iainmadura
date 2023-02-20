@@ -12,20 +12,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create("kpms", function ($table) {
+        Schema::create("admin_fakultas", function ($table) {
             $table->engine = "InnoDB";
             $table->charset = "utf8";
             $table->collation = "utf8_unicode_ci";
             $table->uuid("id")->unique();
+            $table->bigIncrements("user_id");
             $table->uuid("tahun_akademik_id");
-            $table->string("deskripsi")->nullable();
-            $table->text("config");
-            $table->timestamps();
             $table
                 ->foreign("tahun_akademik_id")
                 ->references("id")
                 ->on("tahun_akademiks")
-                ->onUpdate("cascade");
+                ->onUpdate("cascade")
+                ->onDelete("cascade");
         });
     }
 
