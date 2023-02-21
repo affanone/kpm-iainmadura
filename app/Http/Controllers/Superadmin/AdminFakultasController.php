@@ -116,7 +116,6 @@ class AdminFakultasController extends Controller
     {
         if ($request->ajax()) {
             $data = AdminFakultas::with(['user', 'tahun_akademik'])->get();
-
             return DataTables::of($data)
                 ->addColumn('action', function ($data) {
                     return '
@@ -131,7 +130,7 @@ class AdminFakultasController extends Controller
                     return $data->user->username . ' - ' . $data->nama;
                 })
                 ->editColumn('fakultas', function ($data) {
-                    return 'Fakultas ' . explode('|', $data->fakultas)[1];
+                    return 'Fakultas ' . explode('|', $data->fakultas->nama)[1];
                 })
                 ->editColumn('tahun_akademik.tahun', function ($data) {
                     return $data->tahun_akademik->tahun . ' - ' . $data->tahun_akademik->semester;

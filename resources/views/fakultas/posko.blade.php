@@ -59,22 +59,20 @@
                                                 <td>{{ $item->dpl->nama }}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
+                                                        <a type="button" class="btn btn-secondary" href="#">Edit</a>
                                                         <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.edit') }}">Edit</a>
-                                                        <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.delete') }}"">Delete</a>
+                                                            href="#">Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-
-                                <div>
-                                    {{-- @include('fakultas.paginate') --}}
-                                </div>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer clearfix">
+                                {{ $data->links('fakultas.paginate') }}
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
