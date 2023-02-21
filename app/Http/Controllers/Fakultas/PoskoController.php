@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Fakultas;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Admin
 
 class PoskoController extends Controller
 {
@@ -16,6 +15,7 @@ class PoskoController extends Controller
      */
     public function index()
     {
+        $fak = AdminFakultas::where('user_id',Auth::id())->
         return Auth::user();
         return view('fakultas.posko');
     }
