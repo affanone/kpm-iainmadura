@@ -67,6 +67,7 @@ Route::group(
         Route::delete("/dpl", [DplController::class, "destroy"])->name("dpl.delete");
 
         Route::get("/admin_fakultas", [AdminFakultasController::class, "index"])->name("admin_fakultas");
+        Route::post("/admin_fakultas", [AdminFakultasController::class, "store"])->name("admin_fakultas.post");
     }
 );
 
@@ -89,7 +90,6 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
     })->name("fakultas");
-
 });
 
 Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {

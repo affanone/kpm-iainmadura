@@ -85,7 +85,13 @@
                                         <div class="form-group">
                                             <label for="nama">Nama Pegawai</label>
                                             <select class="form-control select2" id="nama" name="nama"
-                                                style="width: 100%;"></select>
+                                                style="width: 100%;">
+                                                <option value="">-- Pilih Pegawai --</option>
+                                                @foreach ($pegawai as $dt_pegawai)
+                                                    <option value="{{ $dt_pegawai->kode }}">
+                                                        {{ $dt_pegawai->kode . ' - ' . $dt_pegawai->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -93,17 +99,31 @@
                                         <div class="form-group">
                                             <label for="fakultas">Fakultas</label>
                                             <select class="form-control select2" id="fakultas" name="fakultas"
-                                                style="width: 100%;"></select>
+                                                style="width: 100%;">
+                                                <option value="">-- Pilih Fakultas --</option>
+                                                @foreach ($fakultas as $dt_fakultas)
+                                                    <option value="{{ $dt_fakultas->id . '|' . $dt_fakultas->nama }}">
+                                                        {{ $dt_fakultas->id . ' - ' . $dt_fakultas->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="alamat">Alamat</label>
-                                            <textarea name="alamat" id="alamat" cols="3" class="form-control"></textarea>
+                                            <label for="tahun">Tahun Akademik</label>
+                                            <select class="form-control select2" id="tahun" name="tahun"
+                                                style="width: 100%;">
+                                                <option value="">-- Pilih Fakultas --</option>
+                                                @foreach ($tahun_akademik as $dt_ta)
+                                                    <option value="{{ $dt_ta->id }}">
+                                                        {{ $dt_ta->tahun . ' - ' . ucwords(strtolower($dt_ta->semester)) . ' ' . ($dt_ta->status == 1 ? '(Aktif)' : '(Tidak Aktif)') }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +131,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary" id="btnSmpDPL">Simpan</button>
+                            <button type="submit" class="btn btn-primary" id="btnSmpAdmFakultas">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -125,82 +145,31 @@
 @endsection
 
 @section('script')
-    <!-- Memanggil data fakultas dan pegawai dari API -->
-    <script>
-        $(document).ready(() => {
-            $.ajax({
-                type: 'GET',
-                url: "https://api.iainmadura.ac.id/api/pegawai",
-                dataType: "json",
-                success: function(response) {
-                    const total = response.total;
-                    $.ajax({
-                        type: 'GET',
-                        url: `https://api.iainmadura.ac.id/api/pegawai?limit=${total}`,
-                        dataType: "json",
-                        success: function(res) {
-                            const data = res.data;
-                            data.forEach((item) => {
-                                // console.log(item);
-                                var opt = new Option(item.kode + ' - ' +
-                                    item.nama, item.kode);
-                                $("#nama").append(opt);
-                            });
-                        }
-                    });
-                }
-            });
-
-            $.ajax({
-                type: 'GET',
-                url: "https://api.iainmadura.ac.id/api/fakultas",
-                dataType: "json",
-                success: function(response) {
-                    const total = response.total;
-                    $.ajax({
-                        type: 'GET',
-                        url: `https://api.iainmadura.ac.id/api/fakultas?limit=${total}`,
-                        dataType: "json",
-                        success: function(res) {
-                            const data = res.data;
-                            data.forEach((item) => {
-                                // console.log(item);
-                                var opt = new Option(item.id + ' - ' +
-                                    item.nama, item.id);
-                                $("#fakultas").append(opt);
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
     <script>
         $('.select2').select2()
-        $('[data-mask]').inputmask()
 
-        const validFormDPL = $("#frmTmbDPL").validate({
+        const validFormAdmFakultas = $("#frmTmbAdmFakultas").validate({
+            ignore: [],
             rules: {
-                kelamin: {
+                nama: {
                     required: true
                 },
-                hp: {
+                fakultas: {
                     required: true
                 },
-                alamat: {
+                tahun: {
                     required: true
                 }
             },
             messages: {
-                kelamin: {
+                nama: {
                     required: 'Harus dipilih'
                 },
-                hp: {
-                    required: 'Harus diisi'
+                fakultas: {
+                    required: 'Harus dipilih'
                 },
-                alamat: {
-                    required: 'Harus diisi'
+                tahun: {
+                    required: 'Harus dipilih'
                 }
             },
             errorPlacement: function(error, element) {
@@ -217,28 +186,32 @@
                 e.preventDefault();
 
                 // disable button
-                $('#btnSmpDPL').prop("disabled", true);
+                $('#btnSmpAdmFakultas').prop("disabled", true);
                 // add spinner to button
-                $('#btnSmpDPL').html(
+                $('#btnSmpAdmFakultas').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
                 );
 
-                const id = $('#id_dpl').val();
+                const id = $('#id_admFakultas').val();
                 let method, url;
-                method = "PUT";
-                url = "{{ route('dpl.update') }}";
-
+                if (id) {
+                    method = "PUT";
+                    url = "{{ route('data_kpm.update') }}";
+                } else {
+                    method = "POST";
+                    url = "{{ route('admin_fakultas.post') }}";
+                }
                 $.ajax({
                     type: method,
                     url: url,
-                    data: $('#frmTmbDPL').serialize(),
+                    data: $('#frmTmbAdmFakultas').serialize(),
                     dataType: 'JSON',
                     success: function(data) {
-                        document.getElementById('frmTmbDPL').reset();
-                        $('#modalTmbDPL').modal('toggle');
-                        $('#btnSmpDPL').prop("disabled", false);
-                        $('#btnSmpDPL').html('Simpan');
-                        $('#tblDPL').DataTable().ajax.reload(null,
+                        document.getElementById('frmTmbAdmFakultas').reset();
+                        $('#modalTmbAdmFakultas').modal('toggle');
+                        $('#btnSmpAdmFakultas').prop("disabled", false);
+                        $('#btnSmpAdmFakultas').html('Simpan');
+                        $('#tblAdmFakultas').DataTable().ajax.reload(null,
                             false);
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
