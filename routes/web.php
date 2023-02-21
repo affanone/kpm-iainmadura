@@ -72,6 +72,7 @@ Route::group(
         Route::post("/admin_fakultas/data", [AdminFakultasController::class, "show"])->name("admin_fakultas.data");
         Route::get("/admin_fakultas/{id}", [AdminFakultasController::class, "edit"])->name("admin_fakultas.edit");
         Route::put("/admin_fakultas", [AdminFakultasController::class, "update"])->name("admin_fakultas.update");
+        Route::delete("/admin_fakultas", [AdminFakultasController::class, "destroy"])->name("admin_fakultas.delete");
     }
 );
 
