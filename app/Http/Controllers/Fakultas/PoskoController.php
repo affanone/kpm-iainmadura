@@ -17,7 +17,7 @@ class PoskoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($posko = null)
     {
         // mengambil tahun akademik yang aktif
         $admin = AdminFakultas::where('user_id', Auth::id())
@@ -38,13 +38,24 @@ class PoskoController extends Controller
         }
 
         $referensi = env('API_SERVER') . '/api/pegawai?fak=' . $admin->fakultas->id;
-
-        return view('fakultas.posko', [
+        $data = [
             'fakultas' => $admin->fakultas->nama,
             'tahun' => $admin->tahun_akademik->semester . ' ' . $admin->tahun_akademik->tahun . '/' . ($admin->tahun_akademik->tahun + 1),
             'dpl' => $dpl,
             'referensi' => $referensi,
-        ]);
+            'edit' => $posko ? true : false,
+            'data' => Posko::paginate(1),
+        ];
+        if ($posko) {
+            return view('fakultas.posko', $data)->withInput([
+                'nama' => $posko->nama,
+                'alamat' => $posko->alamat,
+                'deskripsi' => $posko->deskripsi,
+                'dpl' => $posko->dpl_id,
+            ]);
+        } else {
+            return view('fakultas.posko', $data);
+        }
     }
 
     /**
@@ -97,7 +108,7 @@ class PoskoController extends Controller
         $posko->deskripsi = $request->deskripsi ?? null;
         $posko->save();
 
-        \Log::set('Menambah data posko', 'add', $posko);
+        \Log::set('Melakukan tambah posko KPM', 'insert', $posko);
 
         return Redirect::to(route('fakultas.posko'));
     }
@@ -110,7 +121,8 @@ class PoskoController extends Controller
      */
     public function show($id)
     {
-        //
+        $posko = Posko::find($id);
+        return $this->index($posko);
     }
 
     /**
@@ -121,7 +133,8 @@ class PoskoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $posko = Posko::find($id);
+        return $this->index($posko);
     }
 
     /**
@@ -133,7 +146,41 @@ class PoskoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'nama' => 'required',
+                'alamat' => 'required',
+                'dpl' => 'required',
+            ],
+            [
+                'nama.required' => 'Nama atau label posko harus diisi',
+                'alamat.required' => 'Alamat posko harus diisi',
+                'dpl.required' => 'DPL harus ditentukan',
+            ]
+        );
+
+        $admin = AdminFakultas::where('user_id', Auth::id())
+            ->whereExists(function ($db) {
+                $db->select('*')
+                    ->from('tahun_akademiks')
+                    ->whereRaw('tahun_akademiks.id = admin_fakultas.tahun_akademik_id')
+                    ->where('tahun_akademiks.status', 1);
+            })
+            ->first();
+
+        $posko = Posko::find($id);
+        $posko->fakultas = $admin->fakultas->id . '|' . $admin->fakultas->nama;
+        $posko->tahun_akademik_id = $admin->tahun_akademik_id;
+        $posko->nama = $request->nama;
+        $posko->dpl_id = $request->dpl;
+        $posko->alamat = $request->alamat;
+        $posko->deskripsi = $request->deskripsi ?? null;
+        $posko->save();
+
+        \Log::set('Melakukan sunting posko KPM', 'update', $posko);
+
+        return Redirect::to(route('fakultas.posko'));
     }
 
     /**

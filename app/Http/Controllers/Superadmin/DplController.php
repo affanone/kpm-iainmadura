@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Dpl;
-use Yajra\DataTables\Facades\DataTables;
 use App\Log;
+use App\Models\Dpl;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class DplController extends Controller
 {
@@ -77,7 +77,7 @@ class DplController extends Controller
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Jenis Kelamin
-                                <span class="badge badge-dark">' . (is_null($data->kelamin) ? '-' : ($data->kelamin == 'L' ? 'Laki-laki' : 'Perempuan'))  . '</span>
+                                <span class="badge badge-dark">' . (is_null($data->kelamin) ? '-' : ($data->kelamin == 'L' ? 'Laki-laki' : 'Perempuan')) . '</span>
                             </li>
                         </ul>
                     </div>
@@ -115,14 +115,14 @@ class DplController extends Controller
         $this->validate(
             $request,
             [
-                'kelamin'   => 'required',
-                'hp'        => 'required',
-                'alamat'    => 'required'
+                'kelamin' => 'required',
+                'hp' => 'required',
+                'alamat' => 'required',
             ],
             [
-                'kelamin.required'  => 'Jenis kelamin harus dipilih',
-                'hp.required'       => 'Nomor HP harus diisi',
-                'alamat.required'   => 'Alamat harus diisi'
+                'kelamin.required' => 'Jenis kelamin harus dipilih',
+                'hp.required' => 'Nomor HP harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
             ]
         );
 
@@ -142,7 +142,7 @@ class DplController extends Controller
 
         $data = array(
             'icon' => 'success',
-            'message' => 'DPL : ' . $nama . ' Berhasil Diupdate'
+            'message' => 'DPL : ' . $nama . ' Berhasil Diupdate',
         );
         return response()->json($data);
     }
@@ -168,7 +168,7 @@ class DplController extends Controller
 
                 Log::set("Melakukan hapus data DPL", "delete");
             }
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException$e) {
             $error = $e->errorInfo;
             $data['icon'] = 'error';
             $data['title'] = 'Gagal';

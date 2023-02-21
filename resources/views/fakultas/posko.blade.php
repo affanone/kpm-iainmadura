@@ -36,20 +36,43 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="tblDPL" class="table table-bordered table-striped table-hover">
+                                <table id="dataTableGenerate" class="table table-bordered table-striped table-hover">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th>Nama</th>
-                                            <th>Prodi</th>
-                                            <th>No. HP</th>
-                                            <th>Alamat</th>
+                                            <th>Nama Posko</th>
+                                            <th>Alamat Posko</th>
+                                            <th>Tahun Akademik</th>
+                                            <th>DPL</th>
                                             <th width="7%">Opsi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($data as $i => $item)
+                                            <tr>
+                                                <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->index + 1 }}
+                                                </td>
+                                                <td>{{ $item->nama }}</td>
+                                                <td>{{ $item->alamat }}</td>
+                                                <td>{{ $item->tahun_akademik->semester . ' ' . $item->tahun_akademik->tahun . '/' . ($item->tahun_akademik->tahun + 1) }}
+                                                </td>
+                                                <td>{{ $item->dpl->nama }}</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                                        <a type="button" class="btn btn-secondary"
+                                                            href="{{ route('fakultas.posko.edit') }}">Edit</a>
+                                                        <a type="button" class="btn btn-secondary"
+                                                            href="{{ route('fakultas.posko.delete') }}"">Delete</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
+
+                                <div>
+                                    {{-- @include('fakultas.paginate') --}}
+                                </div>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -67,7 +90,7 @@
                 <div class="modal-content">
                     <!-- form start -->
                     <form class="form-horizontal" method="post" id="frmTmbAdmFakultas"
-                        action="{{ route('fakultas.posko.store') }}">
+                        action="{{ $edit ? route('fakultas.posko.update') : route('fakultas.posko.store') }}">
                         @csrf
                         <input class="d-none" type="text" name="id_admFakultas" id="id_admFakultas">
                         <div class="modal-header bg-secondary">
@@ -127,9 +150,12 @@
                                             </div>
                                             <select class="form-control select2" id="dpl" name="dpl"
                                                 style="width: 100%;">
-                                                <option value="" selected disabled> -- pilih DPL -- </option>
+                                                <option value="" @if (!$edit) selected @endif
+                                                    disabled> -- Pilih DPL -- </option>
                                                 @foreach ($dpl as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    <option value="{{ $item->id }}"
+                                                        @if (old('dpl') == $item->id) selected @endif>
+                                                        {{ $item->nama }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -172,7 +198,7 @@
     <script>
         $('.select2').select2()
 
-        @if ($errors->any())
+        @if ($errors->any() || $edit)
             $('.modal').modal('show');
         @endif
     </script>
