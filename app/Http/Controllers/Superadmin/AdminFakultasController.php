@@ -79,10 +79,20 @@ class AdminFakultasController extends Controller
         $adm_fakultas->fakultas = $fakultas;
         $adm_fakultas->tahun_akademik_id = $tahun;
 
-        $user = new User;
-        $user->username = $kode;
-        $user->access = '[3]';
-        $user->save();
+        $user = User::where('username', $kode)->first();
+        if ($user) {
+            $access = $user->access;
+            if (!in_array(3, $access)) {
+                array_push($access, 3);
+                $user->access = json_encode($access);
+                $user->update();
+            }
+        } else {
+            $user = new User;
+            $user->username = $kode;
+            $user->access = '[3]';
+            $user->save();
+        }
         $adm_fakultas->user()->associate($user);
         $adm_fakultas->save();
 
@@ -173,15 +183,56 @@ class AdminFakultasController extends Controller
         $fakultas = strip_tags($request->fakultas);
         $tahun = strip_tags($request->tahun);
 
-        $adm_fakultas = AdminFakultas::find($id);
-        $adm_fakultas->nama = $nama;
-        $adm_fakultas->fakultas = $fakultas;
-        $adm_fakultas->tahun_akademik_id = $tahun;
+        $adm_fakultas = AdminFakultas::with('user')->find($id);
 
-        $user = User::find($adm_fakultas->user_id);
-        $user->username = $kode;
-        $user->update();
-        $adm_fakultas->update();
+        if (in_array(3, $adm_fakultas->user->access) && count($adm_fakultas->user->access) > 1) {
+            $active_user = User::where('id', $adm_fakultas->user_id)->first();
+            $access = $active_user->access;
+            if (($key = array_search(3, $access)) !== false) {
+                unset($access[$key]);
+            }
+            $active_user->access = json_encode($access);
+            $active_user->update();
+
+            $adm_fakultas->delete();
+
+            $user_new = new User;
+            $user_new->username = $kode;
+            $user_new->access = '[3]';
+            $user_new->save();
+
+            $adm_fakultas_new = new AdminFakultas;
+            $adm_fakultas_new->nama = $nama;
+            $adm_fakultas_new->fakultas = $fakultas;
+            $adm_fakultas_new->tahun_akademik_id = $tahun;
+            $adm_fakultas_new->user()->associate($user_new);
+            $adm_fakultas_new->save();
+        } else {
+            $adm_fakultas->nama = $nama;
+            $adm_fakultas->fakultas = $fakultas;
+            $adm_fakultas->tahun_akademik_id = $tahun;
+
+            $user = User::where('username', $kode)->first();
+            if ($user) {
+                $access = $user->access;
+                if (!in_array(3, $access)) {
+                    array_push($access, 3);
+                    $user->access = json_encode($access);
+                    $user->update();
+
+                    $user_del = User::where('id', $adm_fakultas->user_id);
+                    $user_del->delete();
+
+                    $adm_fakultas->user_id = $user->id;
+                    $adm_fakultas->update();
+                }
+            } else {
+                $user = User::find($adm_fakultas->user_id);
+                $user->username = $kode;
+                $user->update();
+            }
+            $adm_fakultas->update();
+        }
 
         Log::set("Melakukan sunting admin fakultas", "update");
 
@@ -199,8 +250,56 @@ class AdminFakultasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $admin_fakultas = AdminFakultas::with('user')->find($id);
+
+        $data = array();
+        if (count($admin_fakultas->user->access) > 1) {
+            $access = $admin_fakultas->user->access;
+            if (($key = array_search(3, $access)) !== false) {
+                unset($access[$key]);
+            }
+            $user = User::where('id', $admin_fakultas->user_id)->first();
+            $user->access = json_encode($access);
+            $user->update();
+
+            try {
+                $proc = $admin_fakultas->delete();
+                if ($proc) {
+                    $data['icon'] = 'success';
+                    $data['title'] = 'Berhasil';
+                    $data['message'] = 'Admin Fakultas : ' . $admin_fakultas->nama . ' Berhasil Dihapus';
+
+                    Log::set("Melakukan hapus admin fakultas", "delete");
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                $error = $e->errorInfo;
+                $data['icon'] = 'error';
+                $data['title'] = 'Gagal';
+                $data['message'] = str_contains($error[2], 'constraint') ? 'Admin Fakultas : ' . $admin_fakultas->nama . ' sedang digunakan' : 'Ada Kesalahan';
+            }
+        } else {
+            $user = User::where('id', $admin_fakultas->user_id)->first();
+            try {
+                $del_user = $user->delete();
+                $del_admFakultas = $admin_fakultas->delete();
+                if ($del_user && $del_admFakultas) {
+                    $data['icon'] = 'success';
+                    $data['title'] = 'Berhasil';
+                    $data['message'] = 'Admin Fakultas : ' . $admin_fakultas->nama . ' Berhasil Dihapus';
+
+                    Log::set("Melakukan hapus admin fakultas", "delete");
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                $error = $e->errorInfo;
+                $data['icon'] = 'error';
+                $data['title'] = 'Gagal';
+                $data['message'] = str_contains($error[2], 'constraint') ? 'Admin Fakultas : ' . $admin_fakultas->nama . ' sedang digunakan' : 'Ada Kesalahan';
+            }
+        }
+
+        return response()->json($data);
     }
 }

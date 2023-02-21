@@ -319,8 +319,8 @@
     </script>
 
     <script>
-        function hapusDPL(id) {
-            let url = "{{ route('dpl.edit', ':id') }}";
+        function hapusAdmFakultas(id) {
+            let url = "{{ route('admin_fakultas.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -328,7 +328,7 @@
             }).done((response) => {
                 Swal.fire({
                     title: 'Apa Anda Yakin?',
-                    html: `Anda akan menghapus DPL : <span class="font-weight-bold font-italic"> ${response.nama}</span>`,
+                    html: `Anda akan menghapus Admin Fakultas : <span class="font-weight-bold font-italic"> ${response.nama}</span>`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -339,14 +339,14 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('dpl.delete') }}",
+                            url: "{{ route('admin_fakultas.delete') }}",
                             type: "DELETE",
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 "id": response.id
                             },
                             success: function(res) {
-                                $('#tblDPL').DataTable().ajax.reload(null,
+                                $('#tblAdmFakultas').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     res.title,
@@ -355,7 +355,7 @@
                                 );
                             },
                             error: function(res) {
-                                $('#tblDPl').DataTable().ajax.reload(null,
+                                $('#tblAdmFakultas').DataTable().ajax.reload(null,
                                     false);
                                 Swal.fire(
                                     'Gagal',
@@ -370,7 +370,7 @@
                     ) {
                         Swal.fire(
                             'Batal',
-                            `DPL : ${response.nama} tidak jadi dihapus`,
+                            `Admin Fakultas : ${response.nama} tidak jadi dihapus`,
                             'info'
                         )
                     }
