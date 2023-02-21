@@ -92,6 +92,11 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         "index",
     ])->name("fakultas.dashboard");
 
+    Route::get("/posko", [
+        \App\Http\Controllers\Fakultas\PoskoController::class,
+        "index",
+    ])->name("fakultas.posko");
+
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
     })->name("fakultas");
