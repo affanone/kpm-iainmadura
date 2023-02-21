@@ -88,7 +88,7 @@
                                                 style="width: 100%;">
                                                 <option value="">-- Pilih Pegawai --</option>
                                                 @foreach ($pegawai as $dt_pegawai)
-                                                    <option value="{{ $dt_pegawai->kode }}">
+                                                    <option value="{{ $dt_pegawai->kode . '|' . $dt_pegawai->nama }}">
                                                         {{ $dt_pegawai->kode . ' - ' . $dt_pegawai->nama }}</option>
                                                 @endforeach
                                             </select>
@@ -196,7 +196,7 @@
                 let method, url;
                 if (id) {
                     method = "PUT";
-                    url = "{{ route('data_kpm.update') }}";
+                    url = "{{ route('admin_fakultas.update') }}";
                 } else {
                     method = "POST";
                     url = "{{ route('admin_fakultas.post') }}";
@@ -221,8 +221,8 @@
                         });
                     },
                     error: function(data) {
-                        $('#btnSmpDPL').prop("disabled", false);
-                        $('#btnSmpDPL').html('Simpan');
+                        $('#btnSmpAdmFakultas').prop("disabled", false);
+                        $('#btnSmpAdmFakultas').html('Simpan');
                         const msg = JSON.parse(JSON.stringify(data));
                         Swal.fire({
                             icon: 'error',
@@ -237,11 +237,11 @@
     </script>
 
     <script>
-        let tblDPL = $("#tblDPL").DataTable({
+        let tblAdmFakultas = $("#tblAdmFakultas").DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('dpl.data') }}",
+                url: "{{ route('admin_fakultas.data') }}",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}"
@@ -257,13 +257,10 @@
                     data: 'nama'
                 },
                 {
-                    data: 'prodi'
+                    data: 'fakultas'
                 },
                 {
-                    data: 'hp'
-                },
-                {
-                    data: 'alamat'
+                    data: 'tahun_akademik.tahun'
                 },
                 {
                     data: 'action',
@@ -305,19 +302,18 @@
     </script>
 
     <script>
-        function editDPL(id) {
-            let url = "{{ route('dpl.edit', ':id') }}";
+        function editAdmFakultas(id) {
+            let url = "{{ route('admin_fakultas.edit', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
                 dataType: "JSON"
             }).done((response) => {
-                $('#id_dpl').val(response.id);
-                $('#nama').val(response.nama);
-                $('input[name="kelamin"][value="' + response.kelamin + '"]').prop('checked', true);
-                $('#hp').val(response.hp);
-                $('#alamat').val(response.alamat);
-                $('#modalTmbDPL').modal('show');
+                $('#id_admFakultas').val(response.id);
+                $('#nama').val(response.user.username + '|' + response.nama).trigger('change');
+                $('#fakultas').val(response.fakultas).trigger('change');
+                $('#tahun').val(response.tahun_akademik_id).trigger('change');
+                $('#modalTmbAdmFakultas').modal('show');
             });
         }
     </script>

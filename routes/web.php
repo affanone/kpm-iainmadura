@@ -11,6 +11,7 @@ use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
 use App\Http\Controllers\Superadmin\UserCategoryController;
 use App\Http\Controllers\Superadmin\UserController;
+use App\Models\AdminFakultas;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,9 @@ Route::group(
 
         Route::get("/admin_fakultas", [AdminFakultasController::class, "index"])->name("admin_fakultas");
         Route::post("/admin_fakultas", [AdminFakultasController::class, "store"])->name("admin_fakultas.post");
+        Route::post("/admin_fakultas/data", [AdminFakultasController::class, "show"])->name("admin_fakultas.data");
+        Route::get("/admin_fakultas/{id}", [AdminFakultasController::class, "edit"])->name("admin_fakultas.edit");
+        Route::put("/admin_fakultas", [AdminFakultasController::class, "update"])->name("admin_fakultas.update");
     }
 );
 
