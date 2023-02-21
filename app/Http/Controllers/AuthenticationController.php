@@ -134,6 +134,7 @@ class AuthenticationController extends Controller
                     "level" => $user->access[0], // level user
                 ]);
                 if ($user) {
+                    Auth::login($user);
                     session()->put('user', $user);
                     session()->put('register', true);
                     return Redirect::to(route('dpl.dashboard'));
