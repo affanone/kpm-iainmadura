@@ -84,7 +84,7 @@ class DplController extends Controller
                     ';
                 })
                 ->editColumn('prodi', function ($data) {
-                    return $data->prodi->long . ' (Fak. ' . $data->prodi->fakultas->nama . ')';
+                    return $data->prodi->long . ' (' . $data->prodi->fakultas->nama . ')';
                 })
                 ->rawColumns(['nama', 'action'])
                 ->make(true);
@@ -168,7 +168,7 @@ class DplController extends Controller
 
                 Log::set("Melakukan hapus data DPL", "delete");
             }
-        } catch (\Illuminate\Database\QueryException$e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;
             $data['icon'] = 'error';
             $data['title'] = 'Gagal';

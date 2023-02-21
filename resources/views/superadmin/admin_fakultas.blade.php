@@ -257,7 +257,7 @@
                     data: 'nama'
                 },
                 {
-                    data: 'fakultas'
+                    data: 'fakultas.nama'
                 },
                 {
                     data: 'tahun_akademik.tahun'
@@ -311,7 +311,7 @@
             }).done((response) => {
                 $('#id_admFakultas').val(response.id);
                 $('#nama').val(response.user.username + '|' + response.nama).trigger('change');
-                $('#fakultas').val(response.fakultas).trigger('change');
+                $('#fakultas').val(response.fakultas.id + '|' + response.fakultas.nama).trigger('change');
                 $('#tahun').val(response.tahun_akademik_id).trigger('change');
                 $('#modalTmbAdmFakultas').modal('show');
             });
