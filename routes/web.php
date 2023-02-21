@@ -11,7 +11,6 @@ use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
 use App\Http\Controllers\Superadmin\UserCategoryController;
 use App\Http\Controllers\Superadmin\UserController;
-use App\Models\AdminFakultas;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -95,6 +94,10 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         \App\Http\Controllers\Fakultas\PoskoController::class,
         "index",
     ])->name("fakultas.posko");
+    Route::post("/posko", [
+        \App\Http\Controllers\Fakultas\PoskoController::class,
+        "store",
+    ])->name("fakultas.posko.store");
 
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));

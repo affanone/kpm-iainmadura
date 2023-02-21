@@ -63,10 +63,11 @@
         <!-- /modal Tambah -->
         <div class="modal fade" id="modalTambahPosko" data-backdrop="static" data-keyboard="false"
             aria-labelledby="tmbAdmFakultas" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal" id="frmTmbAdmFakultas">
+                    <form class="form-horizontal" method="post" id="frmTmbAdmFakultas"
+                        action="{{ route('fakultas.posko.store') }}">
                         @csrf
                         <input class="d-none" type="text" name="id_admFakultas" id="id_admFakultas">
                         <div class="modal-header bg-secondary">
@@ -77,22 +78,14 @@
                         </div>
                         <div class="modal-body">
                             <div class="card-body">
+
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="nama">Nama Posko<strong class="text-danger">*</strong></label>
-                                            <select class="form-control select2" id="nama" name="nama"
-                                                style="width: 100%;"></select>
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="deskripsi">Deksripsi <span
-                                                    class="text-muted">Opsional</span></label>
-                                            <textarea name="deskripsi" id="deskripsi" cols="3" class="form-control"></textarea>
+                                            <label for="tahun">Tahun Akademik</label>
+                                            <input type="text" class="form-control" id="tahun" disabled
+                                                value="{{ $tahun }}">
                                         </div>
-                                        <!-- /.form-group -->
                                     </div>
                                 </div>
 
@@ -100,9 +93,63 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="fakultas">Fakultas</label>
-                                            <select class="form-control" id="fakultas" name="fakultas"
-                                                style="width: 100%;"></select>
+                                            <input type="text" class="form-control" id="fakultas" disabled
+                                                value="{{ $fakultas }}">
                                         </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="nama" class="@error('nama') text-danger @enderror"> Nama
+                                                Posko<strong class="text-danger">*</strong>
+                                            </label>
+                                            <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                                id="nama" name="nama" placeholder="Nama Posko"
+                                                value="{{ old('nama') }}">
+                                            @error('nama')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="dpl">Dosen Pendamping Lapangan<strong
+                                                    class="text-danger">*</strong></label>
+                                            <div class="text-muted small">Data dosen dpl ditampilkan
+                                                berdasarkan
+                                                <strong>Homebase</strong> yang ada di simpadu
+                                            </div>
+                                            <select class="form-control select2" id="dpl" name="dpl"
+                                                style="width: 100%;">
+                                                <option value="" selected disabled> -- pilih DPL -- </option>
+                                                @foreach ($dpl as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="alamat">Alamat Posko<strong class="text-danger">*</strong>
+                                            </label>
+                                            <textarea name="alamat" id="alamat" cols="3" class="form-control">{{ old('alamat') }}</textarea>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="deskripsi">Deksripsi Posko <span
+                                                    class="text-muted">Opsional</span></label>
+                                            <textarea name="deskripsi" id="deskripsi" cols="3" class="form-control">{{ old('deskripsi') }}</textarea>
+                                        </div>
+                                        <!-- /.form-group -->
                                     </div>
                                 </div>
                             </div>
@@ -122,4 +169,11 @@
 @endsection
 
 @section('script')
+    <script>
+        $('.select2').select2()
+
+        @if ($errors->any())
+            $('.modal').modal('show');
+        @endif
+    </script>
 @endsection
