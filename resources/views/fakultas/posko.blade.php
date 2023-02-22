@@ -25,8 +25,13 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambahPosko"><i
-                            class="fas fa-plus-circle"></i> Tambah Posko</button>
+                    @if ($edit && $nama)
+                        <a href="{{ route('fakultas.posko', ['add' => 1]) }}" class="btn btn-primary"><i
+                                class="fas fa-plus-circle"></i> Tambah Posko</a>
+                    @else
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#modalTambahPosko"><i class="fas fa-plus-circle"></i> Tambah Posko</button>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -34,12 +39,23 @@
                             <div class="card-header">
                                 <h3 class="card-title">Data DPL</h3>
                                 <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                    <div class="input-group input-group-sm" style="width: 250px;">
+                                        <select class="custom-select" id="inputGroupSelect02"
+                                            onchange="getFilterTahun(this.value)">
+                                            <option selected value="">All</option>
+                                            @foreach ($tahun_akademiks as $item)
+                                                <option value="{{ $item->tahun_akademik->id }}">
+                                                    {{ $item->tahun_akademik->semester . ' ' . $item->tahun_akademik->tahun . '/' . ($item->tahun_akademik->tahun + 1) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
                                         <input type="text" name="table_search" class="form-control float-right"
-                                            placeholder="Search">
+                                            id="filterCari" placeholder="Search" style="width: 100px;"
+                                            onkeyup="if (event.keyCode === 13) getFilterCari()">
 
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-default">
+                                            <button type="submit" class="btn btn-default" onclick="getFilterCari()">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>
@@ -47,45 +63,8 @@
                                 </div>
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body table-responsive">
-                                <table id="dataTableGenerate"
-                                    class="table table-bordered table-striped table-hover table-head-fixed text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th width="5%">No</th>
-                                            <th>Nama Posko</th>
-                                            <th>Alamat Posko</th>
-                                            <th>Tahun Akademik</th>
-                                            <th>DPL</th>
-                                            <th width="7%">Opsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $i => $item)
-                                            <tr>
-                                                <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->index + 1 }}
-                                                </td>
-                                                <td>{{ $item->nama }}</td>
-                                                <td>{{ $item->alamat }}</td>
-                                                <td>{{ $item->tahun_akademik->semester . ' ' . $item->tahun_akademik->tahun . '/' . ($item->tahun_akademik->tahun + 1) }}
-                                                </td>
-                                                <td>{{ $item->dpl->nama }}</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
-                                                        <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.delete', ['id' => $item->id]) }}">Delete</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer clearfix">
-                                {{ $data->links('fakultas.paginate') }}
+                            <div id="data">
+                                {!! $datatable !!}
                             </div>
                         </div>
                         <!-- /.card -->
@@ -101,12 +80,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" id="frmTmbAdmFakultas"
-                        action="{{ $edit ? route('fakultas.posko.update') : route('fakultas.posko.store') }}">
+                    <form class="form-horizontal" method="POST" id="frmTmbAdmFakultas" action="#">
                         @csrf
+                        @method($edit ? 'PUT' : 'POST')
                         <input class="d-none" type="text" name="id_admFakultas" id="id_admFakultas">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">{{ $edit ? 'Edit' : 'Tambah' }} Data Posko KPM</h5>
+                            <h5 class="modal-title">{{ $nama ? 'Edit' : 'Tambah' }} Data Posko KPM</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -143,7 +122,7 @@
                                             </label>
                                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                                 id="nama" name="nama" placeholder="Nama Posko"
-                                                value="{{ old('nama') }}">
+                                                value="{{ old('nama', $nama) }}">
                                             @error('nama')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -164,9 +143,9 @@
                                                 id="dpl" name="dpl" style="width: 100%;">
                                                 <option value="" @if (!$edit) selected @endif
                                                     disabled> -- Pilih DPL -- </option>
-                                                @foreach ($dpl as $item)
+                                                @foreach ($dpls as $item)
                                                     <option value="{{ $item->id }}"
-                                                        @if (old('dpl') == $item->id) selected @endif>
+                                                        @if (old('dpl', $dpl) == $item->id) selected @endif>
                                                         {{ $item->nama }}</option>
                                                 @endforeach
                                             </select>
@@ -183,7 +162,7 @@
                                             <label for="alamat" class=" @error('alamat') text-danger @enderror">Alamat
                                                 Posko<strong class="text-danger">*</strong>
                                             </label>
-                                            <textarea name="alamat" id="alamat" cols="3" class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat') }}</textarea>
+                                            <textarea name="alamat" id="alamat" cols="3" class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat', $alamat) }}</textarea>
                                             @error('alamat')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -196,7 +175,7 @@
                                         <div class="form-group">
                                             <label for="deskripsi">Deksripsi Posko <span
                                                     class="text-muted">Opsional</span></label>
-                                            <textarea name="deskripsi" id="deskripsi" cols="3" class="form-control">{{ old('deskripsi') }}</textarea>
+                                            <textarea name="deskripsi" id="deskripsi" cols="3" class="form-control">{{ old('deskripsi', $deskripsi) }}</textarea>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -219,10 +198,47 @@
 
 @section('script')
     <script>
+        var filter = {
+            p: 1,
+            q: '',
+            t: ''
+        }
         $('.select2').select2()
 
         @if ($errors->any() || $edit)
             $('.modal').modal('show');
         @endif
+
+        function fetchData() {
+            $.ajax({
+                url: "/fakultas/posko",
+                data: {
+                    page: filter.p,
+                    cari: filter.q,
+                    tahun: filter.t
+                },
+                success: function(data) {
+                    $('#data').html(data);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                filter.p = $(this).attr('href').split('page=')[1];
+                fetchData();
+            });
+        });
+
+        function getFilterCari() {
+            filter.q = $('#filterCari').val();
+            fetchData();
+        }
+
+        function getFilterTahun(value) {
+            filter.t = value;
+            fetchData();
+        }
     </script>
 @endsection

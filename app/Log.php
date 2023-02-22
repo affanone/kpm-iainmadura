@@ -9,19 +9,29 @@ use Spatie\Activitylog\Contracts\Activity;
 class Log
 {
     // $name (view|insert|update|delete)
-    public static function set($description, $name = "view", Model $model = null)
+    // model1 = before
+    // model2 = after
+    public static function set($description, $name = "insert", Model $model1 = null, Model $model2 = null)
     {
         $conf = [
             "ip" => $_SERVER["REMOTE_ADDR"],
             "method" => $_SERVER["REQUEST_METHOD"],
         ];
-        if ($model) {
-            $modelNamespace = get_class($model);
-            $modelId = $model->id;
-            $conf['data'] = [
-                'model' => $modelNamespace,
-                'id' => $modelId,
-            ];
+        if ($model1) {
+            if ($name == 'insert') {
+                $modelNamespace = get_class($model1);
+                $modelId = $model1->id;
+                $conf['data'] = $model1;
+            } else if ($name == 'delete') {
+                $conf['data'] = $model1;
+            } else if ($name == 'update') {
+                $conf['data'] = [
+                    'before' => $model1,
+                    'after' => $model12 ?? null,
+                ];
+            } else {
+                $conf['data'] = null;
+            }
         }
         activity()
             ->causedBy(Auth::user())
