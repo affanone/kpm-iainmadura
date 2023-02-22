@@ -166,6 +166,7 @@
             form.find('.is-invalid').removeClass('is-invalid');
             form.find('.is-valid').removeClass('is-valid');
             $('.select2').val('').trigger('change');
+            $('.liveSearch').html('').css('display', 'none');
         });
     </script>
 

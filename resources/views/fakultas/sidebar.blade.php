@@ -58,7 +58,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('fakultas.posko') }}" class="nav-link">
-                                <i class="fas fa-calendar-check nav-icon"></i>
+                                <i class="fas fa-map-marked-alt nav-icon"></i>
                                 <p>Posko KPM</p>
                             </a>
                         </li>

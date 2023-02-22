@@ -32,7 +32,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data DPL</h3>
+                                <h3 class="card-title">Data Posko</h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 250px;">
                                         <select class="custom-select" id="inputGroupSelect02">
@@ -191,9 +191,11 @@
                     url: "/fakultas/posko?page=" + page,
                     success: function(data) {
                         $('#data').html(data);
+                        $('table tr').addClass("text-center");
                     }
                 });
             });
+            $('table tr').addClass("text-center");
         });
     </script>
 @endsection

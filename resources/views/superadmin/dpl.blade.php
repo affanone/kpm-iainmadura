@@ -281,7 +281,7 @@
             ],
             "responsive": true,
             "autoWidth": true,
-            "dom": '<"mb-3"B><"clearfix"<"float-left"l><"float-right"f>>t<"d-flex justify-content-between"ip>',
+            "dom": '<"mb-3"B><"clearfix"<"float-left"l><"float-right"f>>tr<"d-flex justify-content-between"ip>',
             "buttons": [{
                 "extend": "excelHtml5",
                 "text": "<i class='far fa-file-excel'></i> Download Excel",

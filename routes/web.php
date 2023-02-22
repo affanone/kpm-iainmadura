@@ -136,6 +136,9 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
             "index",
         ])->name("dpl.dashboard");
 
+        Route::get("/mahasiswa", [\App\Http\Controllers\Dpl\DashboardController::class, "show"])->name("dpl.mahasiswa");
+        Route::post("/mahasiswa/data", [\App\Http\Controllers\Dpl\DashboardController::class, "data"])->name("dpl.mahasiswa.data");
+
         Route::get("/", function () {
             return Redirect::to(route("dpl.reg.profil"));
         });

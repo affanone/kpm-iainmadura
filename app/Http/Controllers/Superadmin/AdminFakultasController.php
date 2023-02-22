@@ -24,14 +24,10 @@ class AdminFakultasController extends Controller
         $total_fakultas = IainApi::get('api/fakultas')->data->total;
         $fakultas = IainApi::get('api/fakultas?limit=' . $total_fakultas);
 
-        $total_pegawai = IainApi::get('api/pegawai')->data->total;
-        $pegawai = IainApi::get('api/pegawai?limit=' . $total_pegawai);
-
         $tahun_akademik = TahunAkademik::orderBy('status', 'desc')->get();
 
         return view('superadmin.admin_fakultas', [
             'fakultas' => $fakultas->data->data,
-            'pegawai' => $pegawai->data->data,
             'tahun_akademik' => $tahun_akademik
         ]);
     }
