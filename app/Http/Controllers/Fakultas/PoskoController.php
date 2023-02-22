@@ -20,6 +20,23 @@ class PoskoController extends Controller
     public function index(Request $request, $posko = null)
     {
         // mengambil tahun akademik yang aktif
+        $master = Posko::when($request->cari, function ($db, $n) {
+            $db->where(function ($db) use ($n) {
+                $db->where('fakultas', 'like', "%$n%");
+                $db->orWhere('nama', 'like', "%$n%");
+                $db->orWhere('alamat', 'like', "%$n%");
+                $db->orWhere('deskripsi', 'like', "%$n%");
+            });
+        })
+            ->when($request->tahun, function ($db, $n) {
+                $db->where('tahun_akademik_id', $n);
+            })
+            ->paginate(10);
+        $datatable = view('fakultas.datatable', ['data' => $master])->render();
+        if ($request->ajax()) {
+            return $datatable;
+        }
+
         $admin = AdminFakultas::where('user_id', Auth::id())
             ->whereExists(function ($db) {
                 $db->select('*')
@@ -32,37 +49,28 @@ class PoskoController extends Controller
             return view('fakultas.denied', [$message => 'Tidak ada tahun akademik yang diaktifkan oleh LP2M']);
         }
 
-        $dpl = Dpl::where('fakultas', $admin->fakultas->id . '|' . $admin->fakultas->nama)->get();
-        if (!count($dpl)) {
+        $dpls = Dpl::where('fakultas', $admin->fakultas->id . '|' . $admin->fakultas->nama)->get();
+        $tahun_akademiks = Posko::select('tahun_akademik_id')->where('fakultas', $admin->fakultas->id . '|' . $admin->fakultas->nama)->groupBy('tahun_akademik_id')->get();
+        if (!count($dpls)) {
             return view('fakultas.denied', [$message => 'Tidak ada data DPL pada fakultas "' . $admin->fakultas->nama . '"']);
         }
 
         $referensi = env('API_SERVER') . '/api/pegawai?fak=' . $admin->fakultas->id;
-        $datatable = view('fakultas.datatable', ['data' => Posko::paginate(1)])->render();
 
         $data = [
-            'fakultas' => $admin->fakultas->nama,
-            'tahun' => $admin->tahun_akademik->semester . ' ' . $admin->tahun_akademik->tahun . '/' . ($admin->tahun_akademik->tahun + 1),
-            'dpl' => $dpl,
+            'fakultas' => $posko->fakultas->nama ?? $admin->fakultas->nama,
+            'tahun' => $posko ? $posko->tahun_akademik->semester . ' ' . $posko->tahun_akademik->tahun . '/' . ($posko->tahun_akademik->tahun + 1) : $admin->tahun_akademik->semester . ' ' . $admin->tahun_akademik->tahun . '/' . ($admin->tahun_akademik->tahun + 1),
+            'tahun_akademiks' => $tahun_akademiks,
+            'dpls' => $dpls,
+            'nama' => $posko->nama ?? '',
+            'dpl' => $posko->dpl_id ?? '',
+            'alamat' => $posko->alamat ?? '',
+            'deskripsi' => $posko->deskripsi ?? '',
             'referensi' => $referensi,
-            'edit' => $posko ? true : false,
+            'edit' => ($posko ? true : ($request->add == 1 ? true : false)),
             'datatable' => $datatable,
         ];
-
-        if ($request->ajax()) {
-            return $datatable;
-        }
-
-        if ($posko) {
-            return view('fakultas.posko', $data)->withInput([
-                'nama' => $posko->nama,
-                'alamat' => $posko->alamat,
-                'deskripsi' => $posko->deskripsi,
-                'dpl' => $posko->dpl_id,
-            ]);
-        } else {
-            return view('fakultas.posko', $data);
-        }
+        return view('fakultas.posko', $data);
     }
 
     /**
@@ -126,10 +134,10 @@ class PoskoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $posko = Posko::find($id);
-        return $this->index(null, $posko);
+        return $this->index($request, $posko);
     }
 
     /**
@@ -177,6 +185,7 @@ class PoskoController extends Controller
             ->first();
 
         $posko = Posko::find($id);
+        $poskoBefore = $posko;
         $posko->fakultas = $admin->fakultas->id . '|' . $admin->fakultas->nama;
         $posko->tahun_akademik_id = $admin->tahun_akademik_id;
         $posko->nama = $request->nama;
@@ -185,7 +194,7 @@ class PoskoController extends Controller
         $posko->deskripsi = $request->deskripsi ?? null;
         $posko->save();
 
-        \Log::set('Melakukan sunting posko KPM', 'update', $posko);
+        \Log::set('Melakukan sunting posko KPM', 'update', $poskoBefore, $posko);
 
         return Redirect::to(route('fakultas.posko'));
     }
@@ -198,6 +207,9 @@ class PoskoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $posko = Posko::find($id);
+        Posko::destroy($id);
+        \Log::set('Melakukan hapus posko KPM', 'delete', $posko);
+        return Redirect::to(route('fakultas.posko'));
     }
 }

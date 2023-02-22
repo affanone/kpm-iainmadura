@@ -21,10 +21,16 @@
                     </td>
                     <td>{{ $item->dpl->nama }}</td>
                     <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a type="button" class="btn btn-secondary" href="#">Edit</a>
-                            <a type="button" class="btn btn-secondary" href="#">Delete</a>
-                        </div>
+                        <form action="{{ route('fakultas.posko') }}" method="POST" class="btn-group" role="group"
+                            aria-label="Basic example">
+                            <a class="btn btn-secondary"
+                                href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-secondary"
+                                href="{{ route('fakultas.posko.delete', ['id' => $item->id]) }}"
+                                onclick="return confirm('Hapus data posko?')">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
