@@ -17,7 +17,7 @@ class PoskoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($posko = null)
+    public function index(Request $request, $posko = null)
     {
         // mengambil tahun akademik yang aktif
         $admin = AdminFakultas::where('user_id', Auth::id())
@@ -38,14 +38,21 @@ class PoskoController extends Controller
         }
 
         $referensi = env('API_SERVER') . '/api/pegawai?fak=' . $admin->fakultas->id;
+        $datatable = view('fakultas.datatable', ['data' => Posko::paginate(1)])->render();
+
         $data = [
             'fakultas' => $admin->fakultas->nama,
             'tahun' => $admin->tahun_akademik->semester . ' ' . $admin->tahun_akademik->tahun . '/' . ($admin->tahun_akademik->tahun + 1),
             'dpl' => $dpl,
             'referensi' => $referensi,
             'edit' => $posko ? true : false,
-            'data' => Posko::paginate(1),
+            'datatable' => $datatable,
         ];
+
+        if ($request->ajax()) {
+            return $datatable;
+        }
+
         if ($posko) {
             return view('fakultas.posko', $data)->withInput([
                 'nama' => $posko->nama,
@@ -122,7 +129,7 @@ class PoskoController extends Controller
     public function show($id)
     {
         $posko = Posko::find($id);
-        return $this->index($posko);
+        return $this->index(null, $posko);
     }
 
     /**
@@ -134,7 +141,7 @@ class PoskoController extends Controller
     public function edit($id)
     {
         $posko = Posko::find($id);
-        return $this->index($posko);
+        return $this->index(null, $posko);
     }
 
     /**

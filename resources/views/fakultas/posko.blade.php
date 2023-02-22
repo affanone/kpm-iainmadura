@@ -34,9 +34,16 @@
                             <div class="card-header">
                                 <h3 class="card-title">Data DPL</h3>
                                 <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                    <div class="input-group input-group-sm" style="width: 250px;">
+                                        <select class="custom-select" id="inputGroupSelect02">
+                                            <option selected>Choose...</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+
                                         <input type="text" name="table_search" class="form-control float-right"
-                                            placeholder="Search">
+                                            placeholder="Search" style="width: 100px;">
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default">
@@ -47,44 +54,8 @@
                                 </div>
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body table-responsive">
-                                <table id="dataTableGenerate"
-                                    class="table table-bordered table-striped table-hover table-head-fixed text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th width="5%">No</th>
-                                            <th>Nama Posko</th>
-                                            <th>Alamat Posko</th>
-                                            <th>Tahun Akademik</th>
-                                            <th>DPL</th>
-                                            <th width="7%">Opsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $i => $item)
-                                            <tr>
-                                                <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->index + 1 }}
-                                                </td>
-                                                <td>{{ $item->nama }}</td>
-                                                <td>{{ $item->alamat }}</td>
-                                                <td>{{ $item->tahun_akademik->semester . ' ' . $item->tahun_akademik->tahun . '/' . ($item->tahun_akademik->tahun + 1) }}
-                                                </td>
-                                                <td>{{ $item->dpl->nama }}</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a type="button" class="btn btn-secondary" href="#">Edit</a>
-                                                        <a type="button" class="btn btn-secondary"
-                                                            href="#">Delete</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer clearfix">
-                                {{ $data->links('fakultas.paginate') }}
+                            <div id="data">
+                                {!! $datatable !!}
                             </div>
                         </div>
                         <!-- /.card -->
@@ -100,8 +71,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" id="frmTmbAdmFakultas"
-                        action="{{ $edit ? route('fakultas.posko.update') : route('fakultas.posko.store') }}">
+                    <form class="form-horizontal" method="post" id="frmTmbAdmFakultas" action="#">
                         @csrf
                         <input class="d-none" type="text" name="id_admFakultas" id="id_admFakultas">
                         <div class="modal-header bg-secondary">
@@ -212,5 +182,18 @@
         @if ($errors->any() || $edit)
             $('.modal').modal('show');
         @endif
+
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $.ajax({
+                    url: "/fakultas/posko?page=" + page,
+                    success: function(data) {
+                        $('#data').html(data);
+                    }
+                });
+            });
+        });
     </script>
 @endsection
