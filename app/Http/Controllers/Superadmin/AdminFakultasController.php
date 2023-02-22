@@ -130,9 +130,6 @@ class AdminFakultasController extends Controller
                 ->editColumn('nama', function ($data) {
                     return $data->user->username . ' - ' . $data->nama;
                 })
-                ->editColumn('fakultas', function ($data) {
-                    return 'Fakultas ' . explode('|', $data->fakultas)[1];
-                })
                 ->editColumn('tahun_akademik.tahun', function ($data) {
                     return $data->tahun_akademik->tahun . ' - ' . $data->tahun_akademik->semester;
                 })

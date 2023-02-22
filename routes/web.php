@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get("/", function () {
-    return view("reg_dpl.data-diri");
+    return Redirect::to(route('login_page'));
 });
 
 Route::group(

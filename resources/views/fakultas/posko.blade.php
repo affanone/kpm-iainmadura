@@ -33,10 +33,23 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data DPL</h3>
+                                <div class="card-tools">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control float-right"
+                                            placeholder="Search">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body">
-                                <table id="dataTableGenerate" class="table table-bordered table-striped table-hover">
+                            <div class="card-body table-responsive">
+                                <table id="dataTableGenerate"
+                                    class="table table-bordered table-striped table-hover table-head-fixed text-nowrap">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
@@ -69,12 +82,11 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-
-                                <div>
-                                    {{-- @include('fakultas.paginate') --}}
-                                </div>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer clearfix">
+                                {{ $data->links('fakultas.paginate') }}
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -94,7 +106,7 @@
                         @csrf
                         <input class="d-none" type="text" name="id_admFakultas" id="id_admFakultas">
                         <div class="modal-header bg-secondary">
-                            <h5 class="modal-title">Tambah/Edit Data Posko KPM</h5>
+                            <h5 class="modal-title">{{ $edit ? 'Edit' : 'Tambah' }} Data Posko KPM</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -142,14 +154,14 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="dpl">Dosen Pendamping Lapangan<strong
-                                                    class="text-danger">*</strong></label>
+                                            <label for="dpl" class="@error('dpl') text-danger @enderror">Dosen
+                                                Pendamping Lapangan<strong class="text-danger">*</strong></label>
                                             <div class="text-muted small">Data dosen dpl ditampilkan
                                                 berdasarkan
                                                 <strong>Homebase</strong> yang ada di simpadu
                                             </div>
-                                            <select class="form-control select2" id="dpl" name="dpl"
-                                                style="width: 100%;">
+                                            <select class="form-control select2 @error('dpl') is-invalid @enderror"
+                                                id="dpl" name="dpl" style="width: 100%;">
                                                 <option value="" @if (!$edit) selected @endif
                                                     disabled> -- Pilih DPL -- </option>
                                                 @foreach ($dpl as $item)
@@ -158,14 +170,25 @@
                                                         {{ $item->nama }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('dpl')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="alamat">Alamat Posko<strong class="text-danger">*</strong>
+                                            <label for="alamat" class=" @error('alamat') text-danger @enderror">Alamat
+                                                Posko<strong class="text-danger">*</strong>
                                             </label>
-                                            <textarea name="alamat" id="alamat" cols="3" class="form-control">{{ old('alamat') }}</textarea>
+                                            <textarea name="alamat" id="alamat" cols="3" class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat') }}</textarea>
+                                            @error('alamat')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
