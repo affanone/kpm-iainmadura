@@ -60,9 +60,9 @@
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.edit') }}">Edit</a>
+                                                            href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
                                                         <a type="button" class="btn btn-secondary"
-                                                            href="{{ route('fakultas.posko.delete') }}"">Delete</a>
+                                                            href="{{ route('fakultas.posko.delete', ['id' => $item->id]) }}">Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>

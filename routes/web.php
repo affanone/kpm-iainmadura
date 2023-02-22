@@ -95,18 +95,22 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         \App\Http\Controllers\Fakultas\PoskoController::class,
         "index",
     ])->name("fakultas.posko");
-    Route::get("/posko/{id}", [
-        \App\Http\Controllers\Fakultas\PoskoController::class,
-        "show",
-    ])->name("fakultas.posko.show");
     Route::post("/posko", [
         \App\Http\Controllers\Fakultas\PoskoController::class,
         "store",
     ])->name("fakultas.posko.store");
+    Route::get("/posko/{id}", [
+        \App\Http\Controllers\Fakultas\PoskoController::class,
+        "show",
+    ])->name("fakultas.posko.edit");
     Route::put("/posko/{id}", [
         \App\Http\Controllers\Fakultas\PoskoController::class,
         "update",
     ])->name("fakultas.posko.update");
+    Route::delete("/posko/{id}", [
+        \App\Http\Controllers\Fakultas\PoskoController::class,
+        "destroy",
+    ])->name("fakultas.posko.delete");
 
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
