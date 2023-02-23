@@ -65,7 +65,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('fakultas.penempatan') }}" class="nav-link">
                                 <i class="fas fa-user-tag nav-icon"></i>
                                 <p>Penempatan Peserta</p>
                             </a>
