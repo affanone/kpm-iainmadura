@@ -480,4 +480,41 @@ class RegisterController extends Controller
             return Redirect::to("mhs/reg/final");
         }
     }
+
+    // percobaan
+    public function dummy_mahasiswa()
+    {
+        return 'off';
+        $mhs = \IainApi::get("api/mahasiswa?page=1&limit=100&fak=1");
+        foreach ($mhs->data->data as $key => $value) {
+            $mhs = $value;
+            $n = User::where('username', $value->kode)->first();
+            if (!$n) {
+                $n = new User();
+                $n->username = $value->kode;
+                $n->email_verified_at = now();
+                $n->access = "[2]";
+                $n->save();
+
+                $m = new Mahasiswa();
+                $m->user_id = $n->id;
+                $m->nim = $mhs->nim;
+                $m->nama = $mhs->nama;
+                $m->kelamin = $mhs->kelamin;
+                $m->prodi =
+                $mhs->prodi->id . "|" . $mhs->prodi->long . "|" . $mhs->prodi->sort;
+                $m->fakultas =
+                $mhs->prodi->fakultas->id . "|" . $mhs->prodi->fakultas->nama;
+                $m->hp = 'TES DATA DUMMI';
+                $m->alamat = 'TES DATA DUMMI';
+                $m->save();
+
+                $pend = new Pendaftaran();
+                $pend->mahasiswa_id = $m->id;
+                $pend->subkpm_id = '7b1b77f2-145e-40dd-835f-ad2ec85a0323';
+                $pend->save();
+            }
+        }
+        return 'done';
+    }
 }

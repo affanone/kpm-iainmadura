@@ -10,7 +10,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return session('user');
         return view('dpl.dashboard');
     }
 

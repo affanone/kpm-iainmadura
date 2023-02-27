@@ -48,6 +48,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('dpl.kpm') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            My KPM
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
