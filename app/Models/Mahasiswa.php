@@ -20,4 +20,9 @@ class Mahasiswa extends Uuid
         $n->fakultas->nama = $fak[1];
         return $n;
     }
+
+    public function pendaftaran()
+    {
+        return $this->hasOne(Pendaftaran::class);
+    }
 }

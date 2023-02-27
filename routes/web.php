@@ -112,6 +112,8 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         "destroy",
     ])->name("fakultas.posko.delete");
 
+    Route::get("/penempatan_peserta", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "index"])->name("fakultas.penempatan");
+
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
     })->name("fakultas");
@@ -139,6 +141,9 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
             \App\Http\Controllers\Dpl\DashboardController::class,
             "index",
         ])->name("dpl.dashboard");
+
+        Route::get("/mahasiswa", [\App\Http\Controllers\Dpl\DashboardController::class, "show"])->name("dpl.mahasiswa");
+        Route::post("/mahasiswa/data", [\App\Http\Controllers\Dpl\DashboardController::class, "data"])->name("dpl.mahasiswa.data");
 
         Route::get("/", function () {
             return Redirect::to(route("dpl.reg.profil"));

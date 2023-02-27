@@ -91,7 +91,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin_fakultas') }}" class="nav-link">
-                                <i class="fas fa-user-tag nav-icon"></i>
+                                <i class="fas fa-laptop nav-icon"></i>
                                 <p>Admin Fakultas</p>
                             </a>
                         </li>

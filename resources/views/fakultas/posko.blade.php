@@ -37,7 +37,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data DPL</h3>
+                                <h3 class="card-title">Data Posko</h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 250px;">
                                         <select class="custom-select" id="inputGroupSelect02"
@@ -226,9 +226,18 @@
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $.ajax({
+                    url: "/fakultas/posko?page=" + page,
+                    success: function(data) {
+                        $('#data').html(data);
+                        $('table tr').addClass("text-center");
+                    }
+                });
                 filter.p = $(this).attr('href').split('page=')[1];
                 fetchData();
             });
+            $('table tr').addClass("text-center");
         });
 
         function getFilterCari() {

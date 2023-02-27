@@ -65,7 +65,7 @@ class TahunAkademikController extends Controller
         $ta->status = $status;
         $ta->save();
 
-        Log::set("Melakukan tambah tahun akademik", "insert");
+        Log::set("Melakukan tambah tahun akademik", "insert", $ta);
 
         $data = array(
             'icon' => 'success',
@@ -153,12 +153,14 @@ class TahunAkademikController extends Controller
         }
 
         $ta = TahunAkademik::find($id);
+        $ta_data = $ta;
+
         $ta->tahun = $tahun;
         $ta->semester = $semester;
         $ta->status = $status;
         $ta->update();
 
-        Log::set("Melakukan sunting tahun akademik", "update");
+        Log::set("Melakukan sunting tahun akademik", "update", $ta_data, $ta);
 
         $data = array(
             'icon' => 'success',
@@ -177,6 +179,7 @@ class TahunAkademikController extends Controller
     {
         $id = $request->id;
         $ta = TahunAkademik::find($id);
+        $ta_data = $ta;
 
         $data = array();
         try {
@@ -186,7 +189,7 @@ class TahunAkademikController extends Controller
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Tahun Akademik ' . $ta->tahun . ' Berhasil Dihapus';
 
-                Log::set("Melakukan hapus tahun akademik", "delete");
+                Log::set("Melakukan hapus tahun akademik", "delete", $ta_data);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

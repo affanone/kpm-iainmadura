@@ -83,15 +83,11 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="nama">Nama Pegawai</label>
-                                            <select class="form-control select2" id="nama" name="nama"
-                                                style="width: 100%;">
-                                                <option value="">-- Pilih Pegawai --</option>
-                                                @foreach ($pegawai as $dt_pegawai)
-                                                    <option value="{{ $dt_pegawai->kode . '|' . $dt_pegawai->nama }}">
-                                                        {{ $dt_pegawai->kode . ' - ' . $dt_pegawai->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            <label for="nama">Nama Pegawai <sup class="font-italic text-danger">*)
+                                                    Ketikkan nama pegawai tanpa gelar</sup></label>
+                                            <input class="form-control" type="text" name="nama" id="nama"
+                                                autocomplete="off">
+                                            <div id="nama-output" class="liveSearch"></div>
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
@@ -145,6 +141,47 @@
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function() {
+            /// Live Search ///
+            $("#nama").on('keyup', function() {
+                var query = $(this).val();
+                if (query) {
+                    $.ajax({
+                        url: "https://api.iainmadura.ac.id/api/pegawai?q=" + query,
+                        success: function(data) {
+                            const pegawai = data.data;
+                            let list = '';
+
+                            if (pegawai.length > 0) {
+                                list += '<div class="list-group">';
+                                pegawai.forEach(item => {
+                                    list +=
+                                        `<button type="button" class="list-group-item list-group-item-action">${item.kode}|${item.nama}</btn>`;
+                                });
+                                list += '</div>';
+                            } else {
+                                list = 'Data tidak ditemukan';
+                            }
+
+                            $("#nama-output").html(list);
+                            $('#nama-output').css('display', 'block');
+
+                            /// Click to enter result ///
+                            $("#nama-output button").on("click", function() {
+                                $("#nama").val($(this).html());
+                                $("#nama-output").css('display', 'none');
+                            });
+                        }
+                    });
+                } else {
+                    $("#nama-output").html("");
+                    $('#nama-output').css('display', 'none');
+                }
+            });
+        });
+    </script>
+
     <script>
         $('.select2').select2()
 
@@ -284,7 +321,7 @@
             ],
             "responsive": true,
             "autoWidth": true,
-            "dom": '<"mb-3"B><"clearfix"<"float-left"l><"float-right"f>>t<"d-flex justify-content-between"ip>',
+            "dom": '<"mb-3"B><"clearfix"<"float-left"l><"float-right"f>>tr<"d-flex justify-content-between"ip>',
             "buttons": [{
                 "extend": "excelHtml5",
                 "text": "<i class='far fa-file-excel'></i> Download Excel",
