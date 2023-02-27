@@ -133,12 +133,14 @@ class DplController extends Controller
         $alamat = strip_tags($request->alamat);
 
         $dpl = Dpl::find($id);
+        $dpl_data = $dpl;
+
         $dpl->kelamin = $kelamin;
         $dpl->hp = $hp;
         $dpl->alamat = $alamat;
         $dpl->update();
 
-        Log::set("Melakukan sunting data DPL", "update");
+        Log::set("Melakukan sunting data DPL", "update", $dpl_data, $dpl);
 
         $data = array(
             'icon' => 'success',
@@ -157,6 +159,7 @@ class DplController extends Controller
     {
         $id = $request->id;
         $dpl = Dpl::find($id);
+        $dpl_data = $dpl;
 
         $data = array();
         try {
@@ -166,7 +169,7 @@ class DplController extends Controller
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'DPL : ' . $dpl->nama . ' Berhasil Dihapus';
 
-                Log::set("Melakukan hapus data DPL", "delete");
+                Log::set("Melakukan hapus data DPL", "delete", $dpl_data);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

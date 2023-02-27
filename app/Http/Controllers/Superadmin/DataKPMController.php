@@ -108,7 +108,7 @@ class DataKPMController extends Controller
         $kpm->config = json_encode($config);
         $kpm->save();
 
-        Log::set("Melakukan tambah data KPM", "insert");
+        Log::set("Melakukan tambah data KPM", "insert", $kpm);
 
         $data = array(
             'icon' => 'success',
@@ -185,12 +185,14 @@ class DataKPMController extends Controller
         $deskripsi = strip_tags($request->deskripsi);
 
         $kpm = Subkpm::find($id);
+        $kpm_data = $kpm;
+
         $kpm->kpm_id = $jenis;
         $kpm->nama = $nama;
         $kpm->deskripsi = $deskripsi;
         $kpm->update();
 
-        Log::set("Melakukan sunting data KPM", "update");
+        Log::set("Melakukan sunting data KPM", "update", $kpm_data, $kpm);
 
         $data = array(
             'icon' => 'success',
@@ -209,6 +211,7 @@ class DataKPMController extends Controller
     {
         $id = $request->id;
         $kpm = Subkpm::find($id);
+        $kpm_data = $kpm;
 
         $data = array();
         try {
@@ -218,7 +221,7 @@ class DataKPMController extends Controller
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Data KPM : ' . $kpm->nama . ' Berhasil Dihapus';
 
-                Log::set("Melakukan hapus data KPM", "delete");
+                Log::set("Melakukan hapus data KPM", "delete", $kpm_data);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;

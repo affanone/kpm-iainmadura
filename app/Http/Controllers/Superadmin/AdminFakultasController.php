@@ -92,7 +92,7 @@ class AdminFakultasController extends Controller
         $adm_fakultas->user()->associate($user);
         $adm_fakultas->save();
 
-        Log::set("Melakukan tambah admin fakultas", "insert");
+        Log::set("Melakukan tambah admin fakultas", "insert", $adm_fakultas);
 
         $data = array(
             'icon' => 'success',
@@ -177,6 +177,7 @@ class AdminFakultasController extends Controller
         $tahun = strip_tags($request->tahun);
 
         $adm_fakultas = AdminFakultas::with('user')->find($id);
+        $adm_fakultas_data = $adm_fakultas;
 
         if (in_array(3, $adm_fakultas->user->access) && count($adm_fakultas->user->access) > 1) {
             $active_user = User::where('id', $adm_fakultas->user_id)->first();
@@ -227,7 +228,7 @@ class AdminFakultasController extends Controller
             $adm_fakultas->update();
         }
 
-        Log::set("Melakukan sunting admin fakultas", "update");
+        Log::set("Melakukan sunting admin fakultas", "update", $adm_fakultas_data, $adm_fakultas);
 
         $data = array(
             'icon' => 'success',
@@ -247,6 +248,7 @@ class AdminFakultasController extends Controller
     {
         $id = $request->id;
         $admin_fakultas = AdminFakultas::with('user')->find($id);
+        $admin_fakultas_data = $admin_fakultas;
 
         $data = array();
         if (count($admin_fakultas->user->access) > 1) {
@@ -265,7 +267,7 @@ class AdminFakultasController extends Controller
                     $data['title'] = 'Berhasil';
                     $data['message'] = 'Admin Fakultas : ' . $admin_fakultas->nama . ' Berhasil Dihapus';
 
-                    Log::set("Melakukan hapus admin fakultas", "delete");
+                    Log::set("Melakukan hapus admin fakultas", "delete", $admin_fakultas_data);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
                 $error = $e->errorInfo;
@@ -283,7 +285,7 @@ class AdminFakultasController extends Controller
                     $data['title'] = 'Berhasil';
                     $data['message'] = 'Admin Fakultas : ' . $admin_fakultas->nama . ' Berhasil Dihapus';
 
-                    Log::set("Melakukan hapus admin fakultas", "delete");
+                    Log::set("Melakukan hapus admin fakultas", "delete", $admin_fakultas_data);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
                 $error = $e->errorInfo;

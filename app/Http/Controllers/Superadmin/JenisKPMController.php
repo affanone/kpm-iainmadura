@@ -103,7 +103,7 @@ class JenisKPMController extends Controller
         $kpm->config = json_encode($config);
         $kpm->save();
 
-        Log::set("Melakukan tambah jenis KPM", "insert");
+        Log::set("Melakukan tambah jenis KPM", "insert", $kpm);
 
         $data = array(
             'icon' => 'success',
@@ -180,12 +180,14 @@ class JenisKPMController extends Controller
         $deskripsi = strip_tags($request->deskripsi);
 
         $kpm = Kpm::find($id);
+        $kpm_data = $kpm;
+
         $kpm->tahun_akademik_id = $tahun;
         $kpm->nama = $jenis;
         $kpm->deskripsi = $deskripsi;
         $kpm->update();
 
-        Log::set("Melakukan sunting jenis KPM", "update");
+        Log::set("Melakukan sunting jenis KPM", "update", $kpm_data, $kpm);
 
         $data = array(
             'icon' => 'success',
@@ -204,6 +206,7 @@ class JenisKPMController extends Controller
     {
         $id = $request->id;
         $kpm = Kpm::find($id);
+        $kpm_data = $kpm;
 
         $data = array();
         try {
@@ -213,7 +216,7 @@ class JenisKPMController extends Controller
                 $data['title'] = 'Berhasil';
                 $data['message'] = 'Jenis KPM : ' . $kpm->nama . ' Berhasil Dihapus';
 
-                Log::set("Melakukan hapus jenis KPM", "delete");
+                Log::set("Melakukan hapus jenis KPM", "delete", $kpm_data);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             $error = $e->errorInfo;
