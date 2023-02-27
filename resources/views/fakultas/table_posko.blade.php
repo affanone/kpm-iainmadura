@@ -24,7 +24,7 @@
                         <form action="{{ route('fakultas.posko') }}" method="POST" class="btn-group" role="group"
                             aria-label="Basic example">
                             <a class="btn btn-sm btn-success"
-                                href="{{ route('fakultas.penempatan', ['posko' => $item->id]) }}">Peserta</a>
+                                href="{{ route('fakultas.posko.penempatan', ['posko' => $item->id]) }}">Peserta</a>
                             <a class="btn btn-sm btn-warning"
                                 href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
                             @csrf

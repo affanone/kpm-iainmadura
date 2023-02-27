@@ -14,6 +14,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('fakultas.dashboard') }}">Beranda</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('fakultas.posko') }}">Posko</a></li>
                             <li class="breadcrumb-item active">Penempatan Peserta</li>
                         </ol>
                     </div>
@@ -31,49 +32,49 @@
                                 <h3 class="card-title">Penempatan Peserta KPM</h3>
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <select class="form-control" name="" id="">
-                                                        <option value="">-- Pilih Program Studi --</option>
-                                                        @foreach ($prodi as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->long }}</option>
-                                                        @endforeach
-                                                    </select>
+                            <form action="#">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <label for="prodi">Program Studi</label>
+                                                        <select class="form-control" name="prodi" id="prodi">
+                                                            <option value="">-- Pilih Program Studi --</option>
+                                                            @foreach ($prodi as $item)
+                                                                <option value="{{ $item->id }}">{{ $item->long }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <label for="posko">Posko</label>
+                                                        <input type="text" class="form-control" name="posko"
+                                                            value="{{ $posko->nama . ' (' . $posko->alamat . ')' }}"
+                                                            readonly>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <select class="form-control" name="" id="">
-                                                        <option value="">-- Pilih Posko --</option>
-                                                        @foreach ($posko as $item)
-                                                            <option value="{{ $item->id }}">
-                                                                {{ $item->nama . ' (' . $item->alamat . ')' }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                                <select class="duallistbox" multiple="multiple" name="mahasiswa"
+                                                    id="mahasiswa">
+                                                    @foreach ($mahasiswa as $item)
+                                                        <option value="{{ $item->user_id }}">
+                                                            {{ $item->nama . ' - ' . $item->prodi->long . ' (' . $item->pendaftaran->subkpm->nama . ')' }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-                                            <select class="duallistbox" multiple="multiple" name="mahasiswa" id="mahasiswa">
-                                                @foreach ($mahasiswa as $item)
-                                                    <option value="{{ $item->user_id }}">
-                                                        {{ $item->nama . ' - ' . $item->prodi->long . ' (' . $item->pendaftaran->subkpm->nama . ')' }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                            <!-- /.form-group -->
                                         </div>
-                                        <!-- /.form-group -->
+                                        <!-- /.col -->
                                     </div>
-                                    <!-- /.col -->
+                                    <!-- /.row -->
                                 </div>
-                                <!-- /.row -->
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                Visit <a href="https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox#readme">Bootstrap
-                                    Duallistbox</a> for more examples and information about
-                                the plugin.
-                            </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                                </div>
+                            </form>
                         </div>
                         <!-- /.card -->
                     </div>

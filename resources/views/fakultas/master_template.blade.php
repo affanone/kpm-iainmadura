@@ -145,14 +145,16 @@
     </script>
 
     <script>
-        const activeurl = window.location;
-        $('li', '#sideMenu')
-            .filter(function() {
-                return !!$(this).find('a[href="' + activeurl.origin + activeurl.pathname.replace(/\/$/,
-                    "") + '"]').length;
-            })
-            .addClass('menu-open')
-            .find('a:first').addClass('active');
+        $(function() {
+            var url = window.location.href
+            $('#sideMenu li').each(function() {
+                if (url.includes($(this).children().attr('href'))) {
+                    $(this).parent('ul').parent('li').addClass('menu-open').children('a').addClass(
+                    'active');
+                    $(this).find('a:first').addClass('active');
+                }
+            });
+        });
     </script>
 
     <script>

@@ -29,8 +29,7 @@ class PenempatanPesertaController extends Controller
         });
         $prodi = array_values($expected);
 
-        $posko = Posko::where('id', $posko)
-            ->get();
+        $posko = Posko::where('id', $posko)->first();
 
         $mahasiswa = Mahasiswa::with(['pendaftaran', 'pendaftaran.subkpm'])
             ->where('fakultas', function ($query) {
@@ -41,6 +40,8 @@ class PenempatanPesertaController extends Controller
             ->whereHas('pendaftaran', function ($query) {
                 return $query->where('status', 3);
             })
+            ->orderBy('prodi', 'asc')
+            ->orderBy('nama', 'asc')
             ->get();
 
         return view('fakultas.penempatan_peserta', [
