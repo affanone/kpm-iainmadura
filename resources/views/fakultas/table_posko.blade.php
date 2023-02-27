@@ -23,11 +23,13 @@
                     <td>
                         <form action="{{ route('fakultas.posko') }}" method="POST" class="btn-group" role="group"
                             aria-label="Basic example">
-                            <a class="btn btn-secondary"
+                            <a class="btn btn-sm btn-success"
+                                href="{{ route('fakultas.penempatan', ['posko' => $item->id]) }}">Peserta</a>
+                            <a class="btn btn-sm btn-warning"
                                 href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-secondary"
+                            <button type="submit" class="btn btn-sm btn-danger"
                                 href="{{ route('fakultas.posko.delete', ['id' => $item->id]) }}"
                                 onclick="return confirm('Hapus data posko?')">Delete</button>
                         </form>

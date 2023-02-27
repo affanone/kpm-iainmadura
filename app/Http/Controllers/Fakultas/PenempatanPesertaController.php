@@ -16,7 +16,7 @@ class PenempatanPesertaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($posko)
     {
         $id_fakultas = AdminFakultas::select('fakultas')
             ->where('user_id', auth()->user()->id)

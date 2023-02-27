@@ -112,7 +112,7 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         "destroy",
     ])->name("fakultas.posko.delete");
 
-    Route::get("/penempatan_peserta", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "index"])->name("fakultas.penempatan");
+    Route::get("/penempatan_peserta/{posko}", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "index"])->name("fakultas.penempatan");
 
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));

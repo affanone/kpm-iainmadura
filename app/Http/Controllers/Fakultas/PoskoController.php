@@ -32,7 +32,7 @@ class PoskoController extends Controller
                 $db->where('tahun_akademik_id', $n);
             })
             ->paginate(10);
-        $datatable = view('fakultas.datatable', ['data' => $master])->render();
+        $datatable = view('fakultas.table_posko', ['data' => $master])->render();
         if ($request->ajax()) {
             return $datatable;
         }
