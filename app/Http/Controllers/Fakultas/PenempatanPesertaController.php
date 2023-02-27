@@ -29,7 +29,7 @@ class PenempatanPesertaController extends Controller
         });
         $prodi = array_values($expected);
 
-        $posko = Posko::where('fakultas', $id_fakultas)
+        $posko = Posko::where('id', $posko)
             ->get();
 
         $mahasiswa = Mahasiswa::with(['pendaftaran', 'pendaftaran.subkpm'])
