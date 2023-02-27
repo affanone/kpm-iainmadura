@@ -142,6 +142,11 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
             "index",
         ])->name("dpl.dashboard");
 
+        Route::get("/kpm", [
+            \App\Http\Controllers\Dpl\KpmController::class,
+            "index",
+        ])->name("dpl.kpm");
+
         Route::get("/mahasiswa", [\App\Http\Controllers\Dpl\DashboardController::class, "show"])->name("dpl.mahasiswa");
         Route::post("/mahasiswa/data", [\App\Http\Controllers\Dpl\DashboardController::class, "data"])->name("dpl.mahasiswa.data");
 
@@ -296,6 +301,11 @@ Route::get("attachment/{folder}/{file}/{extension}", function (
 Route::get("/password/{pass}", function ($pass) {
     return Hash::make($pass);
 });
+
+Route::get("/dummi/register", [
+    \App\Http\Controllers\Reg\RegisterController::class,
+    "dummy_mahasiswa",
+]);
 
 Route::get("/dummi/ta", function () {
     return "a";
