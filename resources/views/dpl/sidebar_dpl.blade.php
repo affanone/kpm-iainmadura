@@ -51,7 +51,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
-                            Data Master
+                            My KPM
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -60,51 +60,6 @@
                             <a href="{{ route('dpl.mahasiswa') }}" class="nav-link">
                                 <i class="fas fa-user-graduate nav-icon"></i>
                                 <p>Mahasiswa</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-project-diagram nav-icon"></i>
-                                <p>Data KPM</p>
-                                <i class="right fas fa-angle-left"></i>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Jenis KPM</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Nama KPM</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-user-tie nav-icon"></i>
-                                <p>DPL</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-user-cog nav-icon"></i>
-                                <p>Kategori Pengguna</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-user nav-icon"></i>
-                                <p>Pengguna</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-clipboard-list nav-icon"></i>
-                                <p>Persyaratan</p>
                             </a>
                         </li>
                     </ul>

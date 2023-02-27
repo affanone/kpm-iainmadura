@@ -46,13 +46,13 @@ class PoskoController extends Controller
             })
             ->first();
         if (!$admin) {
-            return view('fakultas.denied', [$message => 'Tidak ada tahun akademik yang diaktifkan oleh LP2M']);
+            return view('fakultas.denied', ['message' => 'Tidak ada tahun akademik yang diaktifkan oleh LP2M']);
         }
 
         $dpls = Dpl::where('fakultas', $admin->fakultas->id . '|' . $admin->fakultas->nama)->get();
         $tahun_akademiks = Posko::select('tahun_akademik_id')->where('fakultas', $admin->fakultas->id . '|' . $admin->fakultas->nama)->groupBy('tahun_akademik_id')->get();
         if (!count($dpls)) {
-            return view('fakultas.denied', [$message => 'Tidak ada data DPL pada fakultas "' . $admin->fakultas->nama . '"']);
+            return view('fakultas.denied', ['message' => 'Tidak ada data DPL pada fakultas "' . $admin->fakultas->nama . '"']);
         }
 
         $referensi = env('API_SERVER') . '/api/pegawai?fak=' . $admin->fakultas->id;

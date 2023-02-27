@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Dpl;
 
 use App\Http\Controllers\Controller;
-use App\IainApi as AppIainApi;
-use App\Libraries\IainApi;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\DataTables;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        return session('user');
         return view('dpl.dashboard');
     }
 
