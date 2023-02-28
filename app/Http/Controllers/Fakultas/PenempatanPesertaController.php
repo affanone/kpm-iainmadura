@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Fakultas;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Pendaftaran;
-use App\Models\AdminFakultas;
-use App\Models\Posko;
-use App\Models\PoskoPendaftaran;
 use App\IainApi;
 use App\Log;
+use App\Models\AdminFakultas;
+use App\Models\Pendaftaran;
+use App\Models\Posko;
+use App\Models\PoskoPendaftaran;
+use Illuminate\Http\Request;
 
 class PenempatanPesertaController extends Controller
 {
@@ -33,7 +33,7 @@ class PenempatanPesertaController extends Controller
 
         $posko = Posko::where('id', $posko)->first();
 
-        $mahasiswa = Pendaftaran::with(['mahasiswa', 'subkpm'])
+        $mahasiswa = Pendaftaran::select('pendaftarans.*', 'mahasiswas.prodi')->with(['mahasiswa', 'subkpm'])
             ->where('status', 3)
             ->whereHas('mahasiswa', function ($q) {
                 return $q->where('fakultas', function ($query) {
@@ -41,15 +41,20 @@ class PenempatanPesertaController extends Controller
                         ->from('admin_fakultas')
                         ->where('user_id', auth()->user()->id);
                 });
-            });
-        $mahasiswa->orderBy('mahasiswas.prodi', 'asc')
-            ->orderBy('mahasiswas.nama', 'asc');
-        $mahasiswa->get();
+            })
+            ->join('mahasiswas', 'mahasiswas.id', '=', 'pendaftarans.mahasiswa_id')
+            ->orderBy('mahasiswas.prodi', 'asc');
+        //     ->orderBy('mahasiswas.nama', 'asc');
+        $mahasiswa = $mahasiswa->get();
+        // return $mahasiswa;
+        return collect($mahasiswa)->sortBy(function ($item, $key) {
+            return $item->mahasiswa->prodi->sort;
+        });
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
             'prodi' => $prodi,
-            'posko' => $posko
+            'posko' => $posko,
         ]);
     }
 
@@ -91,7 +96,7 @@ class PenempatanPesertaController extends Controller
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Peserta Berhasil Ditambahkan ke Posko'
+            'message' => 'Peserta Berhasil Ditambahkan ke Posko',
         );
 
         return response()->json($data);
