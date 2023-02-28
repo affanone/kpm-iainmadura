@@ -226,14 +226,6 @@
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                $.ajax({
-                    url: "/fakultas/posko?page=" + page,
-                    success: function(data) {
-                        $('#data').html(data);
-                        $('table tr').addClass("text-center");
-                    }
-                });
                 filter.p = $(this).attr('href').split('page=')[1];
                 fetchData();
             });

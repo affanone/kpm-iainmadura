@@ -14,6 +14,11 @@ class Posko extends Uuid
         return $this->belongsTo(Dpl::class);
     }
 
+    public function posko_pendaftaran()
+    {
+        return $this->hasMany(PoskoPendaftaran::class);
+    }
+
     public function getFakultasAttribute($value)
     {
 

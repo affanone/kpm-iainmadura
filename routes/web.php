@@ -146,6 +146,16 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
             "index",
         ])->name("dpl.kpm");
 
+        Route::get("/kpm/{id}", [
+            \App\Http\Controllers\Dpl\KpmController::class,
+            "show",
+        ])->name("dpl.kpm.detail");
+
+        Route::get("/nilai", [
+            \App\Http\Controllers\Dpl\NilaiController::class,
+            "index",
+        ])->name("dpl.nilai");
+
         Route::get("/mahasiswa", [\App\Http\Controllers\Dpl\DashboardController::class, "show"])->name("dpl.mahasiswa");
         Route::post("/mahasiswa/data", [\App\Http\Controllers\Dpl\DashboardController::class, "data"])->name("dpl.mahasiswa.data");
 

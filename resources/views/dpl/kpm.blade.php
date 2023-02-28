@@ -72,3 +72,47 @@
         </section>
     </div>
 @endsection
+
+
+@section('script')
+    <script>
+        var filter = {
+            p: 1,
+            q: '',
+            t: ''
+        }
+
+        function fetchData() {
+            $.ajax({
+                url: "{{ route('dpl.kpm') }}",
+                data: {
+                    page: filter.p,
+                    cari: filter.q,
+                    tahun: filter.t
+                },
+                success: function(data) {
+                    $('#data').html(data);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                filter.p = $(this).attr('href').split('page=')[1];
+                fetchData();
+            });
+            $('table tr').addClass("text-center");
+        });
+
+        function getFilterCari() {
+            filter.q = $('#filterCari').val();
+            fetchData();
+        }
+
+        function getFilterTahun(value) {
+            filter.t = value;
+            fetchData();
+        }
+    </script>
+@endsection

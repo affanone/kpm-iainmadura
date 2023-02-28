@@ -7,7 +7,7 @@
                 <th>Alamat Posko</th>
                 <th>Tahun Akademik</th>
                 <th>Total Mahasiswa</th>
-                <th width="7%">Opsi</th>
+                <th width="1px">Detail</th>
             </tr>
         </thead>
         <tbody>
@@ -21,16 +21,10 @@
                     </td>
                     <td>{{ $item->total }} Mhs</td>
                     <td>
-                        <form action="{{ route('fakultas.posko') }}" method="POST" class="btn-group" role="group"
-                            aria-label="Basic example">
+                        <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="btn btn-secondary"
-                                href="{{ route('fakultas.posko.edit', ['id' => $item->id]) }}">Edit</a>
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-secondary"
-                                href="{{ route('fakultas.posko.delete', ['id' => $item->id]) }}"
-                                onclick="return confirm('Hapus data posko?')">Delete</button>
-                        </form>
+                                href="{{ route('dpl.kpm.detail', ['id' => $item->id]) }}">View</a>
+                        </div>
                     </td>
                 </tr>
             @endforeach
