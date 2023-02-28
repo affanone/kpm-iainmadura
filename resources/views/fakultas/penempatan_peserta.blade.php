@@ -43,7 +43,8 @@
                                                 <select class="duallistbox" multiple="multiple" name="mahasiswa[]"
                                                     id="mahasiswa">
                                                     @foreach ($mahasiswa as $item)
-                                                        <option value="{{ $item->id }}">
+                                                        <option value="{{ $item->id }}"
+                                                            @if ($item->cek !== '0') selected @endif>
                                                             {{ $item->mahasiswa->nama . ' - ' . $item->mahasiswa->prodi->long . ' (' . $item->subkpm->nama . ')' }}
                                                         </option>
                                                     @endforeach
