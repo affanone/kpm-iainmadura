@@ -43,7 +43,8 @@
                                                 <select class="duallistbox" multiple="multiple" name="mahasiswa[]"
                                                     id="mahasiswa">
                                                     @foreach ($mahasiswa as $item)
-                                                        <option value="{{ $item->id }}">
+                                                        <option value="{{ $item->id }}"
+                                                            @if ($item->cek !== '0') selected @endif>
                                                             {{ $item->mahasiswa->nama . ' - ' . $item->mahasiswa->prodi->long . ' (' . $item->subkpm->nama . ')' }}
                                                         </option>
                                                     @endforeach
@@ -88,7 +89,12 @@
                 data: $('#formPenempatan').serialize(),
                 dataType: 'JSON',
                 success: function(res) {
-                    console.log(res)
+                    const msg = JSON.parse(JSON.stringify(res));
+                    Swal.fire({
+                        icon: msg.icon,
+                        title: "Berhasil",
+                        text: msg.message
+                    });
                 },
                 error: function(res) {
                     $('#tblAdmFakultas').DataTable().ajax.reload(null,

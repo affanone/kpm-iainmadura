@@ -10,6 +10,7 @@ use App\Models\Pendaftaran;
 use App\Models\Posko;
 use App\Models\PoskoPendaftaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PenempatanPesertaController extends Controller
 {
@@ -33,7 +34,7 @@ class PenempatanPesertaController extends Controller
 
         $posko = Posko::where('id', $posko)->first();
 
-        $mahasiswa = Pendaftaran::select('pendaftarans.*', 'mahasiswas.prodi')->with(['mahasiswa', 'subkpm'])
+        $mahasiswa = Pendaftaran::select('pendaftarans.*', DB::raw("IFNULL(posko_pendaftarans.id, 0) AS cek"))->with(['mahasiswa', 'subkpm'])
             ->where('status', 3)
             ->whereHas('mahasiswa', function ($q) {
                 return $q->where('fakultas', function ($query) {
@@ -43,13 +44,14 @@ class PenempatanPesertaController extends Controller
                 });
             })
             ->join('mahasiswas', 'mahasiswas.id', '=', 'pendaftarans.mahasiswa_id')
-            ->orderBy('mahasiswas.prodi', 'asc');
-        //     ->orderBy('mahasiswas.nama', 'asc');
-        $mahasiswa = $mahasiswa->get();
+            ->leftJoin('posko_pendaftarans', function($db){
+                $db->on('posko_pendaftarans.pendaftaran_id', '=', 'pendaftarans.id')
+                ->where('posko_pendaftarans.id')
+            })
+            ->orderBy('mahasiswas.prodi', 'asc')
+            ->orderBy('mahasiswas.nama', 'asc')
+            ->get();
         // return $mahasiswa;
-        return collect($mahasiswa)->sortBy(function ($item, $key) {
-            return $item->mahasiswa->prodi->sort;
-        });
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
@@ -85,14 +87,14 @@ class PenempatanPesertaController extends Controller
         $posko = $request->id_posko;
         $mahasiswa = $request->mahasiswa;
 
-        $penempatan = new PoskoPendaftaran;
         foreach ($mahasiswa as $peserta) {
+            $penempatan = new PoskoPendaftaran;
             $penempatan->posko_id = $posko;
             $penempatan->pendaftaran_id = $peserta;
             $penempatan->save();
         }
 
-        Log::set("Menambah peserta ke posko", "insert", $posko);
+        Log::set("Menambah peserta ke posko", "insert", $penempatan);
 
         $data = array(
             'icon' => 'success',
