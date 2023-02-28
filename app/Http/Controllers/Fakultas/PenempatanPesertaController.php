@@ -33,7 +33,7 @@ class PenempatanPesertaController extends Controller
 
         $posko = Posko::where('id', $posko)->first();
 
-        $mahasiswa = Pendaftaran::select('pendaftarans.*', 'mahasiswas.prodi')->with(['mahasiswa', 'subkpm'])
+        $mahasiswa = Pendaftaran::select('pendaftarans.*')->with(['mahasiswa', 'subkpm'])
             ->where('status', 3)
             ->whereHas('mahasiswa', function ($q) {
                 return $q->where('fakultas', function ($query) {
@@ -43,13 +43,9 @@ class PenempatanPesertaController extends Controller
                 });
             })
             ->join('mahasiswas', 'mahasiswas.id', '=', 'pendaftarans.mahasiswa_id')
-            ->orderBy('mahasiswas.prodi', 'asc');
-        //     ->orderBy('mahasiswas.nama', 'asc');
-        $mahasiswa = $mahasiswa->get();
-        // return $mahasiswa;
-        return collect($mahasiswa)->sortBy(function ($item, $key) {
-            return $item->mahasiswa->prodi->sort;
-        });
+            ->orderBy('mahasiswas.prodi', 'asc')
+            ->orderBy('mahasiswas.nama', 'asc')
+            ->get();
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
@@ -85,14 +81,14 @@ class PenempatanPesertaController extends Controller
         $posko = $request->id_posko;
         $mahasiswa = $request->mahasiswa;
 
-        $penempatan = new PoskoPendaftaran;
         foreach ($mahasiswa as $peserta) {
+            $penempatan = new PoskoPendaftaran;
             $penempatan->posko_id = $posko;
             $penempatan->pendaftaran_id = $peserta;
             $penempatan->save();
         }
 
-        Log::set("Menambah peserta ke posko", "insert", $posko);
+        Log::set("Menambah peserta ke posko", "insert", $penempatan);
 
         $data = array(
             'icon' => 'success',
