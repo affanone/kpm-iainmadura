@@ -29,37 +29,22 @@
                     <div class="col-12">
                         <div class="card card-default">
                             <div class="card-header">
-                                <h3 class="card-title">Penempatan Peserta KPM</h3>
+                                <h3 class="card-title">POSKO : {{ $posko->nama . ' (' . $posko->alamat . ')' }}
+                                </h3>
                             </div>
                             <!-- /.card-header -->
-                            <form action="#">
+                            <form id="formPenempatan">
+                                @csrf
+                                <input type="hidden" value="{{ $posko->id }}" name="id_posko">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <label for="prodi">Program Studi</label>
-                                                        <select class="form-control" name="prodi" id="prodi">
-                                                            <option value="">-- Pilih Program Studi --</option>
-                                                            @foreach ($prodi as $item)
-                                                                <option value="{{ $item->id }}">{{ $item->long }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <label for="posko">Posko</label>
-                                                        <input type="text" class="form-control" name="posko"
-                                                            value="{{ $posko->nama . ' (' . $posko->alamat . ')' }}"
-                                                            readonly>
-                                                    </div>
-                                                </div>
-                                                <select class="duallistbox" multiple="multiple" name="mahasiswa"
+                                                <select class="duallistbox" multiple="multiple" name="mahasiswa[]"
                                                     id="mahasiswa">
                                                     @foreach ($mahasiswa as $item)
-                                                        <option value="{{ $item->user_id }}">
-                                                            {{ $item->nama . ' - ' . $item->prodi->long . ' (' . $item->pendaftaran->subkpm->nama . ')' }}
+                                                        <option value="{{ $item->id }}">
+                                                            {{ $item->mahasiswa->nama . ' - ' . $item->mahasiswa->prodi->long . ' (' . $item->subkpm->nama . ')' }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -72,7 +57,8 @@
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                                    <button type="button" class="btn btn-primary float-right"
+                                        id="btnSmpPenempatan">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -88,13 +74,32 @@
     <script>
         //Bootstrap Duallistbox
         $('.duallistbox').bootstrapDualListbox({
-
             // 'string_of_postfix' / false                                                      
             helperSelectNamePostfix: false,
 
             // minimal height in pixels
             selectorMinimalHeight: 300,
+        });
 
+        $('#btnSmpPenempatan').on('click', () => {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('fakultas.posko.penempatan.post') }}",
+                data: $('#formPenempatan').serialize(),
+                dataType: 'JSON',
+                success: function(res) {
+                    console.log(res)
+                },
+                error: function(res) {
+                    $('#tblAdmFakultas').DataTable().ajax.reload(null,
+                        false);
+                    Swal.fire(
+                        'Gagal',
+                        'Ada Kesalahan',
+                        'error'
+                    );
+                }
+            });
         });
     </script>
 @endsection

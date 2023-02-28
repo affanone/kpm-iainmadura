@@ -111,7 +111,9 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
         \App\Http\Controllers\Fakultas\PoskoController::class,
         "destroy",
     ])->name("fakultas.posko.delete");
+
     Route::get("/posko/penempatan_peserta/{posko}", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "index"])->name("fakultas.posko.penempatan");
+    Route::post("/posko/penempatan_peserta", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "store"])->name("fakultas.posko.penempatan.post");
 
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
