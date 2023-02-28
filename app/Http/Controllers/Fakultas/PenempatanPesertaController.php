@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Fakultas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Mahasiswa;
+use App\Models\Pendaftaran;
 use App\Models\AdminFakultas;
 use App\Models\Posko;
+use App\Models\PoskoPendaftaran;
 use App\IainApi;
+use App\Log;
 
 class PenempatanPesertaController extends Controller
 {
@@ -31,18 +33,18 @@ class PenempatanPesertaController extends Controller
 
         $posko = Posko::where('id', $posko)->first();
 
-        $mahasiswa = Mahasiswa::with(['pendaftaran', 'pendaftaran.subkpm'])
-            ->where('fakultas', function ($query) {
-                return $query->select('fakultas')
-                    ->from('admin_fakultas')
-                    ->where('user_id', auth()->user()->id);
-            })
-            ->whereHas('pendaftaran', function ($query) {
-                return $query->where('status', 3);
-            })
-            ->orderBy('prodi', 'asc')
-            ->orderBy('nama', 'asc')
-            ->get();
+        $mahasiswa = Pendaftaran::with(['mahasiswa', 'subkpm'])
+            ->where('status', 3)
+            ->whereHas('mahasiswa', function ($q) {
+                return $q->where('fakultas', function ($query) {
+                    return $query->select('fakultas')
+                        ->from('admin_fakultas')
+                        ->where('user_id', auth()->user()->id);
+                });
+            });
+        $mahasiswa->orderBy('mahasiswas.prodi', 'asc')
+            ->orderBy('mahasiswas.nama', 'asc');
+        $mahasiswa->get();
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
@@ -69,7 +71,30 @@ class PenempatanPesertaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            ['mahasiswa' => 'required'],
+            ['mahasiswa.required' => 'Tidak ada mahasiswa yang dipilih']
+        );
+
+        $posko = $request->id_posko;
+        $mahasiswa = $request->mahasiswa;
+
+        $penempatan = new PoskoPendaftaran;
+        foreach ($mahasiswa as $peserta) {
+            $penempatan->posko_id = $posko;
+            $penempatan->pendaftaran_id = $peserta;
+            $penempatan->save();
+        }
+
+        Log::set("Menambah peserta ke posko", "insert", $posko);
+
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Peserta Berhasil Ditambahkan ke Posko'
+        );
+
+        return response()->json($data);
     }
 
     /**

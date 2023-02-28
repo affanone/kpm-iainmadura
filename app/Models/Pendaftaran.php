@@ -8,4 +8,9 @@ class Pendaftaran extends Uuid
     {
         return $this->belongsTo(Subkpm::class);
     }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
 }
