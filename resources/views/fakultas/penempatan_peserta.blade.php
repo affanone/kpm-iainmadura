@@ -38,6 +38,68 @@
                                 <input type="hidden" value="{{ $posko->id }}" name="id_posko">
                                 <div class="card-body">
                                     <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="table-responsive">
+                                                <table id="tableKiri"
+                                                    class="table table-bordered table-striped table-hover table-head-fixed text-nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th>Nama Posko</th>
+                                                            <th>Alamat Posko</th>
+                                                            <th>Tahun Akademik</th>
+                                                            <th>DPL</th>
+                                                            <th width="7%">Opsi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="table-responsive">
+                                                <table id="tableKanan"
+                                                    class="table table-bordered table-striped table-hover table-head-fixed text-nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th>Nama Mahasiswa</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        @foreach ($mahasiswa as $item)
+                                                            <tr>
+                                                                <td>{{ $no }}</td>
+                                                                <td>
+                                                                    <ul class="list-group">
+                                                                        <li class="list-group-item active">
+                                                                            {{ $item->mahasiswa->nama }}
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            {{ $item->mahasiswa->prodi->long . ' (' . $item->mahasiswa->prodi->fakultas->nama . ')' }}
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            {{ $item->subkpm->nama }}</li>
+                                                                        <li class="list-group-item">Porta ac consectetur ac
+                                                                        </li>
+                                                                        <li class="list-group-item">Vestibulum at eros</li>
+                                                                    </ul>
+                                                            </tr>
+                                                            @php
+                                                                $no++;
+                                                            @endphp
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <select class="duallistbox" multiple="multiple" name="mahasiswa[]"

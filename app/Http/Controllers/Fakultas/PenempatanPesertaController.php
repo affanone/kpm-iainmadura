@@ -49,7 +49,6 @@ class PenempatanPesertaController extends Controller
                     ->whereExists(function ($db) use ($posko) {
                         $db->select('*')
                             ->from('poskos')
-                            ->whereRaw('poskos.id = posko_pendaftarans.posko_id')
                             ->where('poskos.id', $posko->id);
                     });
             })
@@ -58,7 +57,6 @@ class PenempatanPesertaController extends Controller
                     ->from('posko_pendaftarans')
                     ->whereRaw('posko_pendaftarans.pendaftaran_id = pendaftarans.id')
                     ->where('posko_pendaftarans.posko_id', '<>', $posko->id);
-                // ->where('poskos.id', '!=', $posko->id);
             })
             ->orderBy('mahasiswas.prodi', 'asc')
             ->orderBy('mahasiswas.nama', 'asc')
