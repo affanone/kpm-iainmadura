@@ -44,9 +44,21 @@ class PenempatanPesertaController extends Controller
                 });
             })
             ->join('mahasiswas', 'mahasiswas.id', '=', 'pendaftarans.mahasiswa_id')
-            ->leftJoin('posko_pendaftarans', function($db){
+            ->leftJoin('posko_pendaftarans', function ($db) use ($posko) {
                 $db->on('posko_pendaftarans.pendaftaran_id', '=', 'pendaftarans.id')
-                ->where('posko_pendaftarans.id')
+                    ->whereExists(function ($db) use ($posko) {
+                        $db->select('*')
+                            ->from('poskos')
+                            ->whereRaw('poskos.id = posko_pendaftarans.posko_id')
+                            ->where('poskos.id', $posko->id);
+                    });
+            })
+            ->whereNotExists(function ($db) use ($posko) {
+                $db->select('*')
+                    ->from('posko_pendaftarans')
+                    ->whereRaw('posko_pendaftarans.pendaftaran_id = pendaftarans.id')
+                    ->where('posko_pendaftarans.posko_id', '<>', $posko->id);
+                // ->where('poskos.id', '!=', $posko->id);
             })
             ->orderBy('mahasiswas.prodi', 'asc')
             ->orderBy('mahasiswas.nama', 'asc')
