@@ -21,6 +21,8 @@ class PenempatanPesertaController extends Controller
      */
     public function index($posko)
     {
+        return view('fakultas.penempatan-v2');
+
         $id_fakultas = AdminFakultas::select('fakultas')
             ->where('user_id', auth()->user()->id)
             ->first()->fakultas->id;
