@@ -17,19 +17,24 @@ class NilaiController extends Controller
     {
         $posko = Pendaftaran::whereHas('subkpm.kpm.tahun_akademik', function ($db) {
             $db->where('status', 1);
-        })
-            ->whereExists(function ($db) {
-                $db->select('*')
-                    ->from('poskos')
-                    ->whereRaw('poskos.tahun_akademik_id = pendaftarans.tahun_akademik_id')
 
-                    ->whereExists(function ($db) {
-                        $db->select('*')
-                            ->from('dpls')
-                            ->whereRaw('dpls.id = poskos.dpl_id')
-                            ->where('dpls.user_id', session('user')->id);
-                    });
-            })
+        })->whereExists(function ($db) {
+            $db->select('*')
+                ->from('posko_pendaftarans')
+                ->whereRaw('posko_pendaftarans.pendaftaran_id = pendaftarans.id')
+                ->whereExists(function ($db) {
+                    $db->select('*')
+                        ->from('poskos')
+                        ->whereRaw('poskos.id = posko_pendaftarans.posko_id')
+                        ->whereExists(function ($db) {
+                            $db->select('*')
+                                ->from('dpls')
+                                ->whereRaw('dpls.id = poskos.dpl_id')
+                                ->where('dpls.user_id', session('user')->id);
+                        });
+                });
+        })
+
             ->get();
         return $posko;
         return view('dpl.nilai', [
