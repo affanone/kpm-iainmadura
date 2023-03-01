@@ -1,22 +1,21 @@
 @extends('dpl.master_template')
 
-@section('title', 'Data Posko')
+@section('title', 'Data Nilai Peserta KPM')
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Data Posko KPM</h1>
+                        <h1 class="m-0">Data Nilai Peserta KPM</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dpl.dashboard') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active">Data Posko KPM</li>
+                            <li class="breadcrumb-item active">Data Nilai Peserta KPM</li>
                         </ol>
                     </div>
                     <!-- /.col -->
@@ -27,22 +26,22 @@
         </div>
         <!-- /.content-header -->
 
-        <!-- Main content -->
+
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Posko KPM</h3>
+                                <h3 class="card-title">Data Peserta KPM</h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 250px;">
                                         <select class="custom-select" id="inputGroupSelect02"
-                                            onchange="getFilterTahun(this.value)">
+                                            onchange="getFIlterPosko(this.value)">
                                             <option selected value="">All</option>
-                                            @foreach ($tahun_akademiks as $item)
-                                                <option value="{{ $item->tahun_akademik->id }}">
-                                                    {{ $item->tahun_akademik->semester . ' ' . $item->tahun_akademik->tahun . '/' . ($item->tahun_akademik->tahun + 1) }}
+                                            @foreach ($posko as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->nama }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -73,7 +72,13 @@
     </div>
 @endsection
 
-
+@section('style')
+    <style>
+        .form-nilai-kpm {
+            width: 110px;
+        }
+    </style>
+@endsection
 @section('script')
     <script>
         var filter = {
@@ -84,7 +89,7 @@
 
         function fetchData() {
             $.ajax({
-                url: "{{ route('dpl.kpm') }}",
+                url: "{{ route('dpl.nilai') }}",
                 data: {
                     page: filter.p,
                     cari: filter.q,
@@ -110,7 +115,7 @@
             fetchData();
         }
 
-        function getFilterTahun(value) {
+        function getFIlterPosko(value) {
             filter.t = value;
             fetchData();
         }

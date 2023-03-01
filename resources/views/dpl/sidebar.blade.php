@@ -16,23 +16,14 @@
                     alt="User Image" />
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">
+                    <div class="text-truncate">
+                        <div>{{ session('profil')->nama }}</div>
+                        <div class="small text-muted">{{ session('profil')->nip ?? session('profil')->nidn }}</div>
+                    </div>
+                </a>
             </div>
         </div>
-
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                    aria-label="Search" />
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" id="sideMenu" data-widget="treeview"
@@ -63,7 +54,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
@@ -79,7 +70,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="#" onclick="logoutConfirm()" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt"></i>

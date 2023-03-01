@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\TahunAkademik;
-use Yajra\DataTables\Facades\DataTables;
 use App\Log;
+use App\Models\AspekPenilaian;
+use App\Models\TahunAkademik;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class TahunAkademikController extends Controller
 {
@@ -42,12 +43,12 @@ class TahunAkademikController extends Controller
             $request,
             [
                 'tahun' => 'required|numeric',
-                'semester' => 'required'
+                'semester' => 'required',
             ],
             [
                 'tahun.required' => 'Tahun harus diisi',
                 'tahun.numeric' => 'Tahun harus diisi angka',
-                'semester.required' => 'Semester harus dipilih'
+                'semester.required' => 'Semester harus dipilih',
             ]
         );
 
@@ -65,11 +66,29 @@ class TahunAkademikController extends Controller
         $ta->status = $status;
         $ta->save();
 
+        $aspek = new AspekPenilaian;
+        $aspek->tahun_akademik_id = $ta->id;
+        $aspek->aspek = 'Pembekalan';
+        $aspek->persen = 20;
+        $aspek->save();
+
+        $aspek = new AspekPenilaian;
+        $aspek->tahun_akademik_id = $ta->id;
+        $aspek->aspek = 'Pelaksanaan';
+        $aspek->persen = 40;
+        $aspek->save();
+
+        $aspek = new AspekPenilaian;
+        $aspek->tahun_akademik_id = $ta->id;
+        $aspek->aspek = 'Laporan';
+        $aspek->persen = 40;
+        $aspek->save();
+
         Log::set("Melakukan tambah tahun akademik", "insert", $ta);
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Disimpan'
+            'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Disimpan',
         );
         return response()->json($data);
     }
@@ -134,12 +153,12 @@ class TahunAkademikController extends Controller
             $request,
             [
                 'tahun' => 'required|numeric',
-                'semester' => 'required'
+                'semester' => 'required',
             ],
             [
                 'tahun.required' => 'Tahun harus diisi',
                 'tahun.numeric' => 'Tahun harus diisi angka',
-                'semester.required' => 'Semester harus dipilih'
+                'semester.required' => 'Semester harus dipilih',
             ]
         );
 
@@ -164,7 +183,7 @@ class TahunAkademikController extends Controller
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Diupdate'
+            'message' => 'Tahun Akademik ' . $tahun . ' Berhasil Diupdate',
         );
         return response()->json($data);
     }
@@ -191,7 +210,7 @@ class TahunAkademikController extends Controller
 
                 Log::set("Melakukan hapus tahun akademik", "delete", $ta_data);
             }
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException$e) {
             $error = $e->errorInfo;
             $data['icon'] = 'error';
             $data['title'] = 'Gagal';

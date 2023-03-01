@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dpl;
 use App\Models\Pendaftaran;
 use App\Models\TahunAkademik;
 use App\Models\User;
@@ -137,6 +138,8 @@ class AuthenticationController extends Controller
                     Auth::login($user);
                     session()->put('user', $user);
                     session()->put('register', true);
+                    $dpl = Dpl::where('user_id', session('user')->id)->first();
+                    session()->put('profil', $dpl);
                     return Redirect::to(route('dpl.dashboard'));
                 } else {
                     session()->put('register', false);

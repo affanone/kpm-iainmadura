@@ -158,6 +158,11 @@ Route::group(["prefix" => "dpl", "middleware" => ["level_dpl"]], function () {
             "index",
         ])->name("dpl.nilai");
 
+        Route::post("/nilai", [
+            \App\Http\Controllers\Dpl\NilaiController::class,
+            "store",
+        ])->name("dpl.nilai.post");
+
         Route::get("/mahasiswa", [\App\Http\Controllers\Dpl\DashboardController::class, "show"])->name("dpl.mahasiswa");
         Route::post("/mahasiswa/data", [\App\Http\Controllers\Dpl\DashboardController::class, "data"])->name("dpl.mahasiswa.data");
 
