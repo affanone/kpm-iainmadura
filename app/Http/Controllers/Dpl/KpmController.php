@@ -33,10 +33,13 @@ class KpmController extends Controller
             ->when($request->tahun, function ($db, $n) {
                 $db->where('tahun_akademik_id', $n);
             })
+            ->when($request->cari, function ($db, $n) {
+                $db->where('nama', 'like', '%' . $n . '%');
+            })
             ->orderBy('nama', 'asc')
             ->paginate(10);
         $dpl = Dpl::where('user_id', session('user')->id)->first();
-        $datatable = view('dpl.datatable', ['data' => $posko])->render();
+        $datatable = view('dpl.kpm-datatable', ['data' => $posko])->render();
         $tahun_akademiks = Posko::select('tahun_akademik_id')->where('fakultas', $dpl->prodi->fakultas->id . '|' . $dpl->prodi->fakultas->nama)->groupBy('tahun_akademik_id')->get();
         if ($request->ajax()) {
             return $datatable;

@@ -13,4 +13,9 @@ class Pendaftaran extends Uuid
     {
         return $this->belongsTo(Mahasiswa::class);
     }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class);
+    }
 }

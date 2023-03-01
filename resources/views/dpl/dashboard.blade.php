@@ -1,8 +1,8 @@
-@extends('dpl.master_template_dpl')
+@extends('dpl.master_template')
 
 @section('title', 'Dashboard DPL')
 
-@section('content_dpl')
+@section('content')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
