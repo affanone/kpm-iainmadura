@@ -41,6 +41,8 @@
     <link rel="stylesheet"
         href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
+    @yield('style')
 </head>
 
 
@@ -146,22 +148,16 @@
 
     <script>
         $(function() {
-            var url = window.location.href
+            var url = window.location.href;
+            url = url.replace(/\#$/, "");
             $('#sideMenu li').each(function() {
                 if (url.includes($(this).children().attr('href'))) {
                     $(this).parent('ul').parent('li').addClass('menu-open').children('a').addClass(
-                    'active');
+                        'active');
                     $(this).find('a:first').addClass('active');
                 }
             });
         });
-    </script>
-
-    <script>
-        $(function() {
-            //Initialize Select2 Elements
-            // $('.select2').select2()
-        })
     </script>
 
     <script>

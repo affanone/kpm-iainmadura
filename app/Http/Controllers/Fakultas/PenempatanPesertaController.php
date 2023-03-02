@@ -19,10 +19,8 @@ class PenempatanPesertaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($posko)
+    public function index(Request $request, $posko)
     {
-        return view('fakultas.penempatan-v2');
-
         $id_fakultas = AdminFakultas::select('fakultas')
             ->where('user_id', auth()->user()->id)
             ->first()->fakultas->id;
@@ -60,10 +58,31 @@ class PenempatanPesertaController extends Controller
                     ->whereRaw('posko_pendaftarans.pendaftaran_id = pendaftarans.id')
                     ->where('posko_pendaftarans.posko_id', '<>', $posko->id);
             })
+            ->when($request->cari, function ($db) use ($request) {
+                return $db->whereHas('mahasiswa', function ($q) use ($request) {
+                    return $q->where(function ($db) use ($request) {
+                        $db->where('fakultas', 'like', "%$request->cari%");
+                        $db->orWhere('nama', 'like', "%$request->cari%");
+                        $db->orWhere('prodi', 'like', "%$request->cari%");
+                        $db->orWhere('nim', 'like', "%$request->cari%");
+                        $db->orWhere('alamat', 'like', "%$request->cari%");
+                    });
+                });
+            })
+            ->when($request->prodi, function ($db) use ($request) {
+                return $db->whereHas('mahasiswa', function ($q) use ($request) {
+                    return $q->where('prodi', 'like', "%$request->prodi%");
+                });
+            })
             ->orderBy('mahasiswas.prodi', 'asc')
             ->orderBy('mahasiswas.nama', 'asc')
             ->get();
         // return $mahasiswa;
+        // return view('fakultas.penempatan-v2');
+
+        if ($request->ajax()) {
+            return $mahasiswa;
+        }
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
@@ -90,23 +109,19 @@ class PenempatanPesertaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate(
-            $request,
-            ['mahasiswa' => 'required'],
-            ['mahasiswa.required' => 'Tidak ada mahasiswa yang dipilih']
-        );
-
         $posko = $request->id_posko;
-        $mahasiswa = $request->mahasiswa;
+        $mahasiswa = $request->id_peserta;
 
-        foreach ($mahasiswa as $peserta) {
+        $cek_peserta = PoskoPendaftaran::where('pendaftaran_id', $mahasiswa)->first();
+
+        if (!$cek_peserta) {
             $penempatan = new PoskoPendaftaran;
             $penempatan->posko_id = $posko;
-            $penempatan->pendaftaran_id = $peserta;
+            $penempatan->pendaftaran_id = $mahasiswa;
             $penempatan->save();
-        }
 
-        Log::set("Menambah peserta ke posko", "insert", $penempatan);
+            Log::set("Menambah peserta ke posko", "insert", $penempatan);
+        }
 
         $data = array(
             'icon' => 'success',
