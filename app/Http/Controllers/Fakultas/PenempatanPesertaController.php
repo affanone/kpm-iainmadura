@@ -114,6 +114,8 @@ class PenempatanPesertaController extends Controller
 
         $cek_peserta = PoskoPendaftaran::where('pendaftaran_id', $mahasiswa)->first();
 
+        // return response()->json(array('status' => false, 'message' => 'Ada Kesalahan'), 422);
+
         if (!$cek_peserta) {
             $penempatan = new PoskoPendaftaran;
             $penempatan->posko_id = $posko;
@@ -171,8 +173,20 @@ class PenempatanPesertaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id_peserta = $request->id_peserta;
+
+        $penempatan = PoskoPendaftaran::where('pendaftaran_id', $id_peserta)->first();
+        $penempatan_data = $penempatan;
+
+        $penempatan->delete();
+        Log::set("Menambah peserta ke posko", "insert", $penempatan_data);
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Peserta Berhasil Dihapus dari Posko',
+        );
+
+        return response()->json($data);
     }
 }

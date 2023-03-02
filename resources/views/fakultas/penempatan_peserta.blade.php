@@ -69,9 +69,6 @@
                                 </h3>
                             </div>
                             <!-- /.card-header -->
-                            {{-- <form id="formPenempatan">
-                                @csrf
-                                <input type="hidden" value="{{ $posko->id }}" name="id_posko"> --}}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -125,7 +122,7 @@
                                                                             @if ($item->cek !== '0') class="selectedPeserta urut-{{ $key }}" data-key="{{ $key }}" @endif>
                                                                             <td></td>
                                                                             <td>
-                                                                                <a href="#"
+                                                                                <a role="button"
                                                                                     data-id="{{ $item->id }}"
                                                                                     class="font-weight-bold selectPeserta">{{ $item->mahasiswa->nama }}</a>
                                                                                 <ul class="nav flex-column">
@@ -186,31 +183,11 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    {{-- <div class="col-12">
-                                        <div class="form-group">
-                                            <select class="duallistbox" multiple="multiple" name="mahasiswa[]"
-                                                id="mahasiswa">
-                                                @foreach ($mahasiswa as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        @if ($item->cek !== '0') selected @endif>
-                                                        {{ $item->mahasiswa->nama . ' - ' . $item->mahasiswa->prodi->long . ' (' . $item->subkpm->nama . ')' }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div> --}}
                                     <!-- /.col -->
                                 </div>
                                 <!-- /.row -->
                             </div>
                             <!-- /.card-body -->
-                            {{-- <div class="card-footer">
-                                <button type="button" class="btn btn-primary float-right"
-                                    id="btnSmpPenempatan">Simpan</button>
-                            </div>
-                            </form> --}}
                         </div>
                         <!-- /.card -->
                     </div>
@@ -257,7 +234,7 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="#" data-id="${item.id}" class="font-weight-bold selectPeserta">
+                                <a role="button" data-id="${item.id}" class="font-weight-bold selectPeserta">
                                     ${item.mahasiswa.nama}
                                 </a>
                                 <ul class="nav flex-column">
@@ -303,9 +280,6 @@
             $('.selectPeserta').on('click', function() {
                 const tr_kiri = $(this).closest('tr');
                 const id = tr_kiri.find('a').data('id');
-                tr_kiri.css({
-                    'display': 'none'
-                });
 
                 // Proses Simpan
                 if (ajaxNilai) {
@@ -320,33 +294,50 @@
                         dataType: 'JSON',
                         success: function(res) {
                             const msg = JSON.parse(JSON.stringify(res));
-                            // Swal.fire({
-                            //     icon: msg.icon,
-                            //     title: "Berhasil",
-                            //     text: msg.message
-                            // });
                         },
                         error: function(res) {
-                            $('#tblAdmFakultas').DataTable().ajax.reload(null,
-                                false);
+                            // console.log(JSON.parse(JSON.stringify(res)));
                             Swal.fire(
                                 'Gagal',
                                 'Ada Kesalahan',
                                 'error'
                             );
+                            $('.removePeserta[data-id="' + id + '"]').trigger('click');
                         }
                     });
                 }
 
+                tr_kiri.css({
+                    'display': 'none'
+                });
                 $('#tableKanan tbody')
                     .append('<tr>' + tr_kiri.html() + '</tr>')
                     .find('a')
                     .attr('class', 'text-bold removePeserta');
 
-                $('.removePeserta').on('click', function() {
-                    const tr_kanan = $(this).closest('tr');
-                    const id = tr_kanan.find('a').data('id');
-                    tr_kanan.remove();
+                $('.removePeserta[data-id="' + id + '"]').on('click', function() {
+                    // Proses HAPUS
+                    $.ajax({
+                        url: "{{ route('fakultas.posko.penempatan.delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id_peserta": id,
+                            "id_posko": "{{ $posko->id }}"
+                        },
+                        success: function(res) {
+                            const msg = JSON.parse(JSON.stringify(res));
+                        },
+                        error: function(res) {
+                            Swal.fire(
+                                'Gagal',
+                                'Ada Kesalahan Coy',
+                                'error'
+                            );
+                        }
+                    });
+
+                    $(this).closest('tr').remove();
                     $('[data-id="' + id + '"]').closest('tr').attr({
                         'style': ''
                     });
@@ -358,36 +349,9 @@
         }
         selectPeserta();
 
-        // // Proses Simpan
-        // $('#btnSmpPenempatan').on('click', () => {
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "{{ route('fakultas.posko.penempatan.post') }}",
-        //         data: $('#formPenempatan').serialize(),
-        //         dataType: 'JSON',
-        //         success: function(res) {
-        //             const msg = JSON.parse(JSON.stringify(res));
-        //             Swal.fire({
-        //                 icon: msg.icon,
-        //                 title: "Berhasil",
-        //                 text: msg.message
-        //             });
-        //         },
-        //         error: function(res) {
-        //             $('#tblAdmFakultas').DataTable().ajax.reload(null,
-        //                 false);
-        //             Swal.fire(
-        //                 'Gagal',
-        //                 'Ada Kesalahan',
-        //                 'error'
-        //             );
-        //         }
-        //     });
-        // });
-
-        const a = $('tr.selectedPeserta');
-        for (let i = 0; i < a.length; i++) {
-            let key = $(a[i]).attr('data-key');
+        const tr = $('tr.selectedPeserta');
+        for (let i = 0; i < tr.length; i++) {
+            let key = $(tr[i]).attr('data-key');
             $(`tr.urut-${key} .selectPeserta`).trigger('click');
         }
         ajaxNilai = true;

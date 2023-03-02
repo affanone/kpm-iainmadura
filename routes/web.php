@@ -11,6 +11,7 @@ use App\Http\Controllers\Superadmin\PersyaratanController;
 use App\Http\Controllers\Superadmin\TahunAkademikController;
 use App\Http\Controllers\Superadmin\UserCategoryController;
 use App\Http\Controllers\Superadmin\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -114,6 +115,7 @@ Route::group(["prefix" => "fakultas", "middleware" => ["level_fakultas"]], funct
 
     Route::get("/posko/penempatan_peserta/{posko}", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "index"])->name("fakultas.posko.penempatan");
     Route::post("/posko/penempatan_peserta", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "store"])->name("fakultas.posko.penempatan.post");
+    Route::delete("/posko/penempatan_peserta/delete", [\App\Http\Controllers\Fakultas\PenempatanPesertaController::class, "destroy"])->name("fakultas.posko.penempatan.delete");
 
     Route::get("/", function () {
         return Redirect::to(route("fakultas.dashboard"));
