@@ -14,16 +14,23 @@
                     <th rowspan="2">Nama</th>
                     <th rowspan="2">Prodi</th>
                     <th rowspan="2">Posko</th>
-                    <th colspan="{{ count($aspek) }}">Nilai</th>
+                    <th colspan="{{ count($aspek) + 1 }}">Nilai</th>
                 </tr>
                 <tr>
                     @foreach ($aspek as $key => $item)
-                        <th class="form-nilai-kpm"><strong>N{{ $key + 1 }}</strong> ({{ $item->persen }}%)</th>
+                        <th class="form-nilai-kpm"><strong>N{{ $key + 1 }}</strong> (0-100)</th>
                     @endforeach
+                    <th class="form-nilai-kpm">Nilai Akhir</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($data as $i => $item)
+                    @php
+                        $nilai = [];
+                        foreach ($item->nilai as $nk => $vk) {
+                            $nilai[$vk->aspek] = $vk->nilai;
+                        }
+                    @endphp
                     @csrf
                     <tr>
                         <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->index + 1 }}
@@ -32,12 +39,21 @@
                         <td>{{ $item->mahasiswa->nama }}</td>
                         <td>{{ $item->mahasiswa->prodi->sort }}</td>
                         <td>{{ $item->posko }}</td>
+                        @php
+                            $total = 0;
+                        @endphp
                         @foreach ($aspek as $key => $asp)
+                            @php
+                                $total += (($nilai[$asp->aspek] ?? 0) / 100) * $asp->persen;
+                            @endphp
                             <td>
                                 <input type="number" name="n{{ $key + 1 }}__{{ $item->id }}"
-                                    class="form-control text-center">
+                                    class="form-control text-center" value="{{ $nilai[$asp->aspek] ?? '' }}">
                             </td>
                         @endforeach
+                        <td>
+                            {{ round($total, 2) }}
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

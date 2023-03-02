@@ -1,4 +1,4 @@
-@extends('master_template')
+@extends('superadmin.master_template')
 
 @section('title', 'Tahun Akademik')
 

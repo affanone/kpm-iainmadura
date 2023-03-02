@@ -44,15 +44,15 @@
 
 <body class="hold-transition sidebar-mini pace-loading-bar-danger layout-fixed">
     <div class="wrapper">
-        @include('preloader')
+        @include('superadmin.preloader')
 
-        @include('navbar')
+        @include('superadmin.navbar')
 
-        @include('sidebar')
+        @include('superadmin.sidebar')
 
         @yield('content')
 
-        @include('footer')
+        @include('superadmin.footer')
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">

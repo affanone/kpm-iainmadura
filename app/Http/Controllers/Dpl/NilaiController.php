@@ -20,7 +20,8 @@ class NilaiController extends Controller
      */
     public function index(Request $request)
     {
-        $peserta = Pendaftaran::select('pendaftarans.*', DB::raw('poskos.nama as posko'))
+        $peserta = Pendaftaran::with('nilai')
+            ->select('pendaftarans.*', DB::raw('poskos.nama as posko'))
             ->whereHas('subkpm.kpm.tahun_akademik', function ($db) {
                 $db->where('status', 1);
 
@@ -51,6 +52,7 @@ class NilaiController extends Controller
             })
             ->join('posko_pendaftarans', 'posko_pendaftarans.pendaftaran_id', '=', 'pendaftarans.id')
             ->join('poskos', 'poskos.id', '=', 'posko_pendaftarans.posko_id')
+            ->where('status', 4) //
             ->orderBy('posko', 'asc')
             ->orderBy('mahasiswas.prodi', 'asc')
             ->orderBy('mahasiswas.nama', 'asc')
