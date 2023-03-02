@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-olive elevation-4">
+<aside class="main-sidebar sidebar-dark-info elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url('dpl/dashboard') }}" class="brand-link">
         <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="Logo" class="brand-image img-circle elevation-3"

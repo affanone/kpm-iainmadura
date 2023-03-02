@@ -45,7 +45,7 @@
 </head>
 
 
-<body class="hold-transition sidebar-mini pace-loading-bar-danger layout-fixed">
+<body class="hold-transition sidebar-mini pace-loading-bar-info layout-fixed">
     <div class="wrapper">
         @include('dpl.preloader')
 
@@ -151,7 +151,7 @@
             $('#sideMenu li').each(function() {
                 if (url.includes($(this).children().attr('href'))) {
                     $(this).parent('ul').parent('li').addClass('menu-open').children('a').addClass(
-                    'active');
+                        'active');
                     $(this).find('a:first').addClass('active');
                 }
             });

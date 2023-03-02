@@ -46,7 +46,7 @@
 </head>
 
 
-<body class="hold-transition sidebar-mini pace-loading-bar-danger layout-fixed">
+<body class="hold-transition sidebar-mini pace-loading-bar-teal layout-fixed">
     <div class="wrapper">
         @include('fakultas.preloader')
 
