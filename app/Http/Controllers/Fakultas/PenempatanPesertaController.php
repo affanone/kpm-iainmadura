@@ -33,6 +33,7 @@ class PenempatanPesertaController extends Controller
         $prodi = array_values($expected);
 
         $posko = Posko::where('id', $posko)->first();
+        $data_posko = Posko::get();
 
         $mahasiswa = Pendaftaran::select('pendaftarans.*', DB::raw("IFNULL(posko_pendaftarans.id, 0) AS cek"))->with(['mahasiswa', 'subkpm'])
             ->where('status', 3)
@@ -88,6 +89,7 @@ class PenempatanPesertaController extends Controller
             'mahasiswa' => $mahasiswa,
             'prodi' => $prodi,
             'posko' => $posko,
+            'data_posko' => $data_posko
         ]);
     }
 

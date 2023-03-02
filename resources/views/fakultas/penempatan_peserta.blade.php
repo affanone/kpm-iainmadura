@@ -65,8 +65,20 @@
                     <div class="col-12">
                         <div class="card card-default">
                             <div class="card-header">
-                                <h3 class="card-title">POSKO : {{ $posko->nama . ' (' . $posko->alamat . ')' }}
+                                <h3 class="card-title">
+                                    POSKO :
                                 </h3>
+                                <div class="card-tools" style="float: left; margin-left: .5rem;">
+                                    <div class="input-group input-group-sm" style="width: 250px;">
+                                        <select class="custom-select" id="posko" onchange="getPosko(this.value)">
+                                            @foreach ($data_posko as $item)
+                                                <option value="{{ $item->id }}"
+                                                    @if ($item->id == $posko->id) selected @endif>
+                                                    {{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -273,6 +285,12 @@
         function getFilterProdi(value) {
             filter.p = value;
             fetchData();
+        }
+
+        function getPosko(val) {
+            let url = "{{ route('fakultas.posko.penempatan', ':id') }}";
+            url = url.replace(':id', val);
+            window.location = url;
         }
 
         // Select dan Remove Peserta
