@@ -66,7 +66,7 @@
                                                     <div class="card">
                                                         <div class="card-header">
                                                             <h5 class="card-title">Total Pendaftar:
-                                                                <span>@{{ mahasiswa.length }}</span>
+                                                                <span>@{{ countPendaftar }}</span>
                                                             </h5>
                                                             <div class="card-tools">
                                                                 <div class="input-group input-group-sm"
@@ -228,6 +228,15 @@
                 mahasiswa: @json($mahasiswa),
                 data_posko: @json($data_posko)
             },
+            computed: {
+                countPendaftar() {
+                    let total_pendaftar = 0;
+                    this.mahasiswa.map((item) => {
+                        total_pendaftar += +item.cek == '0';
+                    });
+                    return total_pendaftar;
+                }
+            },
             methods: {
                 pindahKeKanan(item) {
                     // Proses Simpan
@@ -271,7 +280,7 @@
                         error: function(res) {
                             Swal.fire(
                                 'Gagal',
-                                'Ada Kesalahan Coy',
+                                'Ada Kesalahan',
                                 'error'
                             );
                         }
