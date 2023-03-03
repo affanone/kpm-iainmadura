@@ -82,7 +82,7 @@ class PenempatanPesertaController extends Controller
         // return view('fakultas.penempatan-v2');
 
         if ($request->ajax()) {
-            return $mahasiswa;
+            return response()->json($mahasiswa);
         }
 
         return view('fakultas.penempatan_peserta', [
