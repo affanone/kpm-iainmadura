@@ -4,7 +4,7 @@
 
 @section('style')
     <style>
-        /* Ganti angka dengan nomor urut */
+        /* Auto Number Table */
         .autonumber {
             counter-reset: row-number;
         }
@@ -12,8 +12,6 @@
         .autonumber td:first-child:before {
             counter-increment: row-number;
             content: counter(row-number);
-            min-width: 1em;
-            margin-right: 0.5em;
         }
     </style>
 @endsection
