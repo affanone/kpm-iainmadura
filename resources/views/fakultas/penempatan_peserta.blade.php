@@ -66,7 +66,7 @@
                                                     <div class="card">
                                                         <div class="card-header">
                                                             <h5 class="card-title">Total Pendaftar:
-                                                                <span id="pesertaKiri">0</span>
+                                                                <span>@{{ mahasiswa.length }}</span>
                                                             </h5>
                                                             <div class="card-tools">
                                                                 <div class="input-group input-group-sm"
@@ -97,7 +97,7 @@
                                                         </div>
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
-                                                            <table
+                                                            <table id="tableKiri"
                                                                 class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
@@ -148,12 +148,13 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5 class="card-title">Peserta Sudah Masuk Posko : <span
-                                                                    id="pesertaKanan">0</span></h5>
+                                                            <h5 class="card-title">Peserta Sudah Masuk Posko :
+                                                                <span>@{{ posko_pendaftaran.length }}</span>
+                                                            </h5>
                                                         </div>
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
-                                                            <table
+                                                            <table id="tableKanan"
                                                                 class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
