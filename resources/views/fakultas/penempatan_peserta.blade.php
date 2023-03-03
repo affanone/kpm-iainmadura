@@ -4,32 +4,12 @@
 
 @section('style')
     <style>
-        table.autonumber {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .autonumber th,
-        .autonumber td {
-            text-align: left;
-            padding: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .autonumber th {
-            background-color: #f2f2f2;
-        }
-
-        .autonumber tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
         /* Ganti angka dengan nomor urut */
-        .autonumber.table-number {
+        .autonumber {
             counter-reset: row-number;
         }
 
-        .autonumber.table-number td:first-child:before {
+        .autonumber td:first-child:before {
             counter-increment: row-number;
             content: counter(row-number);
             min-width: 1em;
@@ -121,7 +101,7 @@
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
                                                             <table id="tableKiri"
-                                                                class="table table-sm table-bordered table-striped table-hover table-head-fixed text-nowrap table-number autonumber">
+                                                                class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
                                                                         <th width="5%">No</th>
@@ -139,19 +119,19 @@
                                                                                     class="font-weight-bold selectPeserta">{{ $item->mahasiswa->nama }}</a>
                                                                                 <ul class="nav flex-column">
                                                                                     <li class="nav-item p-1">
-                                                                                        NIM <span
+                                                                                        <span
                                                                                             class="badge bg-olive">{{ $item->mahasiswa->nim }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        Program Studi <span
+                                                                                        <span
                                                                                             class="badge bg-olive">{{ $item->mahasiswa->prodi->long . ' (' . $item->mahasiswa->prodi->fakultas->nama . ')' }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        Alamat <span
+                                                                                        <span
                                                                                             class="badge bg-olive">{{ $item->mahasiswa->alamat }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        KPM <span
+                                                                                        <span
                                                                                             class="badge bg-olive">{{ $item->subkpm->nama }}</span>
                                                                                     </li>
                                                                                 </ul>
@@ -178,7 +158,7 @@
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
                                                             <table id="tableKanan"
-                                                                class="table table-sm table-bordered table-striped table-hover table-head-fixed text-nowrap table-number autonumber">
+                                                                class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
                                                                         <th width="5%">No</th>
@@ -251,19 +231,15 @@
                                 </a>
                                 <ul class="nav flex-column">
                                     <li class="nav-item p-1">
-                                        NIM
                                         <span class="badge bg-olive">${item.mahasiswa.nim}</span>
                                     </li>
                                     <li class="nav-item p-1">
-                                        Program Studi 
                                         <span class="badge bg-olive">${item.mahasiswa.prodi.long} (${item.mahasiswa.prodi.fakultas.nama})</span>
                                     </li>
                                     <li class="nav-item p-1">
-                                        Alamat
                                         <span class="badge bg-olive">${item.mahasiswa.alamat}</span>
                                     </li>
                                     <li class="nav-item p-1">
-                                        KPM
                                         <span class="badge bg-olive">${item.subkpm.nama}</span>
                                     </li> 
                                 </ul>
