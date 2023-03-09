@@ -97,12 +97,32 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="jenis">Jenis KPM</label>
-                                            <input type="text" class="form-control" id="jenis" name="jenis"
+                                            <label for="nama">Nama KPM</label>
+                                            <input type="text" class="form-control" id="nama" name="nama"
                                                 autocomplete="off">
                                         </div>
                                         <!-- /.form-group -->
                                     </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="jenis">Jenis KPM</label>
+                                        <div class="form-check w-100">
+                                            <input class="form-check-input" type="radio" name="jenis"
+                                                id="jenis_institut" value="0">
+                                            <label class="form-check-label" for="jenis_institut">
+                                                Institut
+                                            </label>
+                                        </div>
+                                        <div class="form-check w-100">
+                                            <input class="form-check-input" type="radio" name="jenis"
+                                                id="jenis_fakultas" value="1">
+                                            <label class="form-check-label" for="jenis_fakultas">
+                                                Fakultas
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- /.form-group -->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -272,7 +292,8 @@
             }).done((response) => {
                 $('#id_jenisKPM').val(response.id);
                 $('#tahun option[value="' + response.tahun_akademik_id + '"]').prop('selected', true);
-                $('#jenis').val(response.nama);
+                $('#nama').val(response.nama);
+                $('input[name=jenis][value=' + response.tipe + ']').prop('checked', true);
                 $('#deskripsi').val(response.deskripsi);
                 $('#modalTmbJenisKPM').modal('show');
             });

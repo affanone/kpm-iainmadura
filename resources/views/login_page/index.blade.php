@@ -65,8 +65,8 @@
                     @endif
 
                     <div class="wrap-input100 validate-input" data-validate="NIM/NIP harus diisi">
-                        <input class="input100" type="text" value="{{ old('id_login', '20382011003') }}"
-                            name="id_login" placeholder="NIM/NIP" autocomplete="off">
+                        <input class="input100" type="text" value="{{ old('id_login', '') }}" name="id_login"
+                            placeholder="NIM/NIP" autocomplete="off">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-user" aria-hidden="true"></i>
@@ -74,8 +74,8 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password harus diisi">
-                        <input class="input100" type="password" value="{{ old('password', 'barokallah') }}"
-                            name="password" id="password" placeholder="Password">
+                        <input class="input100" type="password" value="{{ old('password', '') }}" name="password"
+                            id="password" placeholder="Password">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>

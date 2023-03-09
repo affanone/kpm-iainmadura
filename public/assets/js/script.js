@@ -68,3 +68,18 @@ function logoutConfirm() {
         }
     });
 }
+
+function addQueryParam(url, param, value) {
+    var separator = url.indexOf("?") === -1 ? "?" : "&";
+    var pattern = new RegExp("\\b(" + param + "=).*?(&|$)");
+    if (pattern.test(url)) {
+        return url.replace(pattern, "$1" + value + "$2");
+    }
+    return (
+        url +
+        separator +
+        encodeURIComponent(param) +
+        "=" +
+        encodeURIComponent(value)
+    );
+}

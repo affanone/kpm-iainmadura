@@ -1,16 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\MasterController;
-use App\Http\Controllers\Superadmin\AdminFakultasController;
-use App\Http\Controllers\Superadmin\DashboardController;
-use App\Http\Controllers\Superadmin\DataKPMController;
-use App\Http\Controllers\Superadmin\DplController;
-use App\Http\Controllers\Superadmin\JenisKPMController;
-use App\Http\Controllers\Superadmin\PersyaratanController;
-use App\Http\Controllers\Superadmin\TahunAkademikController;
-use App\Http\Controllers\Superadmin\UserCategoryController;
-use App\Http\Controllers\Superadmin\UserController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -33,45 +23,48 @@ Route::get("/", function () {
 Route::group(
     ["prefix" => "super", "middleware" => ["auth", "revalidate"]],
     function () {
-        Route::get("/", [DashboardController::class, "index"])->name("dashboard");
-        Route::get("/user_category", [UserCategoryController::class, "index"])->name("user.category");
-        Route::get("/user", [UserController::class, "index"])->name("user");
-        Route::get("/master", [MasterController::class, "index"]);
-        Route::get("/syarat", [PersyaratanController::class, "index"])->name("persyaratan");
+        Route::get("/", [\App\Http\Controllers\Superadmin\DashboardController::class, "index"])->name("dashboard");
+        Route::get("/user_category", [\App\Http\Controllers\Superadmin\UserCategoryController::class, "index"])->name("user.category");
+        Route::get("/user", [\App\Http\Controllers\Superadmin\UserController::class, "index"])->name("user");
+        Route::get("/master", [\App\Http\Controllers\Superadmin\MasterController::class, "index"]);
+        Route::get("/syarat", [\App\Http\Controllers\Superadmin\PersyaratanController::class, "index"])->name("persyaratan");
 
-        Route::get("/tahun_akademik", [TahunAkademikController::class, "index"])->name("tahun.akademik");
-        Route::post("/tahun_akademik", [TahunAkademikController::class, "store"])->name("tahun_akademik.post");
-        Route::post("/tahun_akademik/data", [TahunAkademikController::class, "show"])->name("tahun_akademik.data");
-        Route::get("/tahun_akademik/{id}", [TahunAkademikController::class, "edit"])->name("tahun_akademik.edit");
-        Route::put("/tahun_akademik", [TahunAkademikController::class, "update"])->name("tahun_akademik.update");
-        Route::delete("/tahun_akademik", [TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
+        Route::get("/tahun_akademik", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "index"])->name("tahun.akademik");
+        Route::post("/tahun_akademik", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "store"])->name("tahun_akademik.post");
+        Route::post("/tahun_akademik/data", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "show"])->name("tahun_akademik.data");
+        Route::get("/tahun_akademik/{id}", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "edit"])->name("tahun_akademik.edit");
+        Route::put("/tahun_akademik", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "update"])->name("tahun_akademik.update");
+        Route::delete("/tahun_akademik", [\App\Http\Controllers\Superadmin\TahunAkademikController::class, "destroy"])->name("tahun_akademik.delete");
 
-        Route::get("/kpm", [JenisKPMController::class, "index"])->name("jenis_kpm");
-        Route::post("/kpm", [JenisKPMController::class, "store"])->name("jenis_kpm.post");
-        Route::post("/kpm/data", [JenisKPMController::class, "show"])->name("jenis_kpm.data");
-        Route::get("/kpm/{id}", [JenisKPMController::class, "edit"])->name("jenis_kpm.edit");
-        Route::put("/kpm", [JenisKPMController::class, "update"])->name("jenis_kpm.update");
-        Route::delete("/kpm", [JenisKPMController::class, "destroy"])->name("jenis_kpm.delete");
+        Route::get("/kpm", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "index"])->name("jenis_kpm");
+        Route::post("/kpm", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "store"])->name("jenis_kpm.post");
+        Route::post("/kpm/data", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "show"])->name("jenis_kpm.data");
+        Route::get("/kpm/{id}", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "edit"])->name("jenis_kpm.edit");
+        Route::put("/kpm", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "update"])->name("jenis_kpm.update");
+        Route::delete("/kpm", [\App\Http\Controllers\Superadmin\JenisKPMController::class, "destroy"])->name("jenis_kpm.delete");
 
-        Route::get("/data_kpm", [DataKPMController::class, "index"])->name("data_kpm");
-        Route::post("/data_kpm", [DataKPMController::class, "store"])->name("data_kpm.post");
-        Route::post("/data_kpm/data", [DataKPMController::class, "show"])->name("data_kpm.data");
-        Route::get("/data_kpm/{id}", [DataKPMController::class, "edit"])->name("data_kpm.edit");
-        Route::put("/data_kpm", [DataKPMController::class, "update"])->name("data_kpm.update");
-        Route::delete("/data_kpm", [DataKPMController::class, "destroy"])->name("data_kpm.delete");
+        Route::get("/data_kpm", [\App\Http\Controllers\Superadmin\DataKPMController::class, "index"])->name("data_kpm");
+        Route::post("/data_kpm", [\App\Http\Controllers\Superadmin\DataKPMController::class, "store"])->name("data_kpm.post");
+        Route::post("/data_kpm/data", [\App\Http\Controllers\Superadmin\DataKPMController::class, "show"])->name("data_kpm.data");
+        Route::get("/data_kpm/{id}", [\App\Http\Controllers\Superadmin\DataKPMController::class, "edit"])->name("data_kpm.edit");
+        Route::put("/data_kpm", [\App\Http\Controllers\Superadmin\DataKPMController::class, "update"])->name("data_kpm.update");
+        Route::delete("/data_kpm", [\App\Http\Controllers\Superadmin\DataKPMController::class, "destroy"])->name("data_kpm.delete");
 
-        Route::get("/dpl", [DplController::class, "index"])->name("dpl");
-        Route::post("/dpl/data", [DplController::class, "show"])->name("dpl.data");
-        Route::get("/dpl/{id}", [DplController::class, "edit"])->name("dpl.edit");
-        Route::put("/dpl", [DplController::class, "update"])->name("dpl.update");
-        Route::delete("/dpl", [DplController::class, "destroy"])->name("dpl.delete");
+        Route::get("/dpl", [\App\Http\Controllers\Superadmin\DplController::class, "index"])->name("dpl");
+        Route::post("/dpl/data", [\App\Http\Controllers\Superadmin\DplController::class, "show"])->name("dpl.data");
+        Route::get("/dpl/{id}", [\App\Http\Controllers\Superadmin\DplController::class, "edit"])->name("dpl.edit");
+        Route::put("/dpl", [\App\Http\Controllers\Superadmin\DplController::class, "update"])->name("dpl.update");
+        Route::delete("/dpl", [\App\Http\Controllers\Superadmin\DplController::class, "destroy"])->name("dpl.delete");
 
-        Route::get("/admin_fakultas", [AdminFakultasController::class, "index"])->name("admin_fakultas");
-        Route::post("/admin_fakultas", [AdminFakultasController::class, "store"])->name("admin_fakultas.post");
-        Route::post("/admin_fakultas/data", [AdminFakultasController::class, "show"])->name("admin_fakultas.data");
-        Route::get("/admin_fakultas/{id}", [AdminFakultasController::class, "edit"])->name("admin_fakultas.edit");
-        Route::put("/admin_fakultas", [AdminFakultasController::class, "update"])->name("admin_fakultas.update");
-        Route::delete("/admin_fakultas", [AdminFakultasController::class, "destroy"])->name("admin_fakultas.delete");
+        Route::get("/admin_fakultas", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "index"])->name("admin_fakultas");
+        Route::post("/admin_fakultas", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "store"])->name("admin_fakultas.post");
+        Route::post("/admin_fakultas/data", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "show"])->name("admin_fakultas.data");
+        Route::get("/admin_fakultas/{id}", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "edit"])->name("admin_fakultas.edit");
+        Route::put("/admin_fakultas", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "update"])->name("admin_fakultas.update");
+        Route::delete("/admin_fakultas", [\App\Http\Controllers\Superadmin\AdminFakultasController::class, "destroy"])->name("admin_fakultas.delete");
+
+        Route::get("/laporan/kpm", [\App\Http\Controllers\Superadmin\LaporanController::class, "kpm"])->name("laporan.kpm");
+        Route::get("/laporan/kpm/{id}", [\App\Http\Controllers\Superadmin\LaporanController::class, "kpm_detail"])->name("laporan.kpm.detail");
     }
 );
 

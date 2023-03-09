@@ -129,6 +129,8 @@ class NilaiController extends Controller
                 }
             }
         }
+
+        \Log::set("Memperbarui nilai KPM", "update");
         return Redirect::to(route('dpl.nilai'));
     }
 

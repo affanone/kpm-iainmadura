@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Subkpm extends Uuid
 {
-    function getConfigAttribute($value)
+    public function getConfigAttribute($value)
     {
         return json_decode($value);
     }
@@ -12,5 +12,10 @@ class Subkpm extends Uuid
     public function kpm()
     {
         return $this->belongsTo(Kpm::class);
+    }
+
+    public function pendaftaran()
+    {
+        return $this->hasMany(Pendaftaran::class);
     }
 }

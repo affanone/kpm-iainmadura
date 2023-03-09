@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\TahunAkademik;
-use App\Models\Kpm;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
 use App\Log;
+use App\Models\Kpm;
+use App\Models\TahunAkademik;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class JenisKPMController extends Controller
 {
@@ -45,16 +45,19 @@ class JenisKPMController extends Controller
             $request,
             [
                 'tahun' => 'required',
-                'jenis' => 'required'
+                'nama' => 'required',
+                'jenis' => 'required',
             ],
             [
-                'tahun.required'    => 'Tahun Akademik harus dipilih',
-                'jenis.required'    => 'Jenis KPM harus diisi'
+                'tahun.required' => 'Tahun Akademik harus dipilih',
+                'nama.required' => 'Nama KPM harus diisi',
+                'jenis.required' => 'Jenis KPM harus diisi',
             ]
         );
 
         $tahun = strip_tags($request->tahun);
-        $jenis = strtoupper(strip_tags($request->jenis));
+        $nama = strtoupper(strip_tags($request->nama));
+        $jenis = $request->jenis;
         $deskripsi = strip_tags($request->deskripsi);
 
         $unik = Str::random(5);
@@ -68,13 +71,13 @@ class JenisKPMController extends Controller
                     "validator" => [
                         [
                             "rule" => "required",
-                            "message" => "Bukti KRS Harus Diisi"
-                        ]
+                            "message" => "Bukti KRS Harus Diisi",
+                        ],
                     ],
                     "format" => [
                         "jgp",
-                        "pdf"
-                    ]
+                        "pdf",
+                    ],
                 ],
                 [
                     "id" => "rekom" . $unik,
@@ -84,21 +87,22 @@ class JenisKPMController extends Controller
                     "validator" => [
                         [
                             "rule" => "required",
-                            "message" => "Bukti KRS Harus Diisi"
-                        ]
+                            "message" => "Bukti KRS Harus Diisi",
+                        ],
                     ],
                     "format" => [
                         "jgp",
-                        "pdf"
-                    ]
-                ]
+                        "pdf",
+                    ],
+                ],
             ],
-            "validate" => false
+            "validate" => false,
         ];
 
         $kpm = new Kpm;
         $kpm->tahun_akademik_id = $tahun;
-        $kpm->nama = $jenis;
+        $kpm->nama = $nama;
+        $kpm->tipe = $jenis;
         $kpm->deskripsi = $deskripsi;
         $kpm->config = json_encode($config);
         $kpm->save();
@@ -107,7 +111,7 @@ class JenisKPMController extends Controller
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Jenis KPM : ' . $jenis . ' Berhasil Disimpan'
+            'message' => 'Jenis KPM : ' . $jenis . ' Berhasil Disimpan',
         );
         return response()->json($data);
     }
@@ -166,24 +170,28 @@ class JenisKPMController extends Controller
             $request,
             [
                 'tahun' => 'required',
-                'jenis' => 'required'
+                'nama' => 'required',
+                'jenis' => 'required',
             ],
             [
-                'tahun.required'    => 'Tahun Akademik harus dipilih',
-                'jenis.required'    => 'Jenis KPM harus diisi'
+                'tahun.required' => 'Tahun Akademik harus dipilih',
+                'nama.required' => 'Nama KPM harus diisi',
+                'jenis.required' => 'Jenis KPM harus diisi',
             ]
         );
 
         $id = $request->id_jenisKPM;
         $tahun = strip_tags($request->tahun);
-        $jenis = strtoupper(strip_tags($request->jenis));
+        $nama = strtoupper(strip_tags($request->nama));
+        $jenis = $request->jenis;
         $deskripsi = strip_tags($request->deskripsi);
 
         $kpm = Kpm::find($id);
         $kpm_data = $kpm;
 
         $kpm->tahun_akademik_id = $tahun;
-        $kpm->nama = $jenis;
+        $kpm->nama = $nama;
+        $kpm->tipe = $jenis;
         $kpm->deskripsi = $deskripsi;
         $kpm->update();
 
@@ -191,7 +199,7 @@ class JenisKPMController extends Controller
 
         $data = array(
             'icon' => 'success',
-            'message' => 'Jenis KPM ' . $jenis . ' Berhasil Diupdate'
+            'message' => 'Jenis KPM ' . $jenis . ' Berhasil Diupdate',
         );
         return response()->json($data);
     }
@@ -218,7 +226,7 @@ class JenisKPMController extends Controller
 
                 Log::set("Melakukan hapus jenis KPM", "delete", $kpm_data);
             }
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException$e) {
             $error = $e->errorInfo;
             $data['icon'] = 'error';
             $data['title'] = 'Gagal';

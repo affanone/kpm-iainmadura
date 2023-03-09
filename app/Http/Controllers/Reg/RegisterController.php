@@ -41,12 +41,12 @@ class RegisterController extends Controller
         $nim = Auth::user()->username;
         $mhs = Mahasiswa::where("nim", $nim)->first();
         $ta = TahunAkademik::where("status", 1)->first();
-        $pend = Pendaftaran::with("subkpm.kpm")
-            ->where("mahasiswa_id", $mhs->id)
-            ->whereRaw(
-                "exists(select * from subkpms where subkpms.id = pendaftarans.subkpm_id and exists(select * from kpms where kpms.id = subkpms.kpm_id and kpms.tahun_akademik_id = '$ta->id'))"
-            )
-            ->first();
+        // $pend = Pendaftaran::with("subkpm.kpm")
+        //     ->where("mahasiswa_id", $mhs->id)
+        //     ->whereRaw(
+        //         "exists(select * from subkpms where subkpms.id = pendaftarans.subkpm_id and exists(select * from kpms where kpms.id = subkpms.kpm_id and kpms.tahun_akademik_id = '$ta->id'))"
+        //     )
+        //     ->first();
         if (!in_array(session("status"), [0, 2])) {
             return Redirect::to("mhs/reg/profil");
         }
@@ -107,7 +107,7 @@ class RegisterController extends Controller
         session()->push("register", true);
         \Log::set("Melakukan pendaftaran", "register");
 
-        return Redirect::to("mhs/reg/kpm");
+        return Redirect::to(route('mhs.reg.kpm.get'));
     }
 
     public function profil()

@@ -115,6 +115,24 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tools"></i>
+                        <p>
+                            Laporan KPM
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('laporan.kpm') }}" class="nav-link">
+                                <i class="fas fa-calendar-check nav-icon"></i>
+                                <p>Data KPM</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" onclick="logoutConfirm()" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt"></i>
