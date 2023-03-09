@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-olive elevation-4">
+<aside class="main-sidebar sidebar-dark-danger elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
         <img src="http://iainmadura.ac.id/media/iainmadura.png" alt="Logo" class="brand-image img-circle elevation-3"
@@ -16,7 +16,8 @@
                     alt="User Image" />
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">Admin LP2M</a>
+                <div class="small text-muted">Superadmin</div>
             </div>
         </div>
 

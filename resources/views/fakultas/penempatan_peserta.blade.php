@@ -4,36 +4,14 @@
 
 @section('style')
     <style>
-        table.autonumber {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .autonumber th,
-        .autonumber td {
-            text-align: left;
-            padding: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .autonumber th {
-            background-color: #f2f2f2;
-        }
-
-        .autonumber tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* Ganti angka dengan nomor urut */
-        .autonumber.table-number {
+        /* Auto Number Table */
+        .autonumber {
             counter-reset: row-number;
         }
 
-        .autonumber.table-number td:first-child:before {
+        .autonumber td:first-child:before {
             counter-increment: row-number;
             content: counter(row-number);
-            min-width: 1em;
-            margin-right: 0.5em;
         }
     </style>
 @endsection
@@ -60,18 +38,25 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="container-fluid">
+            <div class="container-fluid" id="app-vue">
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-default">
                             <div class="card-header">
-                                <h3 class="card-title">POSKO : {{ $posko->nama . ' (' . $posko->alamat . ')' }}
+                                <h3 class="card-title">
+                                    POSKO :
                                 </h3>
+                                <div class="card-tools" style="float: left; margin-left: .5rem;">
+                                    <div class="input-group input-group-sm" style="width: 250px;">
+                                        <select class="custom-select" id="posko" v-model="filter.posko"
+                                            v-on:change="filterPosko()">
+                                            <option v-for="(item, key) in data_posko" :value="item.id">
+                                                @{{ `${item.nama} - ${item.alamat}` }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-header -->
-                            {{-- <form id="formPenempatan">
-                                @csrf
-                                <input type="hidden" value="{{ $posko->id }}" name="id_posko"> --}}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -80,14 +65,14 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5 class="card-title">Total Pendaftar : <span
-                                                                    id="pesertaKiri">0</span>
+                                                            <h5 class="card-title">Total Pendaftar:
+                                                                <span>@{{ countPendaftar }}</span>
                                                             </h5>
                                                             <div class="card-tools">
                                                                 <div class="input-group input-group-sm"
                                                                     style="width: 250px;">
                                                                     <select class="custom-select" id="prodi"
-                                                                        onchange="getFilterProdi(this.value)">
+                                                                        v-model="filter.prodi" v-on:change="getFilter()">
                                                                         <option selected value="">All</option>
                                                                         @foreach ($prodi as $item)
                                                                             <option value="{{ $item->id }}">
@@ -96,13 +81,14 @@
                                                                     </select>
 
                                                                     <input type="text" name="search"
+                                                                        v-model="filter.cari"
                                                                         class="form-control float-right" id="filterCari"
                                                                         placeholder="Search" style="width: 100px;"
-                                                                        onkeyup="if (event.keyCode === 13) getFilterCari()">
+                                                                        v-on:keyup.enter="getFilter()">
 
                                                                     <div class="input-group-append">
                                                                         <button type="button" class="btn btn-default"
-                                                                            onclick="getFilterCari()">
+                                                                            v-on:click="getFilter()">
                                                                             <i class="fas fa-search"></i>
                                                                         </button>
                                                                     </div>
@@ -112,7 +98,7 @@
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
                                                             <table id="tableKiri"
-                                                                class="table table-sm table-bordered table-striped table-hover table-head-fixed text-nowrap table-number autonumber">
+                                                                class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
                                                                         <th width="5%">No</th>
@@ -120,35 +106,35 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @foreach ($mahasiswa as $key => $item)
-                                                                        <tr
-                                                                            @if ($item->cek !== '0') class="selectedPeserta urut-{{ $key }}" data-key="{{ $key }}" @endif>
+                                                                    <template v-for="(item, key) in mahasiswa">
+                                                                        <tr :class="item.cek != 0 ? 'd-none' : ''">
                                                                             <td></td>
                                                                             <td>
-                                                                                <a href="#"
-                                                                                    data-id="{{ $item->id }}"
-                                                                                    class="font-weight-bold selectPeserta">{{ $item->mahasiswa->nama }}</a>
+                                                                                <a role="button"
+                                                                                    v-on:click="pindahKeKanan(item)"
+                                                                                    class="font-weight-bold">@{{ item.mahasiswa.nama }}
+                                                                                </a>
                                                                                 <ul class="nav flex-column">
                                                                                     <li class="nav-item p-1">
-                                                                                        NIM <span
-                                                                                            class="badge bg-olive">{{ $item->mahasiswa->nim }}</span>
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.nim }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        Program Studi <span
-                                                                                            class="badge bg-olive">{{ $item->mahasiswa->prodi->long . ' (' . $item->mahasiswa->prodi->fakultas->nama . ')' }}</span>
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.prodi.long + ' (' + item.mahasiswa.prodi.fakultas.nama + ')' }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        Alamat <span
-                                                                                            class="badge bg-olive">{{ $item->mahasiswa->alamat }}</span>
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.alamat }}</span>
                                                                                     </li>
                                                                                     <li class="nav-item p-1">
-                                                                                        KPM <span
-                                                                                            class="badge bg-olive">{{ $item->subkpm->nama }}</span>
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.subkpm.nama }}</span>
                                                                                     </li>
                                                                                 </ul>
                                                                             </td>
                                                                         </tr>
-                                                                    @endforeach
+                                                                    </template>
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -163,13 +149,14 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5 class="card-title">Peserta Sudah Masuk Posko : <span
-                                                                    id="pesertaKanan">0</span></h5>
+                                                            <h5 class="card-title">Peserta Sudah Masuk Posko :
+                                                                <span>@{{ posko_pendaftaran.length }}</span>
+                                                            </h5>
                                                         </div>
                                                         <!-- /.card-header -->
                                                         <div class="card-body table-responsive p-0" style="height: 750px;">
                                                             <table id="tableKanan"
-                                                                class="table table-sm table-bordered table-striped table-hover table-head-fixed text-nowrap table-number autonumber">
+                                                                class="table table-sm table-bordered table-hover table-head-fixed text-nowrap autonumber">
                                                                 <thead>
                                                                     <tr>
                                                                         <th width="5%">No</th>
@@ -177,7 +164,34 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-
+                                                                    <template v-for="(item, key) in posko_pendaftaran">
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td>
+                                                                                <a role="button"
+                                                                                    v-on:click="pindahKeKiri(item, key)"
+                                                                                    class="font-weight-bold">@{{ item.mahasiswa.nama }}</a>
+                                                                                <ul class="nav flex-column">
+                                                                                    <li class="nav-item p-1">
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.nim }}</span>
+                                                                                    </li>
+                                                                                    <li class="nav-item p-1">
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.prodi.long + ' (' + item.mahasiswa.prodi.fakultas.nama + ')' }}</span>
+                                                                                    </li>
+                                                                                    <li class="nav-item p-1">
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.mahasiswa.alamat }}</span>
+                                                                                    </li>
+                                                                                    <li class="nav-item p-1">
+                                                                                        <span
+                                                                                            class="badge bg-olive">@{{ item.subkpm.nama }}</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </template>
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -186,31 +200,11 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    {{-- <div class="col-12">
-                                        <div class="form-group">
-                                            <select class="duallistbox" multiple="multiple" name="mahasiswa[]"
-                                                id="mahasiswa">
-                                                @foreach ($mahasiswa as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        @if ($item->cek !== '0') selected @endif>
-                                                        {{ $item->mahasiswa->nama . ' - ' . $item->mahasiswa->prodi->long . ' (' . $item->subkpm->nama . ')' }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div> --}}
                                     <!-- /.col -->
                                 </div>
                                 <!-- /.row -->
                             </div>
                             <!-- /.card-body -->
-                            {{-- <div class="card-footer">
-                                <button type="button" class="btn btn-primary float-right"
-                                    id="btnSmpPenempatan">Simpan</button>
-                            </div>
-                            </form> --}}
                         </div>
                         <!-- /.card -->
                     </div>
@@ -221,114 +215,46 @@
 @endsection
 
 @section('script')
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     <script>
-        let ajaxNilai = false;
-
-        //Bootstrap Duallistbox
-        $('.duallistbox').bootstrapDualListbox({
-            // 'string_of_postfix' / false                                                      
-            helperSelectNamePostfix: false,
-
-            // minimal height in pixels
-            selectorMinimalHeight: 300,
-        });
-
-        // Fetch Data dan Filter
-        let filter = {
-            p: '',
-            q: ''
-        }
-
-        function fetchData() {
-            let url = "{{ route('fakultas.posko.penempatan', ':id') }}";
-            url = url.replace(':id', "{{ $posko->id }}");
-            $.ajax({
-                url: url,
-                data: {
-                    prodi: filter.p,
-                    cari: filter.q
+        var app = new Vue({
+            el: '#app-vue',
+            data: {
+                filter: {
+                    cari: '',
+                    prodi: '',
+                    posko: '{{ $posko->id }}'
                 },
-                success: function(data) {
-                    $('#tableKiri tbody tr').remove();
-
-                    let no = 1;
-                    data.forEach((item) => {
-                        let elem = `
-                        <tr>
-                            <td></td>
-                            <td>
-                                <a href="#" data-id="${item.id}" class="font-weight-bold selectPeserta">
-                                    ${item.mahasiswa.nama}
-                                </a>
-                                <ul class="nav flex-column">
-                                    <li class="nav-item p-1">
-                                        NIM
-                                        <span class="badge bg-olive">${item.mahasiswa.nim}</span>
-                                    </li>
-                                    <li class="nav-item p-1">
-                                        Program Studi 
-                                        <span class="badge bg-olive">${item.mahasiswa.prodi.long} (${item.mahasiswa.prodi.fakultas.nama})</span>
-                                    </li>
-                                    <li class="nav-item p-1">
-                                        Alamat
-                                        <span class="badge bg-olive">${item.mahasiswa.alamat}</span>
-                                    </li>
-                                    <li class="nav-item p-1">
-                                        KPM
-                                        <span class="badge bg-olive">${item.subkpm.nama}</span>
-                                    </li> 
-                                </ul>
-                            </td>
-                        </tr>`;
-                        $('#tableKiri > tbody:last-child').append(elem);
-                        no++;
+                posko_pendaftaran: [],
+                mahasiswa: @json($mahasiswa),
+                data_posko: @json($data_posko)
+            },
+            computed: {
+                countPendaftar() {
+                    let total_pendaftar = 0;
+                    this.mahasiswa.map((item) => {
+                        total_pendaftar += +item.cek == '0';
                     });
-                    selectPeserta();
+                    return total_pendaftar;
                 }
-            });
-        }
-
-        function getFilterCari() {
-            filter.q = $('#filterCari').val();
-            fetchData();
-        }
-
-        function getFilterProdi(value) {
-            filter.p = value;
-            fetchData();
-        }
-
-        // Select dan Remove Peserta
-        function selectPeserta() {
-            $('.selectPeserta').on('click', function() {
-                const tr_kiri = $(this).closest('tr');
-                const id = tr_kiri.find('a').data('id');
-                tr_kiri.css({
-                    'display': 'none'
-                });
-
-                // Proses Simpan
-                if (ajaxNilai) {
+            },
+            methods: {
+                pindahKeKanan(item) {
+                    // Proses Simpan
                     $.ajax({
                         type: "POST",
                         url: "{{ route('fakultas.posko.penempatan.post') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "id_peserta": id,
+                            "id_peserta": item.id,
                             "id_posko": "{{ $posko->id }}"
                         },
                         dataType: 'JSON',
                         success: function(res) {
                             const msg = JSON.parse(JSON.stringify(res));
-                            // Swal.fire({
-                            //     icon: msg.icon,
-                            //     title: "Berhasil",
-                            //     text: msg.message
-                            // });
                         },
                         error: function(res) {
-                            $('#tblAdmFakultas').DataTable().ajax.reload(null,
-                                false);
+                            // console.log(JSON.parse(JSON.stringify(res)));
                             Swal.fire(
                                 'Gagal',
                                 'Ada Kesalahan',
@@ -336,60 +262,66 @@
                             );
                         }
                     });
-                }
 
-                $('#tableKanan tbody')
-                    .append('<tr>' + tr_kiri.html() + '</tr>')
-                    .find('a')
-                    .attr('class', 'text-bold removePeserta');
-
-                $('.removePeserta').on('click', function() {
-                    const tr_kanan = $(this).closest('tr');
-                    const id = tr_kanan.find('a').data('id');
-                    tr_kanan.remove();
-                    $('[data-id="' + id + '"]').closest('tr').attr({
-                        'style': ''
+                    item.cek = item.id;
+                    app.posko_pendaftaran.push(item);
+                },
+                pindahKeKiri(item, key) {
+                    $.ajax({
+                        url: "{{ route('fakultas.posko.penempatan.delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id_peserta": item.id,
+                            "id_posko": "{{ $posko->id }}"
+                        },
+                        success: function(res) {
+                            const msg = JSON.parse(JSON.stringify(res));
+                        },
+                        error: function(res) {
+                            Swal.fire(
+                                'Gagal',
+                                'Ada Kesalahan',
+                                'error'
+                            );
+                        }
                     });
-                });
 
-                $('#pesertaKiri').html($('#tableKiri > tbody > tr:not([style*="display: none"])').length);
-                $('#pesertaKanan').html($('#tableKanan > tbody > tr').length);
-            });
-        }
-        selectPeserta();
-
-        // // Proses Simpan
-        // $('#btnSmpPenempatan').on('click', () => {
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "{{ route('fakultas.posko.penempatan.post') }}",
-        //         data: $('#formPenempatan').serialize(),
-        //         dataType: 'JSON',
-        //         success: function(res) {
-        //             const msg = JSON.parse(JSON.stringify(res));
-        //             Swal.fire({
-        //                 icon: msg.icon,
-        //                 title: "Berhasil",
-        //                 text: msg.message
-        //             });
-        //         },
-        //         error: function(res) {
-        //             $('#tblAdmFakultas').DataTable().ajax.reload(null,
-        //                 false);
-        //             Swal.fire(
-        //                 'Gagal',
-        //                 'Ada Kesalahan',
-        //                 'error'
-        //             );
-        //         }
-        //     });
-        // });
-
-        const a = $('tr.selectedPeserta');
-        for (let i = 0; i < a.length; i++) {
-            let key = $(a[i]).attr('data-key');
-            $(`tr.urut-${key} .selectPeserta`).trigger('click');
-        }
-        ajaxNilai = true;
+                    let i = app.mahasiswa.map(e => e.id).indexOf(item.id);
+                    if (i !== -1) {
+                        app.mahasiswa[i].cek = 0;
+                        app.posko_pendaftaran.splice(key, 1);
+                    }
+                },
+                getFilter() {
+                    let url = "{{ route('fakultas.posko.penempatan', ':id') }}";
+                    url = url.replace(':id', "{{ $posko->id }}");
+                    $.ajax({
+                        url: url,
+                        data: {
+                            prodi: app.filter.prodi,
+                            cari: app.filter.cari
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            app.mahasiswa = data;
+                        }
+                    });
+                },
+                filterPosko() {
+                    let url = "{{ route('fakultas.posko.penempatan', ':id') }}";
+                    url = url.replace(':id', app.filter.posko);
+                    window.location = url;
+                },
+                pindahKananOtomatis() {
+                    app.mahasiswa.forEach(element => {
+                        if (element.cek != 0) {
+                            app.pindahKeKanan(element);
+                        }
+                    });
+                }
+            },
+        });
+        app.pindahKananOtomatis();
     </script>
 @endsection

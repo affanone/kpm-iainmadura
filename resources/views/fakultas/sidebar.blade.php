@@ -16,7 +16,8 @@
                     alt="User Image" />
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{ session('profil')->nama }}</a>
+                <div class="small text-muted">{{ session('profil')->fakultas->nama }}</div>
             </div>
         </div>
 

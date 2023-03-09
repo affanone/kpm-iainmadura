@@ -33,6 +33,7 @@ class PenempatanPesertaController extends Controller
         $prodi = array_values($expected);
 
         $posko = Posko::where('id', $posko)->first();
+        $data_posko = Posko::get();
 
         $mahasiswa = Pendaftaran::select('pendaftarans.*', DB::raw("IFNULL(posko_pendaftarans.id, 0) AS cek"))->with(['mahasiswa', 'subkpm'])
             ->where('status', 3)
@@ -81,13 +82,14 @@ class PenempatanPesertaController extends Controller
         // return view('fakultas.penempatan-v2');
 
         if ($request->ajax()) {
-            return $mahasiswa;
+            return response()->json($mahasiswa);
         }
 
         return view('fakultas.penempatan_peserta', [
             'mahasiswa' => $mahasiswa,
             'prodi' => $prodi,
             'posko' => $posko,
+            'data_posko' => $data_posko
         ]);
     }
 
@@ -113,6 +115,8 @@ class PenempatanPesertaController extends Controller
         $mahasiswa = $request->id_peserta;
 
         $cek_peserta = PoskoPendaftaran::where('pendaftaran_id', $mahasiswa)->first();
+
+        // return response()->json(array('status' => false, 'message' => 'Ada Kesalahan'), 422);
 
         if (!$cek_peserta) {
             $penempatan = new PoskoPendaftaran;
@@ -171,8 +175,20 @@ class PenempatanPesertaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id_peserta = $request->id_peserta;
+
+        $penempatan = PoskoPendaftaran::where('pendaftaran_id', $id_peserta)->first();
+        $penempatan_data = $penempatan;
+
+        $penempatan->delete();
+        Log::set("Menambah peserta ke posko", "insert", $penempatan_data);
+        $data = array(
+            'icon' => 'success',
+            'message' => 'Peserta Berhasil Dihapus dari Posko',
+        );
+
+        return response()->json($data);
     }
 }

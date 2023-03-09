@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminFakultas;
 use App\Models\Dpl;
 use App\Models\Pendaftaran;
 use App\Models\TahunAkademik;
@@ -49,7 +50,7 @@ class AuthenticationController extends Controller
             ]);
             $data = $response->getBody()->getContents();
             $token = json_decode($data);
-        } catch (\GuzzleHttp\Exception\ClientException$e) {
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
             $result = json_decode($response->getBody()->getContents(), true);
         }
@@ -138,8 +139,14 @@ class AuthenticationController extends Controller
                     Auth::login($user);
                     session()->put('user', $user);
                     session()->put('register', true);
-                    $dpl = Dpl::where('user_id', session('user')->id)->first();
-                    session()->put('profil', $dpl);
+                    if ($user->access[0] == 1) {
+                        $data = Dpl::where('user_id', session('user')->id)->first();
+                    } else if ($user->access[0] == 2) {
+                        // 
+                    } else if ($user->access[0] == 3) {
+                        $data = AdminFakultas::where('user_id', session('user')->id)->first();
+                    }
+                    session()->put('profil', $data);
                     return Redirect::to(route('dpl.dashboard'));
                 } else {
                     session()->put('register', false);
