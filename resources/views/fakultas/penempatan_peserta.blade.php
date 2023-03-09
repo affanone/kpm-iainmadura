@@ -51,7 +51,7 @@
                                         <select class="custom-select" id="posko" v-model="filter.posko"
                                             v-on:change="filterPosko()">
                                             <option v-for="(item, key) in data_posko" :value="item.id">
-                                                @{{ item.nama }}</option>
+                                                @{{ `${item.nama} - ${item.alamat}` }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -112,7 +112,8 @@
                                                                             <td>
                                                                                 <a role="button"
                                                                                     v-on:click="pindahKeKanan(item)"
-                                                                                    class="font-weight-bold">@{{ item.mahasiswa.nama }}</a>
+                                                                                    class="font-weight-bold">@{{ item.mahasiswa.nama }}
+                                                                                </a>
                                                                                 <ul class="nav flex-column">
                                                                                     <li class="nav-item p-1">
                                                                                         <span
@@ -168,7 +169,7 @@
                                                                             <td></td>
                                                                             <td>
                                                                                 <a role="button"
-                                                                                    v-on:click="pindahKeKiri(item,key)"
+                                                                                    v-on:click="pindahKeKiri(item, key)"
                                                                                     class="font-weight-bold">@{{ item.mahasiswa.nama }}</a>
                                                                                 <ul class="nav flex-column">
                                                                                     <li class="nav-item p-1">
@@ -286,9 +287,11 @@
                         }
                     });
 
-                    let i = app.posko_pendaftaran.map(e => e.id).indexOf(item.id);
-                    app.posko_pendaftaran[i].cek = 0;
-                    app.posko_pendaftaran.splice(key, 1);
+                    let i = app.mahasiswa.map(e => e.id).indexOf(item.id);
+                    if (i !== -1) {
+                        app.mahasiswa[i].cek = 0;
+                        app.posko_pendaftaran.splice(key, 1);
+                    }
                 },
                 getFilter() {
                     let url = "{{ route('fakultas.posko.penempatan', ':id') }}";
@@ -300,6 +303,7 @@
                             cari: app.filter.cari
                         },
                         success: function(data) {
+                            console.log(data);
                             app.mahasiswa = data;
                         }
                     });

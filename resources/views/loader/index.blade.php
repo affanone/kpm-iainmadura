@@ -364,7 +364,7 @@
                             text: res.message
                         }).then(() => {
                             // $('.btn-shadow').css('display', 'inline-block');
-                            window.location.href = 'logout'
+                            window.location.href = "{{ url('logout') }}"
                         });
                     }
                 }
@@ -391,7 +391,7 @@
                             text: res.message
                         }).then(() => {
                             // $('.btn-shadow').css('display', 'inline-block');
-                            window.location.href = 'logout'
+                            window.location.href = "{{ url('logout') }}"
                         });
                     }
                 }
@@ -418,7 +418,7 @@
                             text: res.message
                         }).then(() => {
                             // $('.btn-shadow').css('display', 'inline-block');
-                            window.location.href = 'logout'
+                            window.location.href = "{{ url('logout') }}"
                         });
 
                     }
